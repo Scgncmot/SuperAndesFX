@@ -50,7 +50,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butPromociones" layoutX="36.0" layoutY="210.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROMOCIONES">
+                        <Button fx:id="butPromociones" layoutX="36.0" layoutY="210.0" mnemonicParsing="false" onAction="#actualizarPanelPromociones" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROMOCIONES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

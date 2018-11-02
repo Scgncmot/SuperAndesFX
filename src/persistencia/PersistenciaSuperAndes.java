@@ -380,7 +380,7 @@ public class PersistenciaSuperAndes {
 		}
 	}
 
-	public Producto registrarProductos(String codigosBarras, String nombres, String presentaciones, String marcas, int cantidades, String unidadesMedida, String especificacionesEmpacado, String categorias)
+	public Producto registrarProducto(String codigosBarras, String nombres, String presentaciones, String marcas, int cantidades, String unidadesMedida, String especificacionesEmpacado, String categorias)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 
@@ -585,7 +585,6 @@ public class PersistenciaSuperAndes {
 			String codigoPromo= nextval()+"";
 			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, 1, fechaVencimientoPromocion);
 			tuplasInsertadas+=sqlPagueNUnidadesLleveMPromo.adicionarPromocion(pm, codigoPromo, compraUnidades, llevaUnidades);		
-			//tuplasInsertadas+=sqlProductoPromocion.adicionarPromocion(pm,codigoProducto , codigoPromo);
 			tx.commit();
 			log.trace ("Inserción de promocion: " + codigoPromo + ": " + tuplasInsertadas + " tuplas insertadas");
 			return new PagueNUnidadesLleveMPromo(codigoPromo, compraUnidades, llevaUnidades);
@@ -1334,6 +1333,31 @@ public class PersistenciaSuperAndes {
 
 		}
 
+		
+	}
+
+	public void eliminarProducto(String barcode) {
+		
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Transaction tx = pm.currentTransaction();
+
+		try {
+
+			tx.begin();
+
+			sqlProducto.eliminarProducto(pm,barcode);
+
+			tx.commit();
+
+		}
+		catch(Exception e) {
+
+			e.printStackTrace();
+
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+
+		}		
 		
 	}
 
