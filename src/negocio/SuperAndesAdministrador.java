@@ -61,7 +61,7 @@ public class SuperAndesAdministrador implements Initializable {
 	private PanelProveedorController panelProveedor;
 
 	private PanelClienteController panelCliente;
-	
+
 	private PanelProductoController panelProducto;
 
 
@@ -238,7 +238,7 @@ public class SuperAndesAdministrador implements Initializable {
 	}
 
 
-	@FXML
+	
 	public void cargarClientes(){
 
 		lista.clear();    	
@@ -249,8 +249,24 @@ public class SuperAndesAdministrador implements Initializable {
 
 			lista.add("Tipo de documento: "+objects[0]+"      :      Numero de documento: "+objects[1]+"      :     Nombre: "+objects[2]+"      :      Correo: "+objects[3]);
 		}    			
-		
+
 		panelCliente.getListView().setItems(lista);
+	}	
+
+
+
+	public void crearCliente(String cliente) {
+
+		//TODO: HAY QUE HACER AQUI ALGO
+
+		String nit = cliente.split("/")[0];
+
+		String nombre = cliente.split("/")[1];
+
+		pp.registrarProveedor(nit, nombre);
+
+		cargarProveedores();
+
 	}	
 
 
@@ -259,8 +275,8 @@ public class SuperAndesAdministrador implements Initializable {
 	//....................................
 	//........... PRODUCTOS ..............
 	//....................................
-	
-	
+
+
 	@FXML
 	public void actualizarPanelProductos(Event actionEvent) throws IOException{
 
@@ -279,8 +295,8 @@ public class SuperAndesAdministrador implements Initializable {
 		borderPanelPrincipal.setRight( rightSide );
 
 	}
+
 	
-	@FXML
 	public void cargarProductos(){
 
 		lista.clear();    	
@@ -291,7 +307,7 @@ public class SuperAndesAdministrador implements Initializable {
 
 			lista.add("Nombre: "+objects[1]+"     :    Codigo barras: "+objects[0]);
 		}    			
-		
+
 		panelProducto.getListViewProductos().setItems(lista);
 	}	
 

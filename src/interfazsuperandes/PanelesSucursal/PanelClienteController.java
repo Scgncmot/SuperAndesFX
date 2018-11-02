@@ -102,11 +102,10 @@ public class PanelClienteController implements Initializable {
 	}
 
 
-
-
-
 	@FXML
 	private void crearCliente(ActionEvent event) {
+		
+		
 		
 	}
 
