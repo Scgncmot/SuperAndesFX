@@ -60,7 +60,7 @@ public class SuperAndesAdministrador implements Initializable {
 	private PanelClienteController panelCliente;
 
 	private PanelProductoController panelProducto;
-	
+
 	private PanelSucursalController panelSucursal;
 
 
@@ -236,8 +236,6 @@ public class SuperAndesAdministrador implements Initializable {
 
 	}
 
-
-	
 	public void cargarClientes(){
 
 		lista.clear();    	
@@ -252,22 +250,54 @@ public class SuperAndesAdministrador implements Initializable {
 		panelCliente.getListView().setItems(lista);
 	}	
 
+	public void crearClienteJuridico(String tipoDocumento, String numDocumento, String nombre, String correo, String direccion) {
+
+		pp.registrarPersonaJuridica(tipoDocumento, numDocumento, nombre, correo, direccion);
+
+		cargarClientes();
+
+	}
+
+	public void crearClienteNatural(String tipoDocumento, String numDocumento, String nombre, String correo) {
+
+		pp.registrarCliente(tipoDocumento, numDocumento, nombre, correo);
+
+		cargarClientes();
+
+	}
 
 
-	public void crearCliente(String cliente) {
+	public void eliminarCliente(String tipoDocumento, String numDocumento) {
 
-		//TODO: HAY QUE HACER AQUI ALGO
+		pp.eliminarCliente(tipoDocumento, numDocumento);
 
-		String nit = cliente.split("/")[0];
+		cargarClientes();
 
-		String nombre = cliente.split("/")[1];
+	}
 
-		pp.registrarProveedor(nit, nombre);
 
-		cargarProveedores();
+	public String buscarDireccionPersonaJuridica(String numDoc) {
 
-	}	
+		return pp.buscarDireccionPersonaJuridica(numDoc);
 
+	}
+
+
+	public void modificarClienteJuridico(String numDocAntiguo, String numDocNuevo, String nombre, String correo, String direccion) {
+
+		pp.modificarClienteJuridico(numDocAntiguo,numDocNuevo, nombre, correo, direccion);
+		
+		cargarClientes();
+	}
+
+
+	public void modificarClienteNatural(String tipoDocAntiguo,String tipoDoc,String numDocAntiguo,String numDoc,String nombre,String correo) {
+
+		pp.modificarClienteNatural(tipoDocAntiguo,tipoDoc,numDocAntiguo,numDoc,nombre,correo);
+		
+		cargarClientes();
+
+	}
 
 
 
@@ -295,7 +325,7 @@ public class SuperAndesAdministrador implements Initializable {
 
 	}
 
-	
+
 	public void cargarProductos(){
 
 		lista.clear();    	
@@ -346,11 +376,11 @@ public class SuperAndesAdministrador implements Initializable {
 		BorderPane.setAlignment(rightSide, Pos.CENTER);	
 
 		cargarSucursales();
-		
+
 		borderPanelPrincipal.setRight( rightSide );
 
 	}
-	
+
 	@FXML
 	public void cargarSucursales(){
 
@@ -365,7 +395,7 @@ public class SuperAndesAdministrador implements Initializable {
 
 		panelSucursal.getListViewSucursales().setItems(lista);
 	}
-	
+
 	public void crearSucursal(String sucursal) 
 	{	
 		String nombre = sucursal.split("/")[0],
@@ -378,20 +408,20 @@ public class SuperAndesAdministrador implements Initializable {
 
 		cargarSucursales();
 	}	
-	
+
 	public void eliminarSucursal(String nombre) 
 	{
 		pp.eliminarSucursalPorNombre(nombre);
 		cargarSucursales();
 
 	}
-	
+
 	public void modificarSucursal(String sucursal, String nombreActual ) 
 	{	
 		/*String[] arreglo = sucursal.split("/");
 		for(String a : arreglo)
 			System.out.println("Esto es: " + a);*/
-		
+
 		String nombreNuevo = sucursal.split("/")[0];
 		String segmentacion = sucursal.split("/")[1];
 		String tamano = sucursal.split("/")[2];
@@ -402,12 +432,12 @@ public class SuperAndesAdministrador implements Initializable {
 		cargarSucursales();
 
 	}
-	
+
 	public Object[] darSucursalPorNombre(String nombre)
 	{
 		return pp.darSucursalPorNombre(nombre);
 	}
-	
+
 	public List<String> darListaSucursales() 
 	{
 
@@ -420,12 +450,12 @@ public class SuperAndesAdministrador implements Initializable {
 
 		return nombreSucursal;
 	}
-	
+
 	public List<Object[]> darDineroRecolectado(Timestamp fechaInicio,  Timestamp fechaFin)
 	{
 		return pp.dineroRecolectado(fechaInicio, fechaFin);
 	}
-	
+
 	public void agregarBodegasSucursal(long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo)
 	{
 		//TODO Corregir lo de la categoria.
@@ -434,8 +464,8 @@ public class SuperAndesAdministrador implements Initializable {
 		pp.registrarBodega(Long.parseLong(id), idCategoria, volumenMaximo, pesoMaximo);
 
 	}
-	
-	
+
+
 	//....................................
 	//........... PROMOCIONES ............
 	//....................................
@@ -464,16 +494,6 @@ public class SuperAndesAdministrador implements Initializable {
 
 
 
-
-
-
-
-
-
-
-
-
-
 	private JsonObject openConfig (String tipo, String archConfig)
 	{
 		JsonObject config = null;
@@ -493,6 +513,13 @@ public class SuperAndesAdministrador implements Initializable {
 		}	
 		return config;
 	}
+
+
+
+
+
+
+
 
 
 

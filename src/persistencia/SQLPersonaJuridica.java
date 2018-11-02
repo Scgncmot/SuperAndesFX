@@ -36,9 +36,22 @@ public class SQLPersonaJuridica {
 	public long adicionarPersonaJuridica(PersistenceManager pm, String tipoDocumento, String numDocumento,
 			String direccion) {
 		
-		Query q = pm.newQuery(SQL, "INSERT INTO" + pp.darTablaPersonaJuridica()+"(TIPODOCUMENTO,NUMDOCUMENTO,DIRECCION) values (?,?,?)");
+		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaPersonaJuridica()+" (TIPODOCUMENTO,NUMDOCUMENTO,DIRECCION) values (?,?,?)");
 		q.setParameters(tipoDocumento,numDocumento,direccion);
 		return (long) q.executeUnique();
+	}
+
+	public String buscarDireccion(PersistenceManager pm, String numDoc) {
+		Query q = pm.newQuery(SQL, "SELECT DIRECCION FROM " + pp.darTablaPersonaJuridica()+" WHERE NUMDOCUMENTO = ?");
+		q.setParameters(numDoc);
+		return (String) q.executeUnique();
+		
+	}
+
+	public void modificarPersonaJuridica(PersistenceManager pm, String numDocAntiguo, String numDoc, String nombre, String direccion) {
+		Query q = pm.newQuery(SQL, "UPDATE " + pp.darTablaPersonaJuridica()+" SET NUMDOCUMENTO = ?, NOMBRE = ?, DIRECCION = ?, WHERE NUMDOCUMENTO = ?");
+		q.setParameters(numDoc,nombre,direccion,numDocAntiguo);
+		q.executeUnique();		
 	}
 
 }

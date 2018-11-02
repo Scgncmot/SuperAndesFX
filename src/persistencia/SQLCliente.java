@@ -43,11 +43,11 @@ public class SQLCliente
 		return (long) q.executeUnique();
 	}
 	
-	public long eliminarClientePorNumDocumento (PersistenceManager pm, String numDocumento)
+	public void eliminarCliente (PersistenceManager pm, String tipoDocumento, String numDocumento)
 	{
-		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCliente() + " WHERE NUMDOCUMENTO = ?");
-	    q.setParameters(numDocumento);
-	    return (long) q.executeUnique();
+		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaCliente() + " WHERE TIPODOCUMENTO = ? AND NUMDOCUMENTO = ?");
+	    q.setParameters(tipoDocumento, numDocumento);
+	    q.executeUnique();
 	}
 	
 	public Object[] darClientePorNumDocumento (PersistenceManager pm, String numDocumento) 
@@ -57,16 +57,17 @@ public class SQLCliente
 		return (Object[]) q.executeUnique();
 	}
 	
-	public Object[] darClientePorNombreCompleto (PersistenceManager pm, String nombre, String apellido) 
-	{
-		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaCliente() + " WHERE NOMBRE = ? and APELLIDO = ?");
-		q.setParameters(nombre, apellido);
-		return (Object[]) q.executeUnique();
-	}
 		
 	public List<Object[]> darClientes(PersistenceManager pm)
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaCliente());
 		return (List<Object[]>) q.executeList();
+	}
+
+	public void modificarCliente(PersistenceManager pm, String tipoDocAntiguo, String tipoDoc,String numDocAntiguo, String numDoc,String nombre,String correo) {
+		
+		Query q = pm.newQuery(SQL, "UPDATE " + pp.darTablaCliente()+" SET TIPODOCUMENTO = ? , NUMDOCUMENTO = ?, NOMBRE = ?, CORREO = ?, WHERE TIPODOCUMENTO = ? AND NUMDOCUMENTO = ?");
+		q.setParameters(tipoDoc, numDoc, nombre, correo, tipoDocAntiguo, numDocAntiguo);
+		q.executeUnique();				
 	}
 }

@@ -445,7 +445,7 @@ public class PersistenciaSuperAndes {
 	}
 
 
-	public PersonaJuridica registrarPersonaJuridica(String documento, String numDocumento, String direccion) {
+	public PersonaJuridica registrarPersonaJuridica(String tipodocumento, String numDocumento, String nombre, String correo, String direccion) {
 
 
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -455,12 +455,13 @@ public class PersistenciaSuperAndes {
 		try {
 
 			tx.begin();
-			long tuplasInsertadas = sqlPersonaJuridica.adicionarPersonaJuridica(pm, documento, numDocumento,direccion);
+			long tuplas2 = sqlCliente.adicionarCliente(pm, tipodocumento, numDocumento, nombre, correo);
+			long tuplasInsertadas = sqlPersonaJuridica.adicionarPersonaJuridica(pm, tipodocumento, numDocumento,direccion);
 			tx.commit();
 
 			log.trace ("Inserción de personaJuridica: " + numDocumento + ": " + tuplasInsertadas + " tuplas insertadas");
 
-			return new PersonaJuridica(documento, numDocumento, direccion);
+			return new PersonaJuridica(tipodocumento, numDocumento, direccion);
 
 		} catch (Exception e) {
 
@@ -1038,7 +1039,7 @@ public class PersistenciaSuperAndes {
 
 		}
 		catch(Exception e) {
-			
+
 			e.printStackTrace();
 
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
@@ -1066,7 +1067,7 @@ public class PersistenciaSuperAndes {
 		}
 
 	}
-	
+
 	public void modificarSucursalPorNombre(String nombreActual ,String nombreNuevo, String segmentacion,
 			Double tamano, String ciudad, String direccion) 
 	{
@@ -1087,7 +1088,7 @@ public class PersistenciaSuperAndes {
 		}
 
 	}	
-	
+
 	public Object[]  darSucursalPorNombre(String nombre) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1107,7 +1108,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public Object[]  darSucursalPorId(long id) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1127,9 +1128,9 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
-	
-	
+
+
+
 	public void modificarProveedor(String nombreAntiguo , String nitAntiguo ,String nit, String nombre) {
 
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1146,7 +1147,7 @@ public class PersistenciaSuperAndes {
 
 		}
 		catch(Exception e) {
-			
+
 			e.printStackTrace();
 
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
@@ -1169,30 +1170,30 @@ public class PersistenciaSuperAndes {
 			List <String> retorno = sqlProductoProveedor.darProductosProveedor(pm, nitStr);
 
 			tx.commit();
-			
+
 			return retorno;
 
 		}
 		catch(Exception e) {
-			
-			
+
+
 			e.printStackTrace();
 
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-			
+
 			return null;
 
 		}
 
-		
+
 	}
 
 	public String obtenerProductoPorCodigo(String string) {
-		
+
 		PersistenceManager pm = pmf.getPersistenceManager();
 
 		Transaction tx = pm.currentTransaction();
-		
+
 		try {
 
 			tx.begin();
@@ -1200,29 +1201,29 @@ public class PersistenciaSuperAndes {
 			String retorno = sqlProducto.darProductoPorCodigo(pm, string);
 
 			tx.commit();
-			
+
 			return retorno;
 
 		}
 		catch(Exception e) {
-			
-			
+
+
 			e.printStackTrace();
 
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-			
+
 			return null;
 
 		}
-		
-		
+
+
 	}
 
 	public Object[] obtenerCodigoDeBarrasPorProducto(String nombreProducto) {
 		PersistenceManager pm = pmf.getPersistenceManager();
 
 		Transaction tx = pm.currentTransaction();
-		
+
 		try {
 
 			tx.begin();
@@ -1230,22 +1231,109 @@ public class PersistenciaSuperAndes {
 			Object[] retorno = sqlProducto.darProductoPorNombre(pm, nombreProducto);
 
 			tx.commit();
-			
+
 			return retorno;
 
 		}
 		catch(Exception e) {
-			
-			
+
+
 			e.printStackTrace();
 
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-			
+
 			return null;
 
 		}
 	}
 
+	public void eliminarCliente(String tipoDocumento, String numDocumento) {
 
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Transaction tx = pm.currentTransaction();
+
+		try {
+
+			tx.begin();
+
+			sqlCliente.eliminarCliente(pm, tipoDocumento, numDocumento);
+
+			tx.commit();
+
+		}
+		catch(Exception e) {
+
+
+			e.printStackTrace();
+
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+
+		}
+
+
+
+	}
+
+	public String buscarDireccionPersonaJuridica(String numDoc) {
+
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		return sqlPersonaJuridica.buscarDireccion(pm,numDoc);
+
+	}
+
+	public void modificarClienteJuridico(String numDocAntiguo,String numDoc, String nombre, String correo, String direccion) {
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Transaction tx = pm.currentTransaction();
+
+		try {
+
+			tx.begin();
+
+			sqlPersonaJuridica.modificarPersonaJuridica(pm,numDocAntiguo,numDoc,nombre,direccion);
+
+			sqlCliente.modificarCliente(pm,"NIT","NIT",numDocAntiguo,numDoc,nombre,correo);
+
+			tx.commit();
+
+		}
+		catch(Exception e) {
+
+			e.printStackTrace();
+
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+
+		}
+	}
+
+	public void modificarClienteNatural(String tipoDocAntiguo, String tipoDoc, String numDocAntiguo, String numDoc, String nombre, String correo) {
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Transaction tx = pm.currentTransaction();
+
+		try {
+
+			tx.begin();
+
+			sqlCliente.modificarCliente(pm,tipoDocAntiguo,tipoDoc,numDocAntiguo,numDoc,nombre,correo);
+
+			tx.commit();
+
+		}
+		catch(Exception e) {
+
+			e.printStackTrace();
+
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+
+		}
+
+		
+	}
 
 }

@@ -52,8 +52,6 @@ public class SQLProveedor {
 
 	public void modificarProveedor(PersistenceManager pm, String nombreAntiguo ,String nitAntiguo ,String nit, String nombre) {
 
-		// TODO: ALGO NO ESTA FUNCIONANDO ACA REVISAR
-
 		Query q = pm.newQuery(SQL, "UPDATE " + pp.darTablaProveedor()+" SET NOMBRE = ? , NIT = ? WHERE NIT = ?");
 		q.setParameters(nombre,nit,nitAntiguo);
 		q.executeUnique();		

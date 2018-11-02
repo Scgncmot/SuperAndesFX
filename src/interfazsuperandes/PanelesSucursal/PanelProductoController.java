@@ -8,6 +8,9 @@ package interfazsuperandes.PanelesSucursal;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,8 +57,6 @@ public class PanelProductoController implements Initializable {
 
 	}
 
-
-
 	public ListView<String> getListViewProductos() {
 		return listViewProductos;
 	}
@@ -101,8 +102,8 @@ public class PanelProductoController implements Initializable {
 	void crearProducto(ActionEvent event) {
 
 		Dialog dialog = new Dialog();
-		dialog.setTitle("Crear cliente");
-		dialog.setHeaderText("Crear cliente");
+		dialog.setTitle("Crear producto");
+		dialog.setHeaderText("Crear producto");
 
 		ButtonType loginButtonType = new ButtonType("Crear", ButtonData.OK_DONE);
 		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
@@ -112,6 +113,7 @@ public class PanelProductoController implements Initializable {
 		grid.setVgap(10);
 
 		ComboBox<String> combo = new ComboBox<>();
+		
 		
 		
 		
