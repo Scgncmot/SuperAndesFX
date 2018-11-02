@@ -329,22 +329,8 @@ public class PanelSucursalController implements Initializable {
 		grid2.add(new Label("Ingrese el peso maximo de la bodega"), 1, 3);
 		grid2.add(pesoMaximo, 2, 3);		
 
-		dialogPane.getDialogPane().setContent(grid);		
-
-		dialogPane.showAndWait();
-
-		/*long cate= Long.valueOf(categoria.getText());
-		Double vM = Double.valueOf(volumenMaximo.getText()),
-				pM = Double.valueOf(pesoMaximo.getText());*/
-
-		/*System.out.println("El id es: " + idSucursal);
-		System.out.println("La categoria es: " + Long.valueOf(categoria.getText()) );
-		System.out.println("El volumen maximo es: " + Double.valueOf(volumenMaximo.getText()));
-		System.out.println("El peso maximo es: " +  Double.valueOf(pesoMaximo.getText()));
-
-		long cate= Long.valueOf(categoria.getText());
-		Double vM = Double.valueOf(volumenMaximo.getText()),
-				pM = Double.valueOf(pesoMaximo.getText());*/
+		dialogPane.getDialogPane().setContent(grid);
+		dialogPane.showAndWait();	
 
 		SuperAndesLogin.admin.
 			agregarBodegasSucursal
@@ -354,7 +340,49 @@ public class PanelSucursalController implements Initializable {
 	@FXML
 	void agregarEstanteSucursal(ActionEvent event) 
 	{
+		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		String[] arreglo = sucursal.split(": ");
 
+		//El id es el elemento arreglo[1] y el nombre es el [3]
+		long idSucursal = Long.valueOf(arreglo[1].trim());
+		String nombreSucursal = arreglo[3].trim();
+
+		Dialog dialogPane = new Dialog();
+		ButtonType button = new ButtonType("Registrar estante", ButtonData.OK_DONE);
+		dialogPane.getDialogPane().getButtonTypes().addAll(button);			
+		GridPane grid = new GridPane();
+
+		grid.setHgap(10);
+		grid.setVgap(10);
+
+		ListView<String> bodegas = new ListView<String>();		
+
+		grid.add(new Label("Estantes de la sucursal:"), 0, 0);			
+		grid.add(bodegas, 0, 1);	
+
+		GridPane grid2= new GridPane();
+		grid.add(grid2, 1, 1);
+
+		TextField categoria = new TextField();
+		TextField volumenMaximo = new TextField();
+		TextField pesoMaximo = new TextField();	
+		TextField nivelAbastecimiento = new TextField();	
+
+		grid2.add(new Label("Ingrese el id de la categoria de los productos que se almacenaran"), 1, 1);
+		grid2.add(categoria, 2, 1);
+		grid2.add(new Label("Ingrese el volumen maximo del estante"), 1, 2);
+		grid2.add(volumenMaximo, 2, 2);		
+		grid2.add(new Label("Ingrese el peso maximo del estante"), 1, 3);
+		grid2.add(pesoMaximo, 2, 3);	
+		grid2.add(new Label("Ingrese nivel de abastecimiento"), 1, 4);
+		grid2.add(nivelAbastecimiento, 2, 4);
+
+		dialogPane.getDialogPane().setContent(grid);
+		dialogPane.showAndWait();	
+
+		SuperAndesLogin.admin.
+			agregarEstantesSucursal
+				(idSucursal, Long.valueOf(categoria.getText()), Double.valueOf(volumenMaximo.getText()), Double.valueOf(pesoMaximo.getText()), Integer.valueOf(nivelAbastecimiento.getText()));
 	}  
 	
 }

@@ -463,6 +463,15 @@ public class SuperAndesAdministrador implements Initializable {
 		Object[] codigo = pp.darSucursalPorId(idSucursal);
 		String id = codigo[0].toString();	
 		pp.registrarBodega(Long.parseLong(id), idCategoria, volumenMaximo, pesoMaximo);
+	}
+	
+	public void agregarEstantesSucursal(long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo,
+			Integer nivelDeAbastecimiento)
+	{
+		//TODO Corregir lo de la categoria.
+		Object[] codigo = pp.darSucursalPorId(idSucursal);
+		String id = codigo[0].toString();	
+		pp.registrarEstante(Long.parseLong(id), idCategoria, volumenMaximo, pesoMaximo, nivelDeAbastecimiento);
 
 	}
 
