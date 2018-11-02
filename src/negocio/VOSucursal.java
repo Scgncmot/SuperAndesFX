@@ -1,10 +1,9 @@
 package negocio;
 
-public interface VOSucursal {
+public interface VOSucursal 
+{
 	
-	/* ****************************************************************
-	 * 			Métodos
-	 *****************************************************************/
+	
 	/**
 	 * @return el id de la sucursal
 	 */
@@ -23,7 +22,7 @@ public interface VOSucursal {
 	/**
 	 * @return el tamano de la sucursal
 	 */
-	public String getTamano();
+	public Double getTamano();
 	
 	/**
 	 * @return la ciudad de la sucursal

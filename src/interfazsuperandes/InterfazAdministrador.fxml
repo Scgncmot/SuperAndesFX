@@ -45,7 +45,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butSucursales" layoutX="36.0" layoutY="164.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="SUCURSALES">
+                        <Button fx:id="butSucursales" layoutX="36.0" layoutY="164.0" mnemonicParsing="false" onAction="#actualizarPanelSucursales" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="SUCURSALES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

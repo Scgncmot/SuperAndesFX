@@ -5,8 +5,6 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import negocio.Cliente;
-
 public class SQLCliente 
 {
 	//-----------------------------------------------------------
@@ -52,24 +50,23 @@ public class SQLCliente
 	    return (long) q.executeUnique();
 	}
 	
-	public Cliente darClientePorNumDocumento (PersistenceManager pm, String numDocumento) 
+	public Object[] darClientePorNumDocumento (PersistenceManager pm, String numDocumento) 
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaCliente() + " WHERE NUMDOCUMENTO = ?");
 		q.setParameters(numDocumento);
-		return (Cliente) q.executeUnique();
+		return (Object[]) q.executeUnique();
 	}
 	
-	public Cliente darClientePorNombreCompleto (PersistenceManager pm, String nombre, String apellido) 
+	public Object[] darClientePorNombreCompleto (PersistenceManager pm, String nombre, String apellido) 
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaCliente() + " WHERE NOMBRE = ? and APELLIDO = ?");
 		q.setParameters(nombre, apellido);
-		return (Cliente) q.executeUnique();
+		return (Object[]) q.executeUnique();
 	}
 		
-	public List<Cliente> darClientes(PersistenceManager pm)
+	public List<Object[]> darClientes(PersistenceManager pm)
 	{
 		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaCliente());
-		q.setResultClass(Cliente.class);
-		return (List<Cliente>) q.executeList();
+		return (List<Object[]>) q.executeList();
 	}
 }
