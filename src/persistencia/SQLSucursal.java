@@ -69,6 +69,13 @@ public class SQLSucursal
 		return (Object[]) q.executeUnique();
 	}
 	
+	public Object[] darSucursalPorId (PersistenceManager pm, long id) 
+	{
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaSucursal() + " WHERE idSucursal = ?");
+		q.setParameters(id);
+		return (Object[]) q.executeUnique();
+	}
+	
 	public List<Object[]> darIndiceOcupacion(PersistenceManager pm, long idSucursal){
 		Query q = pm.newQuery(SQL, "SELECT * FROM ( SELECT idEstante as id_Elemento, 'ESTANTE' as TIPO, CAPACIDADVOLUMEN / CAPACIDADTOTALVOLUMEN as INDICE_VOLUMEN, CAPACIDADPESO / CAPACIDADTOTALPESO as INDICE_PESO "
 				+ "FROM ESTANTE WHERE idsucursal = ? "

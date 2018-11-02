@@ -10,8 +10,8 @@
       <Button fx:id="butEliminar" layoutX="164.0" layoutY="79.0" mnemonicParsing="false" onAction="#eliminarSucursal" prefHeight="40.0" prefWidth="100.0" text="Eliminar" />
       <Button fx:id="butCrear" layoutX="45.0" layoutY="79.0" mnemonicParsing="false" onAction="#crearSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear" />
       <Button fx:id="butModificar" layoutX="282.0" layoutY="79.0" mnemonicParsing="false" onAction="#modificarSucursal" prefHeight="40.0" prefWidth="100.0" text="Modificar" />
-      <Button fx:id="butCrearBodega" layoutX="401.0" layoutY="79.0" mnemonicParsing="false" onAction="#crearBodegaASucursal" prefHeight="40.0" prefWidth="100.0" text="Crear bodega " />
-      <Button fx:id="butCrearEstante" layoutX="519.0" layoutY="79.0" mnemonicParsing="false" onAction="#crearEstanteASucursal" prefHeight="40.0" prefWidth="100.0" text="Crear estante" />
+      <Button fx:id="butCrearBodega" layoutX="401.0" layoutY="79.0" mnemonicParsing="false" onAction="#agregarBodegaSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear bodega " />
+      <Button fx:id="butCrearEstante" layoutX="519.0" layoutY="79.0" mnemonicParsing="false" onAction="#agregarEstanteSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear estante" />
       <Button fx:id="butDarDinero" layoutX="640.0" layoutY="79.0" mnemonicParsing="false" onAction="#mostrarDineroRecolectado" prefHeight="40.0" prefWidth="117.0" text="Dinero recolectado" />
    </children>
 </Pane>

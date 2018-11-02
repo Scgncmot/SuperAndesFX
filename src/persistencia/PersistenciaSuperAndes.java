@@ -178,16 +178,6 @@ public class PersistenciaSuperAndes {
 	private SQLProveedor sqlProveedor;
 
 	/**
-	 * Atributo para el acceso a la tabla RESTICCIONBODEGA de la BD.
-	 */
-	private SQLRestriccionBodega sqlRestriccionBodega;
-
-	/**
-	 * Atributo para el acceso a la tabla RESTRICCIONESTANTE de la BD.
-	 */
-	private SQLRestriccionEstante sqlRestriccionEstante;
-
-	/**
 	 * Atributo para el acceso a la tabla SUCURSAL de la BD.
 	 */
 	private SQLSucursal sqlSucursal;
@@ -349,10 +339,9 @@ public class PersistenciaSuperAndes {
 		sqlSucursal=new SQLSucursal(this);	sqlPagueXCantidadLleveYPromo = new SQLPagueXCantidadLleveYPromo(this);	sqlPedido = new SQLPedido(this);
 		sqlPersonaJuridica = new SQLPersonaJuridica(this);	sqlProducto = new SQLProducto(this);	sqlProductoPedido = new SQLProductoPedido(this);
 		sqlProductoPromocion = new SQLProductoPromocion(this);	sqlProductoProveedor = new SQLProductoProveedor(this);	sqlProductoSucursal = new SQLProductoSucursal(this);
-		sqlPromocion = new SQLPromocion(this);	sqlProveedor = new SQLProveedor(this);	sqlRestriccionBodega = new SQLRestriccionBodega(this);		
-		sqlRestriccionEstante = new SQLRestriccionEstante(this);	sqlSucursal = new SQLSucursal(this);	sqlVenta = new SQLVenta(this);
-		sqlVentaProducto = new SQLVentaProducto(this); sqlPaqueteDeProductosPromo = new SQLPaqueteDeProductosPromo(this); sqlUtil = new SQLUtil(this);
-		sqlElementos = new SQLElementos(this);
+		sqlPromocion = new SQLPromocion(this);	sqlProveedor = new SQLProveedor(this);	sqlSucursal = new SQLSucursal(this);	
+		sqlVenta = new SQLVenta(this);	sqlVentaProducto = new SQLVentaProducto(this); 
+		sqlPaqueteDeProductosPromo = new SQLPaqueteDeProductosPromo(this); sqlUtil = new SQLUtil(this);	sqlElementos = new SQLElementos(this);
 
 	}	
 
@@ -1108,6 +1097,26 @@ public class PersistenciaSuperAndes {
 		{
 			tx.begin();
 			Object[] retorno = sqlSucursal.darSucursalPorNombre(pm, nombre);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	public Object[]  darSucursalPorId(long id) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			Object[] retorno = sqlSucursal.darSucursalPorId(pm, id);
 			tx.commit();			
 			return retorno;
 		}

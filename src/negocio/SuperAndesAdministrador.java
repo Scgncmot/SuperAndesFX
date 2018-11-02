@@ -9,6 +9,7 @@ package negocio;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,11 +40,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import persistencia.PersistenciaSuperAndes;
-
-
-
-
-
 
 /**
  * FXML Controller class
@@ -410,6 +406,33 @@ public class SuperAndesAdministrador implements Initializable {
 	public Object[] darSucursalPorNombre(String nombre)
 	{
 		return pp.darSucursalPorNombre(nombre);
+	}
+	
+	public List<String> darListaSucursales() 
+	{
+
+		List<Object[]> lista = pp.darElementos(PersistenciaSuperAndes.darTablaSucursal());
+
+		List<String> nombreSucursal = new ArrayList<>();
+
+		for (Object[] objects : lista) 
+			nombreSucursal.add((String) objects[1]);	
+
+		return nombreSucursal;
+	}
+	
+	public List<Object[]> darDineroRecolectado(Timestamp fechaInicio,  Timestamp fechaFin)
+	{
+		return pp.dineroRecolectado(fechaInicio, fechaFin);
+	}
+	
+	public void agregarBodegasSucursal(long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo)
+	{
+		//TODO Corregir lo de la categoria.
+		Object[] codigo = pp.darSucursalPorId(idSucursal);
+		String id = codigo[0].toString();	
+		pp.registrarBodega(Long.parseLong(id), idCategoria, volumenMaximo, pesoMaximo);
+
 	}
 	
 	
