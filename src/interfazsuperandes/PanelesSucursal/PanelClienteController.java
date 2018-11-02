@@ -21,7 +21,7 @@ import javafx.scene.control.ListView;
 public class PanelClienteController implements Initializable {
 
 	@FXML
-	private ListView<?> listView;
+	private ListView<String> listView;
 
 	@FXML
 	private Button butEliminar;
@@ -38,8 +38,73 @@ public class PanelClienteController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {		
 		
-	}    
+	}    	
 	
+	
+	public ListView<String> getListView() {
+		return listView;
+	}
+
+
+
+
+
+	public void setListView(ListView<String> listView) {
+		this.listView = listView;
+	}
+
+
+
+
+
+	public Button getButEliminar() {
+		return butEliminar;
+	}
+
+
+
+
+
+	public void setButEliminar(Button butEliminar) {
+		this.butEliminar = butEliminar;
+	}
+
+
+
+
+
+	public Button getButCrear() {
+		return butCrear;
+	}
+
+
+
+
+
+	public void setButCrear(Button butCrear) {
+		this.butCrear = butCrear;
+	}
+
+
+
+
+
+	public Button getButModificar() {
+		return butModificar;
+	}
+
+
+
+
+
+	public void setButModificar(Button butModificar) {
+		this.butModificar = butModificar;
+	}
+
+
+
+
+
 	@FXML
 	private void crearCliente(ActionEvent event) {
 		

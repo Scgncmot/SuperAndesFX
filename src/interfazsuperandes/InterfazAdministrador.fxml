@@ -35,12 +35,12 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butClientes" layoutX="36.0" layoutY="69.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CLIENTES">
+                        <Button fx:id="butClientes" layoutX="36.0" layoutY="69.0" mnemonicParsing="false" onAction="#actualizarPanelClientes" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CLIENTES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butProductos" layoutX="36.0" layoutY="117.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PRODUCTOS">
+                        <Button fx:id="butProductos" layoutX="36.0" layoutY="117.0" mnemonicParsing="false" onAction="#actualizarPanelProductos" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PRODUCTOS">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

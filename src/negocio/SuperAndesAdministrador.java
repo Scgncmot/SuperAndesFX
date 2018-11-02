@@ -23,6 +23,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
+import interfazsuperandes.PanelesSucursal.PanelClienteController;
+import interfazsuperandes.PanelesSucursal.PanelProductoController;
 import interfazsuperandes.PanelesSucursal.PanelProveedorController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -54,9 +56,14 @@ public class SuperAndesAdministrador implements Initializable {
 
 	private PersistenciaSuperAndes pp;
 
-	private ObservableList<String> listaProv = FXCollections.observableArrayList();
+	private ObservableList<String> lista = FXCollections.observableArrayList();
 
 	private PanelProveedorController panelProveedor;
+
+	private PanelClienteController panelCliente;
+	
+	private PanelProductoController panelProducto;
+
 
 	//Panel principal
 	@FXML
@@ -78,9 +85,9 @@ public class SuperAndesAdministrador implements Initializable {
 	@FXML
 	private Button butCategorias;
 	@FXML
-    private Button butEstantes;
-    @FXML
-    private Button butBodegas;
+	private Button butEstantes;
+	@FXML
+	private Button butBodegas;
 
 
 
@@ -124,16 +131,16 @@ public class SuperAndesAdministrador implements Initializable {
 	@FXML
 	public void cargarProveedores(){
 
-		listaProv.clear();    	
+		lista.clear();    	
 
 		List<Object[]> proveedores = pp.darElementos(PersistenciaSuperAndes.darTablaProveedor());
 
 		for (Object[] objects : proveedores) {    		
 
-			listaProv.add("Nombre: "+objects[1]+"      :      NIT: "+objects[0]);
+			lista.add("Nombre: "+objects[1]+"      :      NIT: "+objects[0]);
 		}    			
 
-		panelProveedor.getListViewProveedores().setItems(listaProv);
+		panelProveedor.getListViewProveedores().setItems(lista);
 	}	
 
 
@@ -194,16 +201,16 @@ public class SuperAndesAdministrador implements Initializable {
 
 
 	}
-	
+
 
 	public void agregarProductoProveedor(String nombreProducto, String nit, String calif, String prec) {
 
 		Object[] codigo = pp.obtenerCodigoDeBarrasPorProducto(nombreProducto);
-		
+
 		String barCode = (String) codigo[0];	
-				
+
 		pp.registrarProductoAProveedor(barCode, nit, calif, prec);
-		
+
 	}
 
 
@@ -211,7 +218,40 @@ public class SuperAndesAdministrador implements Initializable {
 	//........... CLIENTES ...............
 	//....................................
 
+	@FXML
+	public void actualizarPanelClientes(Event actionEvent) throws IOException{
 
+		FXMLLoader loader = new FXMLLoader();
+
+		loader.setLocation(getClass().getResource("/interfazsuperandes/PanelesSucursal/PanelClientes.fxml"));
+
+		Parent rightSide = loader.load();	
+
+		panelCliente = loader.getController();
+
+		BorderPane.setAlignment(rightSide, Pos.CENTER);		
+
+		cargarClientes();
+
+		borderPanelPrincipal.setRight( rightSide );
+
+	}
+
+
+	@FXML
+	public void cargarClientes(){
+
+		lista.clear();    	
+
+		List<Object[]> clientes = pp.darElementos(PersistenciaSuperAndes.darTablaCliente());
+
+		for (Object[] objects : clientes) {    		
+
+			lista.add("Tipo de documento: "+objects[0]+"      :      Numero de documento: "+objects[1]+"      :     Nombre: "+objects[2]+"      :      Correo: "+objects[3]);
+		}    			
+		
+		panelCliente.getListView().setItems(lista);
+	}	
 
 
 
@@ -220,19 +260,55 @@ public class SuperAndesAdministrador implements Initializable {
 	//........... PRODUCTOS ..............
 	//....................................
 	
+	
+	@FXML
+	public void actualizarPanelProductos(Event actionEvent) throws IOException{
+
+		FXMLLoader loader = new FXMLLoader();
+
+		loader.setLocation(getClass().getResource("/interfazsuperandes/PanelesSucursal/PanelProductos.fxml"));
+
+		Parent rightSide = loader.load();	
+
+		panelProducto = loader.getController();
+
+		BorderPane.setAlignment(rightSide, Pos.CENTER);		
+
+		cargarProductos();
+
+		borderPanelPrincipal.setRight( rightSide );
+
+	}
+	
+	@FXML
+	public void cargarProductos(){
+
+		lista.clear();    	
+
+		List<Object[]> productos = pp.darElementos(PersistenciaSuperAndes.darTablaProducto());
+
+		for (Object[] objects : productos) {    		
+
+			lista.add("Nombre: "+objects[1]+"     :    Codigo barras: "+objects[0]);
+		}    			
+		
+		panelProducto.getListViewProductos().setItems(lista);
+	}	
+
+
 
 	public List<String> darListaProductos() {
 
 		List<Object[]> lista = pp.darElementos(PersistenciaSuperAndes.darTablaProducto());
-		
+
 		List<String> nomProductos = new ArrayList<>();
-		
+
 		for (Object[] objects : lista) {
-			
+
 			nomProductos.add((String) objects[1]);
-			
+
 		}
-		
+
 		return nomProductos;
 
 	}

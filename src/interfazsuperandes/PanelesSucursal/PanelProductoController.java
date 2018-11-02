@@ -45,6 +45,49 @@ public class PanelProductoController implements Initializable {
 		// TODO Auto-generated method stub
 
 	}
+	
+	
+	
+	public ListView<String> getListViewProductos() {
+		return listViewProductos;
+	}
+
+	public void setListViewProductos(ListView<String> listViewProductos) {
+		this.listViewProductos = listViewProductos;
+	}
+
+	public Button getButEliminar() {
+		return butEliminar;
+	}
+
+	public void setButEliminar(Button butEliminar) {
+		this.butEliminar = butEliminar;
+	}
+
+	public Button getButCrear() {
+		return butCrear;
+	}
+
+	public void setButCrear(Button butCrear) {
+		this.butCrear = butCrear;
+	}
+
+	public Button getButModificar() {
+		return butModificar;
+	}
+
+	public void setButModificar(Button butModificar) {
+		this.butModificar = butModificar;
+	}
+
+	public Button getButVerPromociones() {
+		return butVerPromociones;
+	}
+
+	public void setButVerPromociones(Button butVerPromociones) {
+		this.butVerPromociones = butVerPromociones;
+	}
+
 	@FXML
 	void eliminarProducto(ActionEvent event) {
 
