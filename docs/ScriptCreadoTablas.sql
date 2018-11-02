@@ -4,9 +4,9 @@ create sequence SuperAndes_sequence;
 CREATE TABLE Producto
 (
     codigoDeBarras VARCHAR(80) NOT NULL,
-    nombre VARCHAR(80),
-    presentacion VARCHAR(80),
-    marca VARCHAR(80),
+    nombre VARCHAR(80) NOT NULL,
+    presentacion VARCHAR(80) NOT NULL,
+    marca VARCHAR(80) NOT NULL,
     cantidad INTEGER  CHECK (cantidad > 0),
     unidadDeMedida VARCHAR(80),
     especificacionEmpacado VARCHAR(80),
@@ -19,7 +19,7 @@ CREATE TABLE Sucursal
     idSucursal INTEGER NOT NULL,
     nombre VARCHAR(80) NOT NULL,
     segmentacion VARCHAR(80),
-    tamano VARCHAR(80) NOT NULL,
+    tamano NUMBER NOT NULL CHECK (tamano > 0),
     ciudad VARCHAR(80) NOT NULL,
     direccion VARCHAR(80) NOT NULL,
     CONSTRAINT sucursal_pk PRIMARY KEY(idSucursal)
@@ -282,7 +282,7 @@ ALTER TABLE PagueNUnidadesLleveMPromo
     
 ALTER TABLE VentaPromocion
     ADD    FOREIGN KEY (codigoPromo)
-    REFERENCES Promocion(codigoPromocion
+    REFERENCES Promocion(codigoPromocion)
     ON DELETE CASCADE
 ;
     

@@ -26,6 +26,7 @@ import com.google.gson.stream.JsonReader;
 import interfazsuperandes.PanelesSucursal.PanelClienteController;
 import interfazsuperandes.PanelesSucursal.PanelProductoController;
 import interfazsuperandes.PanelesSucursal.PanelProveedorController;
+import interfazsuperandes.PanelesSucursal.PanelSucursalController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -63,6 +64,8 @@ public class SuperAndesAdministrador implements Initializable {
 	private PanelClienteController panelCliente;
 
 	private PanelProductoController panelProducto;
+	
+	private PanelSucursalController panelSucursal;
 
 
 	//Panel principal
@@ -333,11 +336,83 @@ public class SuperAndesAdministrador implements Initializable {
 	//....................................
 	//........... SUCURSALES .............
 	//....................................
+	@FXML
+	public void actualizarPanelSucursales(Event actionEvent) throws IOException{
 
+		FXMLLoader loader = new FXMLLoader();
 
+		loader.setLocation(getClass().getResource("/interfazsuperandes/PanelesSucursal/PanelSucursales.fxml"));
 
+		Parent rightSide = loader.load();	
 
+		panelSucursal = loader.getController();
 
+		BorderPane.setAlignment(rightSide, Pos.CENTER);	
+
+		cargarSucursales();
+		
+		borderPanelPrincipal.setRight( rightSide );
+
+	}
+	
+	@FXML
+	public void cargarSucursales(){
+
+		lista.clear();    	
+
+		List<Object[]> sucursales = pp.darElementos(PersistenciaSuperAndes.darTablaSucursal());
+
+		for (Object[] objects : sucursales) {    		
+
+			lista.add("Id: "+objects[0]+"      :      Nombre: "+objects[1]);
+		}    			
+
+		panelSucursal.getListViewSucursales().setItems(lista);
+	}
+	
+	public void crearSucursal(String sucursal) 
+	{	
+		String nombre = sucursal.split("/")[0],
+				segmentacion = sucursal.split("/")[1],
+				tamanio = sucursal.split("/")[2],
+				ciudad = sucursal.split("/")[3],
+				direccion = sucursal.split("/")[4];		
+
+		pp.registrarSucursal(nombre, segmentacion, Double.valueOf(tamanio), ciudad, direccion);
+
+		cargarSucursales();
+	}	
+	
+	public void eliminarSucursal(String nombre) 
+	{
+		pp.eliminarSucursalPorNombre(nombre);
+		cargarSucursales();
+
+	}
+	
+	public void modificarSucursal(String sucursal, String nombreActual ) 
+	{	
+		/*String[] arreglo = sucursal.split("/");
+		for(String a : arreglo)
+			System.out.println("Esto es: " + a);*/
+		
+		String nombreNuevo = sucursal.split("/")[0];
+		String segmentacion = sucursal.split("/")[1];
+		String tamano = sucursal.split("/")[2];
+		String ciudad = sucursal.split("/")[3];
+		String direccion = sucursal.split("/")[4];
+
+		pp.modificarSucursalPorNombre(nombreActual, nombreNuevo, segmentacion, Double.valueOf(tamano), ciudad, direccion);
+		cargarSucursales();
+
+	}
+	
+	public Object[] darSucursalPorNombre(String nombre)
+	{
+		return pp.darSucursalPorNombre(nombre);
+	}
+	
+	
 	//....................................
 	//........... PROMOCIONES ............
 	//....................................

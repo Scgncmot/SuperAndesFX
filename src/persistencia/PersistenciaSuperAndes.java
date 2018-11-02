@@ -492,7 +492,7 @@ public class PersistenciaSuperAndes {
 	}
 
 
-	public Sucursal registrarSucursal(String nombre, String segmentacion, String tamanio, String ciudad, String direccion)
+	public Sucursal registrarSucursal(String nombre, String segmentacion, Double tamano, String ciudad, String direccion)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
@@ -500,10 +500,10 @@ public class PersistenciaSuperAndes {
 		{
 			tx.begin();
 			long idSucursal= nextval();
-			long tuplasInsertadas = sqlSucursal.insertarSucursal(pm, idSucursal, nombre, segmentacion, tamanio, ciudad, direccion);
+			long tuplasInsertadas = sqlSucursal.insertarSucursal(pm, idSucursal, nombre, segmentacion, tamano, ciudad, direccion);
 			tx.commit();
 			log.trace ("Inserción de sucursal: " + nombre + ": " + tuplasInsertadas + " tuplas insertadas");
-			return new Sucursal(idSucursal, nombre, segmentacion, direccion, tamanio, ciudad);
+			return new Sucursal(idSucursal, nombre,  segmentacion,  direccion,  ciudad,  tamano);
 
 		} 
 		catch (Exception e) 
@@ -523,24 +523,47 @@ public class PersistenciaSuperAndes {
 
 	}
 
-	public Bodega registrarBodega()
-	{
-		//TODO Hacer metodo.
-		return null;
-	}
-
-	public Estante registrarEstante(long idSucursal, double capacidadVolumen, double capacidadTotalVolumen, double capacidadPeso, double capacidadTotalPeso)
+	public Bodega registrarBodega(long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
 		try 
 		{
 			tx.begin();
-			long idEstante= nextval();	
-			long tuplasInsertadas = sqlEstante.insertarEstante(pm,idEstante,idSucursal,capacidadVolumen,capacidadTotalVolumen,capacidadPeso,capacidadTotalPeso);
+			long id= nextval();	
+			long tuplasInsertadas = sqlBodega.adicionarBodega(pm, id, idSucursal, idCategoria, volumenMaximo, pesoMaximo);
 			tx.commit();
-			log.trace ("Inserción de estante: " + idEstante + ": " + tuplasInsertadas + " tuplas insertadas");
-			return new Estante(idSucursal, idEstante, "", 0, capacidadVolumen, capacidadTotalVolumen, capacidadPeso, capacidadTotalPeso, 0);
+			log.trace ("Inserción de estante: " + id + ": " + tuplasInsertadas + " tuplas insertadas");
+			return new Bodega( id, idSucursal, idCategoria, volumenMaximo, pesoMaximo);
+		} 
+		catch (Exception e) 
+		{
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+	}
+
+	public Estante registrarEstante(long idSucursal, long idCategoria, 
+			Double volumenMaximo, Double pesoMaximo, Integer nivelDeAbastecimiento)
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		try 
+		{
+			tx.begin();
+			long id= nextval();	
+			long tuplasInsertadas = sqlEstante.adicionarEstante(pm, id, idSucursal,idCategoria, volumenMaximo, pesoMaximo, nivelDeAbastecimiento);
+			tx.commit();
+			log.trace ("Inserción de estante: " + id + ": " + tuplasInsertadas + " tuplas insertadas");
+			return new Estante(id, idSucursal,idCategoria, volumenMaximo, pesoMaximo, nivelDeAbastecimiento);
 		} 
 		catch (Exception e) 
 		{
@@ -1035,6 +1058,69 @@ public class PersistenciaSuperAndes {
 
 	}
 
+	public void eliminarSucursalPorNombre(String nombre) 
+	{
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlSucursal.eliminarSucursalPorNombre(pm, nombre);
+			tx.commit();
+		}
+		catch(Exception e) 
+		{			
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));			
+		}
+
+	}
+	
+	public void modificarSucursalPorNombre(String nombreActual ,String nombreNuevo, String segmentacion,
+			Double tamano, String ciudad, String direccion) 
+	{
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlSucursal.modificarSucursalPorNombre(pm, nombreActual, nombreNuevo, segmentacion, tamano, ciudad, direccion);
+			tx.commit();
+		}
+		catch(Exception e) 
+		{			
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));			
+		}
+
+	}	
+	
+	public Object[]  darSucursalPorNombre(String nombre) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			Object[] retorno = sqlSucursal.darSucursalPorNombre(pm, nombre);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	
+	
 	public void modificarProveedor(String nombreAntiguo , String nitAntiguo ,String nit, String nombre) {
 
 		PersistenceManager pm = pmf.getPersistenceManager();
