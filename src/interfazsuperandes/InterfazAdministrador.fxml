@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPanelPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1110.0" style="-fx-background-color: #20120F;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="negocio.SuperAndesAdministrador">
+   <left>
+      <BorderPane prefHeight="629.0" prefWidth="320.0" BorderPane.alignment="CENTER">
+         <top>
+            <Pane prefHeight="116.0" prefWidth="320.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane layoutX="11.0" layoutY="10.0" prefHeight="107.0" prefWidth="282.0" style="-fx-background-color: #632921;">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="145.0" layoutX="69.0" layoutY="-19.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@logoSuperAndes.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </top>
+         <center>
+            <Pane prefHeight="527.0" prefWidth="320.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane layoutX="11.0" layoutY="8.0" prefHeight="493.0" prefWidth="282.0" style="-fx-background-color: #632921;">
+                     <children>
+                        <Button fx:id="butProveedores" layoutX="36.0" layoutY="23.0" mnemonicParsing="false" onAction="#actualizarPanelProveedores" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROVEEDORES">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butClientes" layoutX="36.0" layoutY="69.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CLIENTES">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butProductos" layoutX="36.0" layoutY="117.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PRODUCTOS">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butSucursales" layoutX="36.0" layoutY="164.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="SUCURSALES">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butPromociones" layoutX="36.0" layoutY="210.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROMOCIONES">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butPedidos" layoutX="36.0" layoutY="256.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PEDIDOS">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butVentas" layoutX="36.0" layoutY="304.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="VENTAS">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butCategorias" layoutX="36.0" layoutY="351.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CATEGORIAS">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butEstantes" layoutX="36.0" layoutY="441.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="ESTANTES">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butBodegas" layoutX="36.0" layoutY="396.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="BODEGAS">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </center>
+      </BorderPane>
+   </left>
+   <right>
+      <Pane prefHeight="629.0" prefWidth="819.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane layoutX="-19.0" layoutY="10.0" prefHeight="609.0" prefWidth="776.0" style="-fx-background-color: #632821;">
+               <children>
+                  <ImageView fitHeight="611.0" fitWidth="799.0" layoutX="2.0" layoutY="-1.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@marco.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="311.0" fitWidth="680.0" layoutX="62.0" layoutY="184.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@welcome.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </right>
+</BorderPane>

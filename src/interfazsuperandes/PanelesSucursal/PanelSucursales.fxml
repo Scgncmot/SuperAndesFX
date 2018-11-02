@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="801.0" style="-fx-background-color: #632921;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfazsuperandes.PanelesSucursal.PanelSucursalController">
+   <children>
+      <ListView fx:id="listViewSucursales" layoutX="45.0" layoutY="170.0" prefHeight="380.0" prefWidth="712.0" />
+      <Button fx:id="butEliminar" layoutX="164.0" layoutY="79.0" mnemonicParsing="false" onAction="#eliminarSucursal" prefHeight="40.0" prefWidth="100.0" text="Eliminar" />
+      <Button fx:id="butCrear" layoutX="45.0" layoutY="79.0" mnemonicParsing="false" onAction="#crearSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear" />
+      <Button fx:id="butModificar" layoutX="282.0" layoutY="79.0" mnemonicParsing="false" onAction="#modificarSucursal" prefHeight="40.0" prefWidth="100.0" text="Modificar" />
+      <Button fx:id="butCrearBodega" layoutX="401.0" layoutY="79.0" mnemonicParsing="false" onAction="#crearBodegaASucursal" prefHeight="40.0" prefWidth="100.0" text="Crear bodega " />
+      <Button fx:id="butCrearEstante" layoutX="519.0" layoutY="79.0" mnemonicParsing="false" onAction="#crearEstanteASucursal" prefHeight="40.0" prefWidth="100.0" text="Crear estante" />
+      <Button fx:id="butDarDinero" layoutX="640.0" layoutY="79.0" mnemonicParsing="false" onAction="#mostrarDineroRecolectado" prefHeight="40.0" prefWidth="117.0" text="Dinero recolectado" />
+   </children>
+</Pane>
