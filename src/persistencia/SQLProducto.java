@@ -53,4 +53,12 @@ public class SQLProducto {
 		q.setParameters(nombreProducto);
 		return (Object[]) q.executeUnique();
 	}
+
+	public void eliminarProducto(PersistenceManager pm, String barcode) {
+		
+		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaProducto()+" WHERE CODIGODEBARRAS = ?");
+		q.setParameters(barcode);
+		q.executeUnique();
+		
+	}
 }

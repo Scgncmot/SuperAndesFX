@@ -26,6 +26,7 @@ import com.google.gson.stream.JsonReader;
 
 import interfazsuperandes.PanelesSucursal.PanelClienteController;
 import interfazsuperandes.PanelesSucursal.PanelProductoController;
+import interfazsuperandes.PanelesSucursal.PanelPromocionController;
 import interfazsuperandes.PanelesSucursal.PanelProveedorController;
 import interfazsuperandes.PanelesSucursal.PanelSucursalController;
 import javafx.collections.FXCollections;
@@ -62,6 +63,8 @@ public class SuperAndesAdministrador implements Initializable {
 	private PanelProductoController panelProducto;
 
 	private PanelSucursalController panelSucursal;
+
+	private PanelPromocionController panelPromocion;
 
 
 	//Panel principal
@@ -286,7 +289,7 @@ public class SuperAndesAdministrador implements Initializable {
 	public void modificarClienteJuridico(String numDocAntiguo, String numDocNuevo, String nombre, String correo, String direccion) {
 
 		pp.modificarClienteJuridico(numDocAntiguo,numDocNuevo, nombre, correo, direccion);
-		
+
 		cargarClientes();
 	}
 
@@ -294,7 +297,7 @@ public class SuperAndesAdministrador implements Initializable {
 	public void modificarClienteNatural(String tipoDocAntiguo,String tipoDoc,String numDocAntiguo,String numDoc,String nombre,String correo) {
 
 		pp.modificarClienteNatural(tipoDocAntiguo,tipoDoc,numDocAntiguo,numDoc,nombre,correo);
-		
+
 		cargarClientes();
 
 	}
@@ -357,6 +360,28 @@ public class SuperAndesAdministrador implements Initializable {
 		return nomProductos;
 
 	}
+
+
+	public void crearProducto(String barcode, String nombre, String presentacion, String marca, String cantidad, String medida,
+			String especificacion, String categoria) {
+
+		pp.registrarProducto(barcode, nombre, presentacion, marca, Integer.parseInt(cantidad), medida, especificacion, categoria);
+
+		cargarProductos();
+
+	}
+
+
+
+	public void eliminarProducto(String barcode) {
+
+		pp.eliminarProducto(barcode);
+
+		cargarProductos();
+
+	}
+
+
 
 
 	//....................................
@@ -471,6 +496,39 @@ public class SuperAndesAdministrador implements Initializable {
 	//....................................
 
 
+	@FXML
+	public void actualizarPanelPromociones(Event actionEvent) throws IOException{
+
+		FXMLLoader loader = new FXMLLoader();
+
+		loader.setLocation(getClass().getResource("/interfazsuperandes/PanelesSucursal/PanelPromociones.fxml"));
+
+		Parent rightSide = loader.load();	
+
+		panelPromocion = loader.getController();
+
+		BorderPane.setAlignment(rightSide, Pos.CENTER);		
+
+		cargarPromociones();
+
+		borderPanelPrincipal.setRight( rightSide );
+
+	}
+
+	public void cargarPromociones(){
+
+		lista.clear();    	
+
+		List<Object[]> promociones = pp.darElementos(PersistenciaSuperAndes.darTablaPromocion());
+
+		for (Object[] objects : promociones) {    		
+
+			lista.add("Codigo: "+objects[0]+"     :    Tipo: "+objects[1]+"     :    Fecha vencimiento: "+objects[2]);
+		}    			
+
+		panelPromocion.getListViewPromocion().setItems(lista);
+	}	
+
 
 
 	//....................................
@@ -492,6 +550,21 @@ public class SuperAndesAdministrador implements Initializable {
 	//....................................
 
 
+	public List<String> darListaCategorias() {
+
+		List<Object[]> lista = pp.darElementos(PersistenciaSuperAndes.darTablaCategoria());
+
+		List<String> retorno = new ArrayList<>();
+
+		for (Object[] objects : lista) {
+
+			retorno.add(objects[0]+"-"+objects[1]);
+
+		}
+
+		return retorno;
+
+	}
 
 
 	private JsonObject openConfig (String tipo, String archConfig)
@@ -503,18 +576,16 @@ public class SuperAndesAdministrador implements Initializable {
 			FileReader file = new FileReader (archConfig);
 			JsonReader reader = new JsonReader ( file );
 			config = gson.fromJson(reader, JsonObject.class);
-			log.info ("Se encontró un archivo de configuración válido: " + tipo);
+			log.info ("Se encontro un archivo de configuracion valido: " + tipo);
 		} 
 		catch (Exception e)
 		{
 			e.printStackTrace ();
 			//log.info ("No se encontro un archivo de configuracion valido");			
-			JOptionPane.showMessageDialog(null, "No se encontró un archivo de configuración de interfaz válido: " + tipo, "Parranderos App", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "No se encontro un archivo de configuracion de interfaz valido: " + tipo, "Parranderos App", JOptionPane.ERROR_MESSAGE);
 		}	
 		return config;
 	}
-
-
 
 
 

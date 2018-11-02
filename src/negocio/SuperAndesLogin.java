@@ -18,6 +18,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.main;
@@ -28,9 +29,11 @@ import main.main;
  * @author s.carrero
  */
 public class SuperAndesLogin implements Initializable {
-	
+
 	public static SuperAndesAdministrador admin;
 
+	@FXML
+	private ProgressBar progressBar;
 	@FXML
 	private PasswordField contrasena;
 	@FXML
@@ -45,16 +48,16 @@ public class SuperAndesLogin implements Initializable {
 		//INVOCAR AL BACK PARA REVISAR LA BASE DE DATOS PARA VERIFICAR CREDENCIALES     
 
 		if(comboBox.getValue().equals("Administrador")){
-			
+
 			FXMLLoader loader = new FXMLLoader();
-			
+
 			loader.setLocation(getClass().getResource("/interfazsuperandes/InterfazAdministrador.fxml"));
-			
+
 			Parent window1 = loader.load();
-			
+
 			admin = loader.getController();			
 
-			Stage mainStage = main.parentWindow;
+			Stage mainStage = main.parentWindow;			
 
 			mainStage.getScene().setRoot(window1);       
 
@@ -66,14 +69,14 @@ public class SuperAndesLogin implements Initializable {
 		}
 
 		else {
-			
-			
+
+
 
 		}
 
 
 	}    
-	
+
 
 
 	/**

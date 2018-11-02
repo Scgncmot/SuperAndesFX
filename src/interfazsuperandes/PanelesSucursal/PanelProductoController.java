@@ -6,6 +6,7 @@
 package interfazsuperandes.PanelesSucursal;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -15,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -22,6 +24,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
@@ -112,36 +115,115 @@ public class PanelProductoController implements Initializable {
 		grid.setHgap(10);
 		grid.setVgap(10);
 
-		ComboBox<String> combo = new ComboBox<>();
-		
-		
-		
-		
-		TextField nit = new TextField();
-		nit.setPromptText("00000000-0");
-		TextField nombre = new TextField();
-		nombre.setPromptText("A Datum Corp Inc.");
+		List<String> lista = SuperAndesLogin.admin.darListaCategorias();
 
-		grid.add(new Label("Ingrese el NIT del proveedor:"), 0, 0);
-		grid.add(nit, 1, 0);
-		grid.add(new Label("Ingrese el nombre del proveedor:"), 0, 1);
-		grid.add(nombre, 1, 1);
+		if(lista.isEmpty()) {
 
-		dialog.getDialogPane().setContent(grid);
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("No existen categorias");
+			alert.setHeaderText(null);
+			alert.setContentText("No existen categorias, cree una categoria antes de continuar");
+			alert.showAndWait();
+		}
 
-		String x = "";
+		else {
 
-		Optional<Pair<String, String>> result = dialog.showAndWait();
+			TextField codigotf = new TextField();
 
-		x = result.get().getKey()+"/"+result.get().getValue();
+			grid.add(new Label("Codigo de barras: "), 0, 0);
 
-		SuperAndesLogin.admin.crearProveedor(x);
+			grid.add(codigotf, 1, 0);
+			
+
+			TextField nombretf = new TextField();
+
+			grid.add(new Label("Nombre: "), 0, 1);
+
+			grid.add(nombretf, 1, 1);
+
+
+			TextField presentaciontf = new TextField();
+
+			grid.add(new Label("Presentacion: "), 0, 2);
+
+			grid.add(presentaciontf, 1, 2);
+
+
+			TextField marcatf = new TextField();
+
+			grid.add(new Label("Marca: "), 0, 3);
+
+			grid.add(marcatf, 1, 3);
+
+
+			TextField cantidadtf = new TextField();
+
+			grid.add(new Label("Cantidad: "), 0, 4);
+
+			grid.add(cantidadtf, 1, 4);
+
+
+			TextField unidadmedidatf = new TextField();
+
+			grid.add(new Label("Unidad de medidad: "), 0, 5);
+
+			grid.add(unidadmedidatf, 1, 5);
+
+
+			TextField especificacionEmpacadotf = new TextField();
+
+			grid.add(new Label("Especificaciones empacado: "), 0, 6);
+
+			grid.add(especificacionEmpacadotf, 1, 6);
+
+
+			ComboBox<String> combo = new ComboBox<>();
+
+			ObservableList<String> listO = FXCollections.observableList(lista);
+
+			combo.setItems(listO);
+
+			grid.add(new Label("Categoria: "), 0, 7);
+
+			grid.add(combo, 1, 7);			
+
+			dialog.getDialogPane().setContent(grid);
+
+			dialog.showAndWait();		
+			
+			boolean ex = false;
+			
+			try {
+				
+				Integer.parseInt(cantidadtf.getText());
+			}
+			
+			catch (Exception e) {
+				
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("ERROR");
+				alert.setHeaderText(null);
+				alert.setContentText("Error: La cantidad debe ser un entero");
+				alert.showAndWait();
+				
+				ex = true;			
+							
+			}		
+
+			if(!ex)
+			SuperAndesLogin.admin.crearProducto(codigotf.getText(), nombretf.getText(), presentaciontf.getText(), marcatf.getText(), cantidadtf.getText(), unidadmedidatf.getText(), especificacionEmpacadotf.getText(), combo.getValue().split("-")[0]);
+
+		}
 
 	}
 
 
 	@FXML
 	void eliminarProducto(ActionEvent event) {
+		
+		String barcode = listViewProductos.getSelectionModel().getSelectedItem().split(": ")[3].trim();
+		
+		SuperAndesLogin.admin.eliminarProducto(barcode);		
 
 	}
 
