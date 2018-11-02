@@ -7,6 +7,10 @@ package interfazsuperandes.PanelesSucursal;
 
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -20,6 +24,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -38,36 +43,35 @@ import negocio.SuperAndesLogin;
 public class PanelSucursalController implements Initializable {
 
 	@FXML
-    private ListView<String> listViewSucursales;
+	private ListView<String> listViewSucursales;
 
-    @FXML
-    private Button butEliminar;
+	@FXML
+	private Button butEliminar;
 
-    @FXML
-    private Button butCrear;
+	@FXML
+	private Button butCrear;
 
-    @FXML
-    private Button butModificar;
+	@FXML
+	private Button butModificar;
 
-    @FXML
-    private Button butCrearBodega;
+	@FXML
+	private Button butCrearBodega;
 
-    @FXML
-    private Button butCrearEstante;
+	@FXML
+	private Button butCrearEstante;
 
-    @FXML
-    private Button butDarDinero;
-    
+	@FXML
+	private Button butDarDinero;
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
 	}
-	
-	
-    public ListView<String> getListViewSucursales() {return listViewSucursales;}
+
+
+	public ListView<String> getListViewSucursales() {return listViewSucursales;}
 
 	public void setListViewSucursales(ListView<String> listViewSucursales) 
-		{this.listViewSucursales = listViewSucursales;	}
+	{this.listViewSucursales = listViewSucursales;	}
 
 	public Button getButEliminar() {return butEliminar;}
 
@@ -80,25 +84,25 @@ public class PanelSucursalController implements Initializable {
 	public Button getButModificar() {return butModificar;}
 
 	public void setButModificar(Button butModificar) 
-		{this.butModificar = butModificar;}
+	{this.butModificar = butModificar;}
 
 	public Button getButCrearBodega() {return butCrearBodega;}
 
 	public void setButCrearBodega(Button butCrearBodega) 
-		{this.butCrearBodega = butCrearBodega;}
+	{this.butCrearBodega = butCrearBodega;}
 
 	public Button getButCrearEstante() {return butCrearEstante;}
 
 	public void setButCrearEstante(Button butCrearEstante) 
-		{this.butCrearEstante = butCrearEstante;}
+	{this.butCrearEstante = butCrearEstante;}
 
 	public Button getButDarDinero() {return butDarDinero;}
 
 	public void setButDarDinero(Button butDarDinero) 
-		{this.butDarDinero = butDarDinero;}
+	{this.butDarDinero = butDarDinero;}
 
 	@FXML
-    void crearSucursal(ActionEvent event) 
+	void crearSucursal(ActionEvent event) 
 	{
 		Dialog<Pair<String, String>> dialog = new Dialog<>();
 		dialog.setTitle("Crear Sucursal");
@@ -136,31 +140,31 @@ public class PanelSucursalController implements Initializable {
 
 		dialog.getDialogPane().setContent(grid);
 		dialog.showAndWait();
-		
+
 		String sucursal = nombre.getText() + "/" + segmentacion.getText() + "/" +
 				tamano.getText() + "/" + ciudad.getText() + "/" + direccion.getText();	
 
 		SuperAndesLogin.admin.crearSucursal(sucursal);
-    }
+	}
 
-    @FXML
-    void eliminarSucursal(ActionEvent event) 
-    {
-    	String nombre = listViewSucursales.getSelectionModel().getSelectedItem();    	
+	@FXML
+	void eliminarSucursal(ActionEvent event) 
+	{
+		String nombre = listViewSucursales.getSelectionModel().getSelectedItem();  
 		String[] arreglo = nombre.split(": ");		
 		String nombreStr = arreglo[3].trim();
 		SuperAndesLogin.admin.eliminarSucursal(nombreStr);
-    }
+	}
 
-    @FXML
-    void modificarSucursal(ActionEvent event) 
-    {
-    	String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();
+	@FXML
+	void modificarSucursal(ActionEvent event) 
+	{
+		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();
 
 		String[] arreglo = sucursal.split(": ");	
 
 		String nombreActual = arreglo[3].trim();
-		
+
 		//----------------------------------------------------------------
 		//Se obtiene la informacion anterior para ponerla en el texto.
 		Object[] datos = SuperAndesLogin.admin.darSucursalPorNombre(nombreActual);			
@@ -169,7 +173,7 @@ public class PanelSucursalController implements Initializable {
 		Object ciudadActual = datos[4];
 		Object direccionActual = datos[5];	
 		//----------------------------------------------------------------
-		
+
 		Dialog<Pair<String, String>> dialog = new Dialog<>();
 		dialog.setTitle("Modificar proveedor");
 		dialog.setHeaderText("Modificar proveedor");
@@ -206,17 +210,17 @@ public class PanelSucursalController implements Initializable {
 
 		dialog.getDialogPane().setContent(grid);
 		dialog.showAndWait();		
-		
+
 		String sucursalNueva = nombreNuevo.getText() + "/" + segmentacion.getText() + "/" +
 				tamano.getText() + "/" + ciudad.getText() + "/" + direccion.getText();	
 
 		SuperAndesLogin.admin.modificarSucursal(sucursalNueva, nombreActual);
-    }
+	}
 
-    @FXML
-    void mostrarDineroRecolectado(ActionEvent event)
-    {
-    	List<String> lista = SuperAndesLogin.admin.darListaSucursales();
+	@FXML
+	void mostrarDineroRecolectado(ActionEvent event)
+	{
+		List<String> lista = SuperAndesLogin.admin.darListaSucursales();
 
 		if(lista.isEmpty()) 
 		{
@@ -233,45 +237,67 @@ public class PanelSucursalController implements Initializable {
 			dialogPane.setTitle("Dinero recolectado entre las sucursales");
 			dialogPane.getDialogPane().getButtonTypes().addAll(button);			
 			GridPane grid = new GridPane();
-			
+
 			grid.setHgap(10);
 			grid.setVgap(10);		
-			
-			TextField fechaInicio = new TextField();
-			TextField fechaFinal = new TextField();			
+
+			DatePicker dPFechaInicio = new DatePicker();
+			DatePicker dpFechaFinal = new DatePicker();			
 
 			grid.add(new Label("Ingrese la fecha inicial:"), 0, 2);
-			grid.add(fechaInicio, 1, 2);
+			grid.add(dPFechaInicio, 1, 2);
 			grid.add(new Label("Ingrese la fecha final:"), 0, 3);
-			grid.add(fechaFinal, 1, 3);
-			
+			grid.add(dpFechaFinal, 1, 3);
+
 			dialogPane.getDialogPane().setContent(grid);
-			
+
 			dialogPane.showAndWait();	
-			
+
+			LocalDate lDFechaInicio = dPFechaInicio.getValue();
+			LocalDate lDFechaFinal = dpFechaFinal.getValue();
+
+			Date fechaInicio = Date.from(lDFechaInicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			Date fechaFinal = Date.from(lDFechaFinal.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
 			Dialog dialogPane2 = new Dialog();
-			ButtonType button2 = new ButtonType("Siguiente", ButtonData.OK_DONE);
+			ButtonType button2 = new ButtonType("OK", ButtonData.OK_DONE);
 			dialogPane2.setTitle("Dinero recolectado entre las sucursales");
 			dialogPane2.getDialogPane().getButtonTypes().addAll(button2);
 			GridPane grid2 = new GridPane();
 			grid2.setHgap(10);
 			grid2.setVgap(10);	
-			
-			//TODO El formato de timestamp toca cambiarlo.
-			grid2.add(new Label("El dinero recolectado es: "), 0, 0);
+
 			List<Object[]> valor = SuperAndesLogin.admin.
-					darDineroRecolectado(Timestamp.valueOf(fechaInicio.getText()) , Timestamp.valueOf(fechaFinal.getText()));
-			grid2.add(new Label(valor.get(0).toString()) , 1, 0);			
+					darDineroRecolectado(fechaInicio , fechaFinal);
+
+			List<String> mostrarDatos = new ArrayList<String>();
+
+			for (Object[] objects : valor) {
+				
+				mostrarDatos.add("Id de la sucursal: "+objects[0]+"  /   Total: "+objects[1]);
+
+			}
+			
+			ObservableList<String> listaO = FXCollections.observableList(mostrarDatos);
+			
+			ListView<String> vista = new ListView<String>();
+			
+			vista.setItems(listaO);		
+			
+			grid2.add(vista, 0, 0);
+
+			dialogPane2.getDialogPane().setContent(grid2);
+
+			dialogPane2.showAndWait();
 		}
-    }
+	}
 
 	@FXML
-    void agregarBodegaSucursal(ActionEvent event) 
+	void agregarBodegaSucursal(ActionEvent event) 
 	{
-		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();
-
+		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
 		String[] arreglo = sucursal.split(": ");
-		
+
 		//El id es el elemento arreglo[1] y el nombre es el [3]
 		long idSucursal = Long.valueOf(arreglo[1].trim());
 		String nombreSucursal = arreglo[3].trim();
@@ -280,53 +306,55 @@ public class PanelSucursalController implements Initializable {
 		ButtonType button = new ButtonType("Registrar bodega", ButtonData.OK_DONE);
 		dialogPane.getDialogPane().getButtonTypes().addAll(button);			
 		GridPane grid = new GridPane();
-			
+
 		grid.setHgap(10);
 		grid.setVgap(10);
-		
+
 		ListView<String> bodegas = new ListView<String>();		
-	
+
 		grid.add(new Label("Bodegas Sucursal:"), 0, 0);			
 		grid.add(bodegas, 0, 1);	
-		
+
 		GridPane grid2= new GridPane();
 		grid.add(grid2, 1, 1);
 
 		TextField categoria = new TextField();
 		TextField volumenMaximo = new TextField();
 		TextField pesoMaximo = new TextField();	
-			
+
 		grid2.add(new Label("Ingrese el id de la categoria de los productos que se almacenaran"), 1, 1);
 		grid2.add(categoria, 2, 1);
 		grid2.add(new Label("Ingrese el volumen maximo de la bodega"), 1, 2);
 		grid2.add(volumenMaximo, 2, 2);		
 		grid2.add(new Label("Ingrese el peso maximo de la bodega"), 1, 3);
 		grid2.add(pesoMaximo, 2, 3);		
-		
+
 		dialogPane.getDialogPane().setContent(grid);		
-			
+
 		dialogPane.showAndWait();
-		
+
 		/*long cate= Long.valueOf(categoria.getText());
 		Double vM = Double.valueOf(volumenMaximo.getText()),
 				pM = Double.valueOf(pesoMaximo.getText());*/
-		
+
 		/*System.out.println("El id es: " + idSucursal);
 		System.out.println("La categoria es: " + Long.valueOf(categoria.getText()) );
 		System.out.println("El volumen maximo es: " + Double.valueOf(volumenMaximo.getText()));
 		System.out.println("El peso maximo es: " +  Double.valueOf(pesoMaximo.getText()));
-		
+
 		long cate= Long.valueOf(categoria.getText());
 		Double vM = Double.valueOf(volumenMaximo.getText()),
 				pM = Double.valueOf(pesoMaximo.getText());*/
 
-		SuperAndesLogin.admin.agregarBodegasSucursal(idSucursal, Long.valueOf(categoria.getText()), Double.valueOf(volumenMaximo.getText()), Double.valueOf(pesoMaximo.getText()));
-
+		SuperAndesLogin.admin.
+			agregarBodegasSucursal
+				(idSucursal, Long.valueOf(categoria.getText()), Double.valueOf(volumenMaximo.getText()), Double.valueOf(pesoMaximo.getText()));
 	}
 
-    @FXML
-    void agregarEstanteSucursal(ActionEvent event) 
-    {
+	@FXML
+	void agregarEstanteSucursal(ActionEvent event) 
+	{
 
-    }   
+	}  
+	
 }

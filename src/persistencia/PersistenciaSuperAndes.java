@@ -528,6 +528,7 @@ public class PersistenciaSuperAndes {
 		} 
 		catch (Exception e) 
 		{
+			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 			return null;
 		}
@@ -859,7 +860,7 @@ public class PersistenciaSuperAndes {
 	 *****************************************************************/
 
 
-	public List<Object[]> dineroRecolectado(Timestamp fechaInicio,Timestamp fechaFin)
+	public List<Object[]> dineroRecolectado(Date fechaInicio,Date fechaFin)
 	{
 		log.info ("Obteniendo dinero recolectado en las sucursales entre " + fechaInicio+" y "+fechaFin);
 

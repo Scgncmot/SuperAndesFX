@@ -41,9 +41,9 @@ CREATE TABLE Estante
     id INTEGER NOT NULL,
     idSucursal INTEGER NOT NULL,   
     idCategoria INTEGER NOT NULL,
-    volumenActual NUMBER NOT NULL CHECK (volumenActual > 0),
+    volumenActual NUMBER NOT NULL CHECK (volumenActual >= 0),
     volumenMaximo NUMBER NOT NULL CHECK (volumenMaximo > 0),
-    pesoActual NUMBER NOT NULL CHECK (pesoActual > 0),
+    pesoActual NUMBER NOT NULL CHECK (pesoActual >= 0),
     pesoMaximo NUMBER NOT NULL CHECK (pesoMaximo > 0),
     nivelDeAbastecimiento INTEGER NOT NULL CHECK (nivelDeAbastecimiento > 0),
     CONSTRAINT estante_pk PRIMARY KEY(idSucursal, id)
@@ -63,9 +63,9 @@ CREATE TABLE Bodega
     id INTEGER NOT NULL,
     idSucursal INTEGER NOT NULL,
     idCategoria INTEGER,
-    volumenActual NUMBER NOT NULL CHECK (volumenActual > 0),
+    volumenActual NUMBER NOT NULL CHECK (volumenActual >= 0),
     volumenMaximo NUMBER NOT NULL CHECK (volumenMaximo > 0),
-    pesoActual NUMBER NOT NULL CHECK (pesoActual > 0),
+    pesoActual NUMBER NOT NULL CHECK (pesoActual >= 0),
     pesoMaximo NUMBER NOT NULL CHECK (pesoMaximo > 0),
     CONSTRAINT bodega_pk PRIMARY KEY(idSucursal, id)
 );

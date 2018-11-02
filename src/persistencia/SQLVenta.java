@@ -45,10 +45,13 @@ public class SQLVenta {
 		return (long) q.executeUnique();
 	}
 
-	public List<Object[]> obtenerDineroRecolectado(PersistenceManager pm, Timestamp fechaInicio, Timestamp fechaFin) {
+	public List<Object[]> obtenerDineroRecolectado(PersistenceManager pm, Date fechaInicio, Date fechaFin) {
 		
-		Query q = pm.newQuery(SQL, "SELECT idsucursal, SUM(totalventa) FROM venta WHERE fechaventa BETWEEN ? AND ? GROUP BY idsucursal;");
-		q.setParameters(fechaInicio, fechaFin);
+		Timestamp fechI = new Timestamp(fechaInicio.getTime()); 
+		Timestamp fechF = new Timestamp(fechaFin.getTime()); 
+		
+		Query q = pm.newQuery(SQL, "SELECT idsucursal, SUM(totalventa) FROM venta WHERE fechaventa BETWEEN ? AND ? GROUP BY idsucursal");
+		q.setParameters(fechI, fechF);
 		return (List<Object[]>) q.executeList();
 		
 	}

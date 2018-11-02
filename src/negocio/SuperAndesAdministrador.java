@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -451,7 +452,7 @@ public class SuperAndesAdministrador implements Initializable {
 		return nombreSucursal;
 	}
 
-	public List<Object[]> darDineroRecolectado(Timestamp fechaInicio,  Timestamp fechaFin)
+	public List<Object[]> darDineroRecolectado(Date fechaInicio,  Date fechaFin)
 	{
 		return pp.dineroRecolectado(fechaInicio, fechaFin);
 	}

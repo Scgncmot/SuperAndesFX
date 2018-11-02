@@ -33,9 +33,9 @@ public class SQLBodega
 	
 	public long adicionarBodega(PersistenceManager pm, long id, long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo) 
 	{		
-		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaBodega()+"(id, idSucursal,idCategoria, volumenMaximo "
-				+ ",pesoMaximo) values (?, ?, ?, ?, ?, ?)");
-		q.setParameters(id, idSucursal,idCategoria, volumenMaximo, pesoMaximo);
+		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaBodega()+"(id, idSucursal,idCategoria, volumenActual,volumenMaximo "
+				+ ", pesoActual, pesoMaximo) values (?, ?, ?, ?, ?, ? , ?)");
+		q.setParameters(id, idSucursal,idCategoria, 0,volumenMaximo, 0, pesoMaximo);
 		return (long) q.executeUnique();
 	}
 	
