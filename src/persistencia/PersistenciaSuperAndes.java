@@ -17,6 +17,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import interfazsuperandes.PanelesSucursal.PanelPromocionController;
 import negocio.Bodega;
 import negocio.Cliente;
 import negocio.DescPorcentajePromo;
@@ -603,7 +604,7 @@ public class PersistenciaSuperAndes {
 		{
 			tx.begin();
 			String codigoPromo= nextval()+"";
-			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, 1, fechaVencimientoPromocion);
+			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, PanelPromocionController.PAGUENLLEVEM, fechaVencimientoPromocion);
 			tuplasInsertadas+=sqlPagueNUnidadesLleveMPromo.adicionarPromocion(pm, codigoPromo, compraUnidades, llevaUnidades);		
 			tx.commit();
 			log.trace ("Inserción de promocion: " + codigoPromo + ": " + tuplasInsertadas + " tuplas insertadas");
@@ -631,7 +632,7 @@ public class PersistenciaSuperAndes {
 		{
 			tx.begin();
 			String codigoPromo= nextval()+"";
-			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, 1, fechaVencimientoPromocion);
+			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, "FALTA", fechaVencimientoPromocion);
 			tuplasInsertadas+=sqlDescPorcentajePromo.adicionarPromocion(pm, codigoPromo, porcentaje);		
 			//tuplasInsertadas+=sqlProductoPromocion.adicionarPromocion(pm,codigoProducto , codigoPromo);
 			tx.commit();
@@ -660,7 +661,7 @@ public class PersistenciaSuperAndes {
 		{
 			tx.begin();
 			String codigoPromo= nextval()+"";
-			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, 1, fechaVencimientoPromocion);
+			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, PanelPromocionController.PAGUEXLLEVEY, fechaVencimientoPromocion);
 			tuplasInsertadas+=sqlPagueXCantidadLleveYPromo.adicionarPromocion(pm, codigoPromo, cantidadPaga, cantidadLleva);		
 			//tuplasInsertadas+=sqlProductoPromocion.adicionarPromocion(pm,codigoProducto , codigoPromo);
 			tx.commit();
@@ -689,7 +690,7 @@ public class PersistenciaSuperAndes {
 		{
 			tx.begin();
 			String codigoPromo= nextval()+"";
-			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, 1, fechaVencimientoPromocion);
+			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoPromo, PanelPromocionController.PAGUE1LLEVE2CONDESCUENTO, fechaVencimientoPromocion);
 			tuplasInsertadas+=sqlPague1Lleve2ConDescPromo.adicionarPromocion(pm, codigoPromo, porcentaje);		
 			//tuplasInsertadas+=sqlProductoPromocion.adicionarPromocion(pm,codigoProducto , codigoPromo);
 			tx.commit();
@@ -710,18 +711,19 @@ public class PersistenciaSuperAndes {
 			pm.close();
 		}
 	}
-	public Promocion registrarPromocionPaqueteProductos( Timestamp fechaVencimientoPromocion, String codigoProducto, int precioConjunto)
+	public Promocion registrarPromocionPaqueteProductos( Timestamp fechaVencimientoPromocion, String codigoBarras, String nombre, String presentacion, String marca, int cantidad, String unidadMedida, String especificacion, int precio, String categoria)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx=pm.currentTransaction();
 		try 
 		{
 			tx.begin();
-			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoProducto, 5, fechaVencimientoPromocion);
-			long tuplasInsertadas2 = sqlPaqueteDeProductosPromo.adicionarPaquete(pm, codigoProducto, precioConjunto);
+			long tuplasIsertadas0 = sqlProducto.adicionarProducto(pm, codigoBarras, nombre, presentacion, marca, cantidad, unidadMedida, especificacion, categoria);
+			long tuplasInsertadas=sqlPromocion.adicionarPromocion(pm, codigoBarras, PanelPromocionController.PAQUETEPRODUCTOS, fechaVencimientoPromocion);
+			long tuplasInsertadas2 = sqlPaqueteDeProductosPromo.adicionarPaquete(pm, codigoBarras, precio);
 			tx.commit();
-			log.trace ("Inserción de promocion: " + codigoProducto + ": " + tuplasInsertadas + " tuplas insertadas");
-			return new Promocion(codigoProducto, fechaVencimientoPromocion);
+			log.trace ("Inserción de promocion: " + codigoBarras + ": " + tuplasInsertadas + " tuplas insertadas");
+			return new Promocion(codigoBarras, fechaVencimientoPromocion);
 		} 
 		catch (Exception e) 
 		{

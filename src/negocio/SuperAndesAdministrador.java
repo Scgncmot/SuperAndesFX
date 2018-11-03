@@ -354,12 +354,12 @@ public class SuperAndesAdministrador implements Initializable {
 		return nomProductos;
 
 	}
-	
+
 	public List<Object[]> darProductos() 
 	{
 		return pp.darElementos(PersistenciaSuperAndes.darTablaProducto());
 	}
-	
+
 	public List<Object[]> darProductosSucursal(long idSucursal) 
 	{
 		return pp.darProductosSucursal(idSucursal);
@@ -373,6 +373,12 @@ public class SuperAndesAdministrador implements Initializable {
 
 		cargarProductos();
 
+
+	}
+
+	public String obtenerCodigoDeBarrasPorNombreProducto(String nomProducto) {
+
+		return (String) pp.obtenerCodigoDeBarrasPorProducto(nomProducto)[0];
 	}
 
 
@@ -424,18 +430,18 @@ public class SuperAndesAdministrador implements Initializable {
 
 		panelSucursal.getListViewSucursales().setItems(lista);
 	}
-	
-	
+
+
 	public List<Object[]> cargarBodegasSucursal(long idSucursal)
 	{
 		return pp.darBodegaSucursalPorId(idSucursal);		
 	}
-	
+
 	public List<Object[]> darClientes()
 	{
 		return pp.darClientes();		
 	}
-	
+
 	public List<Object[]> cargarEstantesSucursal(long idSucursal)
 	{
 		return pp.darEstanteSucursalPorId(idSucursal);
@@ -459,17 +465,17 @@ public class SuperAndesAdministrador implements Initializable {
 		pp.eliminarSucursalPorNombre(nombre);
 		cargarSucursales();
 	}
-	
+
 	public void eliminarBodegaPorIdSucursal(long idBodega, long idSucursal) 
 	{
 		pp.eliminarBodegaPorSucursalId(idBodega, idSucursal);
 	}
-	
+
 	public void eliminarEstantePorIdSucursal(long idBodega, long idSucursal) 
 	{
 		pp.eliminarEstantePorSucursalId(idBodega, idSucursal);
 	}
-	
+
 	public void eliminarProductoSucursalPorIds(long idSucursal, String codigoBarras) 
 	{
 		pp.eliminarProductoSucursalPorIds(idSucursal, codigoBarras);
@@ -519,13 +525,13 @@ public class SuperAndesAdministrador implements Initializable {
 	{	
 		pp.registrarBodega(idSucursal, idCategoria, volumenMaximo, pesoMaximo);
 	}
-	
+
 	public void agregarEstantesSucursal(long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo,
 			Integer nivelDeAbastecimiento)
 	{		
 		pp.registrarEstante(idSucursal, idCategoria, volumenMaximo, pesoMaximo, nivelDeAbastecimiento);
 	}
-	
+
 	public void agregarProductosSucursal(long idSucursal, String codigoBarras, Double precioUnitario, Double precioUnidadMedida,
 			Integer nivelDeReorden, Integer cantidadRecompra)
 	{		
@@ -570,6 +576,42 @@ public class SuperAndesAdministrador implements Initializable {
 
 		panelPromocion.getListViewPromocion().setItems(lista);
 	}	
+
+	public void crearPromocion(String tipoPromocion, String[] datos, Date fecha) {
+
+		Timestamp fechaVencimientoPromocion = new Timestamp(fecha.getTime());
+
+		switch (tipoPromocion) {
+
+		case PanelPromocionController.PAGUENLLEVEM:
+
+			pp.registrarPromocionPagueNLleveM(datos[0], fechaVencimientoPromocion, Integer.parseInt(datos[1]), Integer.parseInt(datos[2]));
+
+			break;
+
+		case PanelPromocionController.PAGUEXLLEVEY:
+
+			pp.registrarPromocionPagueXLleveY(datos[0], fechaVencimientoPromocion, Integer.parseInt(datos[1]), Integer.parseInt(datos[2]));
+
+			break;
+
+		case PanelPromocionController.PAQUETEPRODUCTOS:
+
+			pp.registrarPromocionPaqueteProductos(fechaVencimientoPromocion, datos[0], datos[1], datos[2], datos[3], Integer.parseInt(datos[4]), datos[5], datos[6], Integer.parseInt(datos[7]), datos[8]);
+
+			break;
+
+		case PanelPromocionController.PAGUE1LLEVE2CONDESCUENTO:
+
+			pp.registrarPromocionPague1Lleve2doDesc(datos[0], fechaVencimientoPromocion, Double.parseDouble(datos[1]));
+
+			break;
+
+		}
+		
+		cargarPromociones();
+
+	}
 
 
 
@@ -628,6 +670,8 @@ public class SuperAndesAdministrador implements Initializable {
 		}	
 		return config;
 	}
+
+
 
 
 

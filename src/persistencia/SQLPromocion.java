@@ -36,7 +36,7 @@ public class SQLPromocion
 		this.pp = pp;
 	}
 	
-	public long adicionarPromocion(PersistenceManager pm, String codigoPromocion, int tipoPromocion, Timestamp fechaTerminacion)
+	public long adicionarPromocion(PersistenceManager pm, String codigoPromocion, String tipoPromocion, Timestamp fechaTerminacion)
 	{
 		Query q = pm.newQuery(SQL,"INSERT INTO "+pp.darTablaPromocion()+" (CODIGOPROMOCION, TIPOPROMOCION,FECHATERMINACION) VALUES (?,?,?)");
 		q.setParameters(codigoPromocion,tipoPromocion,fechaTerminacion);

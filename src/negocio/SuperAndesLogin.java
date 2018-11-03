@@ -20,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import main.main;
 
@@ -41,14 +42,18 @@ public class SuperAndesLogin implements Initializable {
 	@FXML
 	private TextField usuario;
 	@FXML
-	private ComboBox<String> comboBox;
+	private ComboBox<String> comboBox;	
+	
+	
+	
 	@FXML
 	public void confirmarLogIn(Event evento) throws IOException{
 
-		//INVOCAR AL BACK PARA REVISAR LA BASE DE DATOS PARA VERIFICAR CREDENCIALES     
+		//INVOCAR AL BACK PARA REVISAR LA BASE DE DATOS PARA VERIFICAR CREDENCIALES  
+		
 
 		if(comboBox.getValue().equals("Administrador")){
-
+			
 			FXMLLoader loader = new FXMLLoader();
 
 			loader.setLocation(getClass().getResource("/interfazsuperandes/InterfazAdministrador.fxml"));

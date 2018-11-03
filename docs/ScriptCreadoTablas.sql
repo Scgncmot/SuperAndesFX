@@ -172,7 +172,7 @@ CREATE TABLE VentaProducto
 CREATE TABLE Promocion
 (
     codigoPromocion VARCHAR(80) NOT NULL,
-    tipoPromocion INTEGER NOT NULL,
+    tipoPromocion VARCHAR(80) NOT NULL,
     fechaTerminacion DATE NOT NULL,
     CONSTRAINT promocion_pk PRIMARY KEY(codigoPromocion)
 );
