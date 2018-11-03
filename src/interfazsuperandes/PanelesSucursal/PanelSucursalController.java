@@ -416,7 +416,7 @@ public class PanelSucursalController implements Initializable {
 		String nombreSucursal = arreglo[3].trim();
 		
 		Dialog<?> dialogPane = new Dialog();
-		ButtonType button = new ButtonType("Borrar seleccionada", ButtonData.OK_DONE);
+		ButtonType button = new ButtonType("Borrar seleccion", ButtonData.OK_DONE);
 		dialogPane.setTitle("Bodegas");
 		dialogPane.getDialogPane().getButtonTypes().addAll(button, ButtonType.CANCEL);	
 		dialogPane.initStyle(StageStyle.UTILITY);
@@ -442,7 +442,7 @@ public class PanelSucursalController implements Initializable {
 		dialogPane.getDialogPane().setContent(grid);	
 		dialogPane.showAndWait().ifPresent(response -> {
 		     if (response == button) {
-		    	 String bodega = vista.getSelectionModel().getSelectedItem();
+		    	String bodega = vista.getSelectionModel().getSelectedItem();
 		 		String[] arreglo2 = bodega.split("   ");
 		 		/*for(String a: arreglo2)
 		 			System.out.println("Esto es: " + a);*/
@@ -471,7 +471,7 @@ public class PanelSucursalController implements Initializable {
 		String nombreSucursal = arreglo[3].trim();
 		
 		Dialog<?> dialogPane = new Dialog();
-		ButtonType eliminar = new ButtonType("Eliminar", ButtonData.OK_DONE);
+		ButtonType eliminar = new ButtonType("Borrar seleccion", ButtonData.OK_DONE);
 		dialogPane.setTitle("Estantes");
 		dialogPane.getDialogPane().getButtonTypes().addAll(eliminar, ButtonType.CANCEL);	
 		dialogPane.initStyle(StageStyle.UTILITY);
@@ -497,7 +497,7 @@ public class PanelSucursalController implements Initializable {
 		dialogPane.getDialogPane().setContent(grid);		
 		dialogPane.showAndWait().ifPresent(response -> {
 		     if (response == eliminar) {
-		    	 String estante = vista.getSelectionModel().getSelectedItem();
+		    	String estante = vista.getSelectionModel().getSelectedItem();
 		 		String[] arreglo2 = estante.split("   ");
 		 		/*for(String a: arreglo2)
 		 			System.out.println("Esto es: " + a);*/
@@ -602,7 +602,7 @@ public class PanelSucursalController implements Initializable {
 		String nombreSucursal = arreglo[3].trim();
 		
 		Dialog<?> dialogPane = new Dialog();
-		ButtonType eliminar = new ButtonType("Eliminar", ButtonData.OK_DONE);
+		ButtonType eliminar = new ButtonType("Borrar seleccion", ButtonData.OK_DONE);
 		dialogPane.setTitle("Productos");
 		dialogPane.getDialogPane().getButtonTypes().addAll(eliminar, ButtonType.CANCEL);	
 		dialogPane.initStyle(StageStyle.UTILITY);
@@ -629,7 +629,7 @@ public class PanelSucursalController implements Initializable {
 		dialogPane.getDialogPane().setContent(grid);		
 		dialogPane.showAndWait().ifPresent(response -> {
 		     if (response == eliminar) {
-		    	 String producto = vista.getSelectionModel().getSelectedItem();
+		    	String producto = vista.getSelectionModel().getSelectedItem();
 		 		/*El arreglo tiene 4 elementos. El elemento [0] es el nombre, el [3] es el codigo de barras */
 		 		String[] arreglo2 = producto.split("   ");	
 		 		/*for(String a: arreglo2)
