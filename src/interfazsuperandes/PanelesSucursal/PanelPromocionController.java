@@ -108,7 +108,6 @@ public class PanelPromocionController implements Initializable {
 	}
 
 
-
 	@FXML
 	void crearPromocion(ActionEvent event) {
 

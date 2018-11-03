@@ -82,15 +82,8 @@ public class SuperAndesAdministrador implements Initializable {
 	@FXML
 	private Button butPromociones;
 	@FXML
-	private Button butPedidos;
-	@FXML
-	private Button butVentas;
-	@FXML
 	private Button butCategorias;
-	@FXML
-	private Button butEstantes;
-	@FXML
-	private Button butBodegas;
+
 
 
 
