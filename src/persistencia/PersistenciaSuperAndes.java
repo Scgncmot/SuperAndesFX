@@ -834,8 +834,8 @@ public class PersistenciaSuperAndes {
 		}
 	}
 
-	public Venta registrarVenta(String sucursal, String tipodocumento, String documento, String[] codigosProductos,
-			String[] cantidad, String[] precios, double precioTotal, Date fecha) {
+	public Venta registrarVenta(long sucursal, String tipodocumento, String documento, String[] codigosProductos,
+			String[] cantidad, Double precioTotal, Date fecha) {
 
 		PersistenceManager pm = pmf.getPersistenceManager();
 
@@ -851,11 +851,9 @@ public class PersistenciaSuperAndes {
 
 			long tuplasInsertadas2 = 0;
 
-			for (int i = 0; i < codigosProductos.length; i++) {
-
+			for (int i = 0; i < codigosProductos.length; i++)
 				tuplasInsertadas2 += sqlVentaProducto.adicionarVentaProducto(pm, numeroVenta, codigosProductos[i],cantidad[i]);		
-			}
-
+		
 			tx.commit();
 
 			log.trace ("Inserción de venta: " + numeroVenta + ": " + tuplasInsertadas + " tuplas insertadas");
@@ -867,6 +865,7 @@ public class PersistenciaSuperAndes {
 
 		} catch (Exception e) {
 
+			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 
 			return null;

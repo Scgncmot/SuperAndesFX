@@ -37,11 +37,12 @@ public class SQLVenta {
 		this.pp = pp;
 	}
 
-	public long adicionarVenta(PersistenceManager pm, String sucursal, long numeroVenta, String documento,
-			String documento2, double precioTotal, Date fecha) {
-		
+	public long adicionarVenta(PersistenceManager pm, long sucursal, long numeroVenta, String tipoDocumento,
+			String numDoc, Double precioTotal, Date fecha) {
+				
+		Timestamp fechI = new Timestamp(fecha.getTime()); 
 		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaVenta()+"(NUMEROVENTA,TIPODOCCLIENTE,NUMDOCCLIENTE,TOTALVENTA,FECHAVENTA,IDSUCURSAL) values (?,?,?,?,?,?)");
-		q.setParameters(numeroVenta, documento, documento2, precioTotal, fecha, sucursal);
+		q.setParameters(numeroVenta, tipoDocumento, numDoc, precioTotal, fechI, sucursal);
 		return (long) q.executeUnique();
 	}
 

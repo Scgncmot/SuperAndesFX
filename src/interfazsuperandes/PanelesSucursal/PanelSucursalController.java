@@ -10,8 +10,11 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -24,6 +27,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -678,7 +682,7 @@ public class PanelSucursalController implements Initializable {
 		//Hacer lista de productos
 		for(Object[] a : productosSucursal)
 			infoProductoSucursal.
-				add("Nombre:   " + a[7] + "   |   Codigo de Barras:   " + a[1]);
+				add("Nombre:   " + a[7] + "   |   Codigo de Barras:   " + a[1] + "   |   PrecioUnitario:   " + a[2]);
 		
 		ObservableList<String> datosProducto = FXCollections.observableArrayList(infoProductoSucursal);
 		ListView<String> vistaProducto = new ListView<String>();
@@ -699,10 +703,14 @@ public class PanelSucursalController implements Initializable {
 		grid.add(vistaCliente, 0, 1);	
 		grid.add(new Label("Productos ofrecidos"), 1, 0);
 		grid.add(vistaProducto, 1, 1);	
+		grid.add(new Label("Ingrese la cantidad de los productos, separados por comas"), 0, 2);
+		TextField cantidades = new TextField();
+		grid.add(cantidades, 1, 2);
 
 		//Informacion productos
-		List<String> codigosDeBarras = new ArrayList<>();
+		List<String> codigosDeBarrasList = new ArrayList<>();;
 		List<String> nombreProd = new ArrayList<>();
+		List<String> preciosUni = new ArrayList<>();
 		
 		dialogPane.getDialogPane().setContent(grid);				
 		dialogPane.showAndWait().ifPresent(response -> 
@@ -711,51 +719,38 @@ public class PanelSucursalController implements Initializable {
 			{
 				String clienteSeleccionado = vistaCliente.getSelectionModel().getSelectedItem();
 
-				// [1] = Nombre , [4] = Tipo Doc , [7] = Numero Doc
+				// [1] = Nombre, [4] = Tipo Doc, [7] = Numero Doc
 				String[] infoClienteSeleccionada = clienteSeleccionado.split("   ");
 
+				// [1] = Nombre, [4] = Codigo de Barras , [7] = Precio Unitario
 				ObservableList<String> productos = vistaProducto.getSelectionModel().getSelectedItems();
-				for (String a : productos) 
+				for (int i = 0; i < productos.size() ; i++) 
 				{
-					codigosDeBarras.add(a.split("   ")[3]);
-					nombreProd.add(a.split("   ")[1]);
-				}
+					//codigosDeBarras.add(a.split("   ")[3]);
+					codigosDeBarrasList.add(productos.get(i).split("   ")[4]);
+					nombreProd.add(productos.get(i).split("   ")[1]);
+					preciosUni.add(productos.get(i).split("   ")[7]);					
+				}			
+				Date fechaActual = new Date();
+				//System.out.println("Fecha actual: " + fechaActual);
+				
+				String[] cantidadProductoSelec = cantidades.getText().split(",") ;
+				/*for(String a : cantidadProductoSelec)
+					System.out.println(a);*/		
+				
+				String[] codigosDeBarras = codigosDeBarrasList.toArray(new String [0]);
+				
+				Double precioTotal = 0.0;					
+				//Los precios y la cantidad deben tener el mismo tamaño de array, asi que no hay problema.
+				for (int i = 0; i < preciosUni.size(); i++) 				
+					precioTotal += Double.valueOf(preciosUni.get(i)) * Double.valueOf(cantidadProductoSelec[i]);				
+				
+				SuperAndesLogin.admin.
+					registrarVenta(idSucursal, infoClienteSeleccionada[4], infoClienteSeleccionada[7], 
+							codigosDeBarras, cantidadProductoSelec, precioTotal, fechaActual);
 			}
-		});
-		
-		String clienteSeleccionado = vistaCliente.getSelectionModel().getSelectedItem();
-		
-		//[1] = Nombre , [4] = Tipo Doc , [7] = Numero Doc		
-		String[] infoClienteSeleccionada = clienteSeleccionado.split("   ");
-		
-		Dialog<?> cantidadProducto = new Dialog();
-		ButtonType registrarVenta = new ButtonType("Realizar venta", ButtonData.OK_DONE);
-		cantidadProducto.getDialogPane().getButtonTypes().addAll(button , ButtonType.CANCEL);	
-		cantidadProducto.setTitle("Ingrese la cantidad a vender");	
-		cantidadProducto.setHeaderText("Ingrese la cantidad a vender");
-		cantidadProducto.initStyle(StageStyle.UTILITY);
-		
-		GridPane grid2 = new GridPane();
-		grid2.setHgap(10);
-		grid2.setVgap(10);	
-		
-		//Se llena el grid2 de los productos y la cantidad a ingresar
-		for(int i = 0; i < codigosDeBarras.size() ; i++)
-		{	
-			//Nombre del producto
-			grid2.add(new Label(nombreProd.get(i)), 0 , i);
-			
-			//Cantidad que se vendera
-			TextField cantidad = new TextField();	
-			grid2.add(cantidad, 1, i);
-		}	
-		
-		cantidadProducto.getDialogPane().setContent(grid2);
-		cantidadProducto.showAndWait();
-		/*for(String a : listaCodigos)
-			System.out.println(a);*/
-		
-    }
+		});		
+    }  
     
     @FXML
     void verVentasSucursal(ActionEvent event) 

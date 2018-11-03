@@ -481,6 +481,12 @@ public class SuperAndesAdministrador implements Initializable {
 	{
 		pp.eliminarProductoSucursalPorIds(idSucursal, codigoBarras);
 	}
+	
+	public void registrarVenta(long sucursal, String tipodocumento, String documento, String[] codigosProductos,
+			String[] cantidad, Double precioTotal, Date fecha)
+	{
+		pp.registrarVenta(sucursal, tipodocumento, documento, codigosProductos, cantidad, precioTotal, fecha);
+	}
 
 	public void modificarSucursal(String sucursal, String nombreActual ) 
 	{	
