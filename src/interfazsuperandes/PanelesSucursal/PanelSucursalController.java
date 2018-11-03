@@ -139,13 +139,13 @@ public class PanelSucursalController implements Initializable {
 	@FXML
 	void crearSucursal(ActionEvent event) 
 	{
-		Dialog<Pair<String, String>> dialog = new Dialog<>();
+		Dialog<?> dialog = new Dialog<>();
 		dialog.setTitle("Crear Sucursal");
 		dialog.setHeaderText("Crear Sucursal");
 		dialog.initStyle(StageStyle.UTILITY);
 
-		ButtonType loginButtonType = new ButtonType("Crear", ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+		ButtonType crear = new ButtonType("Crear", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(crear , ButtonType.CANCEL);
 
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -175,30 +175,34 @@ public class PanelSucursalController implements Initializable {
 		grid.add(direccion, 1, 4);
 
 		dialog.getDialogPane().setContent(grid);
-		dialog.showAndWait();
+		dialog.showAndWait().ifPresent(response -> {
+		     if (response == crear) 
+		     {
+		    	 String sucursal = nombre.getText() + "/" + segmentacion.getText() + "/" +
+		 				tamano.getText() + "/" + ciudad.getText() + "/" + direccion.getText();			
 
-		String sucursal = nombre.getText() + "/" + segmentacion.getText() + "/" +
-				tamano.getText() + "/" + ciudad.getText() + "/" + direccion.getText();	
-
-		SuperAndesLogin.admin.crearSucursal(sucursal);
+		 		SuperAndesLogin.admin.crearSucursal(sucursal);	
+		     }
+		 });
 	}
 
 	@FXML
 	void eliminarSucursal(ActionEvent event) 
 	{
-		String nombre = listViewSucursales.getSelectionModel().getSelectedItem();  
+		String nombre = listViewSucursales.getSelectionModel().getSelectedItem(); 
+		//[1] = Id , [3] = Nombre
 		String[] arreglo = nombre.split(": ");		
-		String nombreStr = arreglo[3].trim();
-		SuperAndesLogin.admin.eliminarSucursal(nombreStr);
+		/*for(String a : arreglo)
+			System.out.println("Esto es: " + a);*/
+		
+		SuperAndesLogin.admin.eliminarSucursal(Long.parseLong(arreglo[1].trim()), arreglo[3]);
 	}
 
 	@FXML
 	void modificarSucursal(ActionEvent event) 
 	{
 		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();
-
 		String[] arreglo = sucursal.split(": ");	
-
 		String nombreActual = arreglo[3].trim();
 
 		//----------------------------------------------------------------
@@ -210,13 +214,13 @@ public class PanelSucursalController implements Initializable {
 		Object direccionActual = datos[5];	
 		//----------------------------------------------------------------
 
-		Dialog<Pair<String, String>> dialog = new Dialog<>();
+		Dialog<?> dialog = new Dialog<>();
 		dialog.setTitle("Modificar proveedor");
 		dialog.setHeaderText("Modificar proveedor");
 		dialog.initStyle(StageStyle.UTILITY);
 
-		ButtonType loginButtonType = new ButtonType("Modificar", ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
+		ButtonType modificar = new ButtonType("Modificar", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(modificar, ButtonType.CANCEL);
 
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
@@ -246,12 +250,15 @@ public class PanelSucursalController implements Initializable {
 		grid.add(direccion, 1, 4);
 
 		dialog.getDialogPane().setContent(grid);
-		dialog.showAndWait();		
+		dialog.showAndWait().ifPresent(response -> {
+		     if (response == modificar) 
+		     {
+		    	 String sucursalNueva = nombreNuevo.getText() + "/" + segmentacion.getText() + "/" +
+		 				tamano.getText() + "/" + ciudad.getText() + "/" + direccion.getText();	
 
-		String sucursalNueva = nombreNuevo.getText() + "/" + segmentacion.getText() + "/" +
-				tamano.getText() + "/" + ciudad.getText() + "/" + direccion.getText();	
-
-		SuperAndesLogin.admin.modificarSucursal(sucursalNueva, nombreActual);
+		 		SuperAndesLogin.admin.modificarSucursal(sucursalNueva, nombreActual);
+		     }
+		});
 	}
 
 	@FXML
@@ -270,7 +277,7 @@ public class PanelSucursalController implements Initializable {
 		}
 		else 
 		{		
-			Dialog dialogPane = new Dialog();
+			Dialog<?> dialogPane = new Dialog();
 			ButtonType button = new ButtonType("Siguiente", ButtonData.OK_DONE);
 			dialogPane.setTitle("Dinero recolectado entre las sucursales");
 			dialogPane.getDialogPane().getButtonTypes().addAll(button);	
@@ -298,7 +305,7 @@ public class PanelSucursalController implements Initializable {
 			Date fechaInicio = Date.from(lDFechaInicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			Date fechaFinal = Date.from(lDFechaFinal.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-			Dialog dialogPane2 = new Dialog();
+			Dialog<?> dialogPane2 = new Dialog();
 			ButtonType button2 = new ButtonType("OK", ButtonData.OK_DONE);
 			dialogPane2.setTitle("Dinero recolectado entre las sucursales");
 			dialogPane2.getDialogPane().getButtonTypes().addAll(button2);
@@ -311,22 +318,15 @@ public class PanelSucursalController implements Initializable {
 
 			List<String> mostrarDatos = new ArrayList<String>();
 
-			for (Object[] objects : valor) {
-				
-				mostrarDatos.add("Id de la sucursal: "+objects[0]+"  /   Total: "+objects[1]);
-
-			}
+			for (Object[] objects : valor) 				
+				mostrarDatos.add("Id de la sucursal: "+objects[0]+"  /   Total: "+objects[1]);			
 			
-			ObservableList<String> listaO = FXCollections.observableList(mostrarDatos);
-			
-			ListView<String> vista = new ListView<String>();
-			
+			ObservableList<String> listaO = FXCollections.observableList(mostrarDatos);			
+			ListView<String> vista = new ListView<String>();			
 			vista.setItems(listaO);		
 			
 			grid2.add(vista, 0, 0);
-
 			dialogPane2.getDialogPane().setContent(grid2);
-
 			dialogPane2.showAndWait();
 		}
 	}
@@ -335,15 +335,15 @@ public class PanelSucursalController implements Initializable {
 	void agregarBodegaSucursal(ActionEvent event) 
 	{
 		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		//[1] = Id , [3] = Nombre
 		String[] arreglo = sucursal.split(": ");
-
-		//El id es el elemento arreglo[1] y el nombre es el [3]
+		
 		long idSucursal = Long.valueOf(arreglo[1].trim());
 		String nombreSucursal = arreglo[3].trim();
 
-		Dialog dialogPane = new Dialog();
-		ButtonType button = new ButtonType("Registrar bodega", ButtonData.OK_DONE);
-		dialogPane.getDialogPane().getButtonTypes().addAll(button);		
+		Dialog<?> dialogPane = new Dialog();
+		ButtonType registrar = new ButtonType("Registrar bodega", ButtonData.OK_DONE);
+		dialogPane.getDialogPane().getButtonTypes().addAll(registrar);		
 		dialogPane.setTitle("Agregar bodega a una sucursal");	
 		dialogPane.initStyle(StageStyle.UTILITY);
 		GridPane grid = new GridPane();
@@ -366,26 +366,30 @@ public class PanelSucursalController implements Initializable {
 		grid2.add(pesoMaximo, 2, 3);		
 
 		dialogPane.getDialogPane().setContent(grid);
-		dialogPane.showAndWait();	
-
-		SuperAndesLogin.admin.
-			agregarBodegasSucursal
-				(idSucursal, Long.valueOf(categoria.getText()), Double.valueOf(volumenMaximo.getText()), Double.valueOf(pesoMaximo.getText()));
+		dialogPane.showAndWait().ifPresent(response -> {
+		     if (response == registrar) 
+		     {
+		    	 SuperAndesLogin.admin.
+					agregarBodegasSucursal
+						(idSucursal, Long.valueOf(categoria.getText()), Double.valueOf(volumenMaximo.getText()), Double.valueOf(pesoMaximo.getText()));
+		     }
+		});
 	}
 
 	@FXML
 	void agregarEstanteSucursal(ActionEvent event) 
 	{
+		//Se obtiene la informacion de la sucursal
 		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		//[1] = Id , [3] = Nombre
 		String[] arreglo = sucursal.split(": ");
 
-		//El id es el elemento arreglo[1] y el nombre es el [3]
 		long idSucursal = Long.valueOf(arreglo[1].trim());
 		String nombreSucursal = arreglo[3].trim();
 
-		Dialog dialogPane = new Dialog();
-		ButtonType button = new ButtonType("Registrar estante", ButtonData.OK_DONE);
-		dialogPane.getDialogPane().getButtonTypes().addAll(button);		
+		Dialog<?> dialogPane = new Dialog();
+		ButtonType registrar = new ButtonType("Registrar estante", ButtonData.OK_DONE);
+		dialogPane.getDialogPane().getButtonTypes().addAll(registrar);		
 		dialogPane.initStyle(StageStyle.UTILITY);
 		GridPane grid = new GridPane();
 
@@ -410,12 +414,15 @@ public class PanelSucursalController implements Initializable {
 		grid2.add(nivelAbastecimiento, 2, 4);
 
 		dialogPane.getDialogPane().setContent(grid);
-		dialogPane.showAndWait();	
-
-		SuperAndesLogin.admin.
-			agregarEstantesSucursal
-				(idSucursal, Long.valueOf(categoria.getText()), Double.valueOf(volumenMaximo.getText()),
-						Double.valueOf(pesoMaximo.getText()), Integer.valueOf(nivelAbastecimiento.getText()));
+		dialogPane.showAndWait().ifPresent(response -> {
+		     if (response == registrar) 
+		     {	
+		    	 SuperAndesLogin.admin.
+					agregarEstantesSucursal
+						(idSucursal, Long.valueOf(categoria.getText()), Double.valueOf(volumenMaximo.getText()),
+								Double.valueOf(pesoMaximo.getText()), Integer.valueOf(nivelAbastecimiento.getText()));
+		     }
+		});
 	}  
 	
 	@FXML
@@ -423,9 +430,9 @@ public class PanelSucursalController implements Initializable {
 	{
 		//Se obtiene la informacion de la sucursal
 		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		//[1] = Id , [3] = Nombre
 		String[] arreglo = sucursal.split(": ");
 
-		//El id es el elemento arreglo[1] y el nombre es el [3]
 		long idSucursal = Long.valueOf(arreglo[1].trim());
 		String nombreSucursal = arreglo[3].trim();
 		
@@ -464,13 +471,6 @@ public class PanelSucursalController implements Initializable {
 		 		SuperAndesLogin.admin.eliminarBodegaPorIdSucursal(Long.valueOf(arreglo2[1].trim()), idSucursal);	
 		     }
 		 });
-		
-		//String bodega = vista.getSelectionModel().getSelectedItem();
-		//String[] arreglo2 = bodega.split("   ");
-		/*for(String a: arreglo2)
-			System.out.println("Esto es: " + a);*/
-		
-		//SuperAndesLogin.admin.eliminarBodegaPorIdSucursal(Long.valueOf(arreglo2[1].trim()), idSucursal);		
     }
 
     @FXML
@@ -478,9 +478,9 @@ public class PanelSucursalController implements Initializable {
     {
     	//Se obtiene la informacion de la sucursal
 		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		//[1] = Id , [3] = Nombre
 		String[] arreglo = sucursal.split(": ");
-
-		//El id es el elemento arreglo[1] y el nombre es el [3]
+		
 		long idSucursal = Long.valueOf(arreglo[1].trim());
 		String nombreSucursal = arreglo[3].trim();
 		
@@ -519,13 +519,6 @@ public class PanelSucursalController implements Initializable {
 		 		SuperAndesLogin.admin.eliminarEstantePorIdSucursal(Long.valueOf(arreglo2[1].trim()), idSucursal);
 		     }
 		 });
-		
-		//String estante = vista.getSelectionModel().getSelectedItem();
-		//String[] arreglo2 = estante.split("   ");
-		/*for(String a: arreglo2)
-			System.out.println("Esto es: " + a);*/
-		
-		//SuperAndesLogin.admin.eliminarEstantePorIdSucursal(Long.valueOf(arreglo2[1].trim()), idSucursal);	
     }
     
     @FXML
@@ -535,7 +528,6 @@ public class PanelSucursalController implements Initializable {
 
 		if(lista.isEmpty()) 
 		{
-
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("No existen productos");
 			alert.setHeaderText(null);
@@ -547,15 +539,15 @@ public class PanelSucursalController implements Initializable {
 		{			
 			//Se obtiene la informacion de la sucursal
 			String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+			//[1] = Id , [3] = Nombre
 			String[] arreglo = sucursal.split(": ");
 
-			//El id es el elemento arreglo[1] y el nombre es el [3]
 			long idSucursal = Long.valueOf(arreglo[1].trim());
 			String nombreSucursal = arreglo[3].trim();
 
-			Dialog dialogPane = new Dialog();
-			ButtonType button = new ButtonType("Registrar producto", ButtonData.OK_DONE);
-			dialogPane.getDialogPane().getButtonTypes().addAll(button);			
+			Dialog<?> dialogPane = new Dialog();
+			ButtonType anadirProducto = new ButtonType("Registrar producto", ButtonData.OK_DONE);
+			dialogPane.getDialogPane().getButtonTypes().addAll(anadirProducto, ButtonType.CANCEL);			
 			GridPane grid = new GridPane();
 			
 			grid.setHgap(10);
@@ -589,18 +581,22 @@ public class PanelSucursalController implements Initializable {
 			grid.add(cantidadRecompra, 1, 5);		
 			
 			dialogPane.getDialogPane().setContent(grid);			
-			dialogPane.showAndWait();	
-			
-			String producto = vista.getSelectionModel().getSelectedItem();
-			/*El arreglo tiene 4 elementos. El elemento [0] es el nombre, el [3] es el codigo de barras */
-			String[] arreglo2 = producto.split("   ");	
-			/*for(String a: arreglo2)
-				System.out.println("Esto es: " + a);*/
-			
-			SuperAndesLogin.admin.
-				agregarProductosSucursal
-					(idSucursal, arreglo2[3], Double.valueOf(precioUnitario.getText()), Double.valueOf(precioUnidadMedida.getText()),
-							Integer.valueOf(nivelDeReorden.getText()), Integer.valueOf(cantidadRecompra.getText()));			
+			dialogPane.showAndWait().ifPresent(response -> 
+			{
+				if(response == anadirProducto)
+				{
+					String producto = vista.getSelectionModel().getSelectedItem();
+					/*[0] = Nombre, [3] = Codigo de barras*/
+					String[] arreglo2 = producto.split("   ");	
+					/*for(String a: arreglo2)
+						System.out.println("Esto es: " + a);*/
+					
+					SuperAndesLogin.admin.
+						agregarProductosSucursal
+							(idSucursal, arreglo2[3], Double.valueOf(precioUnitario.getText()), Double.valueOf(precioUnidadMedida.getText()),
+									Integer.valueOf(nivelDeReorden.getText()), Integer.valueOf(cantidadRecompra.getText()));	
+				}			
+			});				
 		}
     }
     
@@ -608,10 +604,10 @@ public class PanelSucursalController implements Initializable {
     void eliminarProductosSucursal(ActionEvent event) 
     {
     	//Se obtiene la informacion de la sucursal
-		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();
+		//[1] = Id , [3] = Nombre
 		String[] arreglo = sucursal.split(": ");
 
-		//El id es el elemento arreglo[1] y el nombre es el [3]
 		long idSucursal = Long.valueOf(arreglo[1].trim());
 		String nombreSucursal = arreglo[3].trim();
 		
@@ -642,9 +638,10 @@ public class PanelSucursalController implements Initializable {
 		
 		dialogPane.getDialogPane().setContent(grid);		
 		dialogPane.showAndWait().ifPresent(response -> {
-		     if (response == eliminar) {
+		     if (response == eliminar) 
+		     {
 		    	String producto = vista.getSelectionModel().getSelectedItem();
-		 		/*El arreglo tiene 4 elementos. El elemento [0] es el nombre, el [3] es el codigo de barras */
+		 		/*El arreglo tiene 4 elementos.[0] = Nombre, [3] = Codigo de barras*/
 		 		String[] arreglo2 = producto.split("   ");	
 		 		/*for(String a: arreglo2)
 		 			System.out.println("Esto es: " + a);*/
@@ -652,23 +649,15 @@ public class PanelSucursalController implements Initializable {
 		 		SuperAndesLogin.admin.eliminarProductoSucursalPorIds(idSucursal, arreglo2[3]);
 		     }
 		 });
-		
-		//String producto = vista.getSelectionModel().getSelectedItem();
-		/*El arreglo tiene 4 elementos. El elemento [0] es el nombre, el [3] es el codigo de barras */
-		//String[] arreglo2 = producto.split("   ");	
-		/*for(String a: arreglo2)
-			System.out.println("Esto es: " + a);*/
-		
-		//SuperAndesLogin.admin.eliminarProductoSucursalPorIds(idSucursal, arreglo2[3]);
 	}	
     
     @FXML
     void realizarVentaSucursal(ActionEvent event) 
     {
     	String sucursalActual = listViewSucursales.getSelectionModel().getSelectedItem();	
-		String[] arreglo = sucursalActual.split(": ");
-
 		//[1] = Id , [3] = Nombre
+		String[] arreglo = sucursalActual.split(": ");
+		
 		long idSucursal = Long.valueOf(arreglo[1].trim());
 		
 		//Solo necesito el TD y el numero documento
@@ -696,10 +685,10 @@ public class PanelSucursalController implements Initializable {
 		vistaProducto.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		vistaProducto.setItems(datosProducto);
 		
-		Dialog dialogPane = new Dialog();
-		ButtonType button = new ButtonType("Registrar venta", ButtonData.OK_DONE);
+		Dialog<?> dialogPane = new Dialog();
+		ButtonType button = new ButtonType("Aceptar", ButtonData.OK_DONE);
 		dialogPane.getDialogPane().getButtonTypes().addAll(button , ButtonType.CANCEL);		
-		dialogPane.setTitle("Realizar Venta");	
+		dialogPane.setTitle("Seleccionar cliente y productos a vender");	
 		dialogPane.initStyle(StageStyle.UTILITY);
 		
 		GridPane grid = new GridPane();
@@ -711,24 +700,61 @@ public class PanelSucursalController implements Initializable {
 		grid.add(new Label("Productos ofrecidos"), 1, 0);
 		grid.add(vistaProducto, 1, 1);	
 
-		dialogPane.getDialogPane().setContent(grid);
-		dialogPane.showAndWait();	
+		//Informacion productos
+		List<String> codigosDeBarras = new ArrayList<>();
+		List<String> nombreProd = new ArrayList<>();
+		
+		dialogPane.getDialogPane().setContent(grid);				
+		dialogPane.showAndWait().ifPresent(response -> 
+		{
+			if (response == button) 
+			{
+				String clienteSeleccionado = vistaCliente.getSelectionModel().getSelectedItem();
+
+				// [1] = Nombre , [4] = Tipo Doc , [7] = Numero Doc
+				String[] infoClienteSeleccionada = clienteSeleccionado.split("   ");
+
+				ObservableList<String> productos = vistaProducto.getSelectionModel().getSelectedItems();
+				for (String a : productos) 
+				{
+					codigosDeBarras.add(a.split("   ")[3]);
+					nombreProd.add(a.split("   ")[1]);
+				}
+			}
+		});
 		
 		String clienteSeleccionado = vistaCliente.getSelectionModel().getSelectedItem();
-		//[1] = Nombre , [4] = Tipo Doc , [7] = Numero Doc
-		String[] infoClienteSeleccionada = clienteSeleccionado.split("   ");		
 		
-		//Se llena la lista con los codigos de barras de los productos comprados.
-		List<String> listaCodigos = new ArrayList<>();
-		for(String a : datosProducto) 		
-			listaCodigos.add(a.split("   ")[4]);
+		//[1] = Nombre , [4] = Tipo Doc , [7] = Numero Doc		
+		String[] infoClienteSeleccionada = clienteSeleccionado.split("   ");
 		
-		for(String a : listaCodigos)
-			System.out.println(a);
-		//TODO Los Codigos estan en el mismo orden que la lista, por lo tanto se puede ingresar un array separado por comas
-		//y quiza funcione.
+		Dialog<?> cantidadProducto = new Dialog();
+		ButtonType registrarVenta = new ButtonType("Realizar venta", ButtonData.OK_DONE);
+		cantidadProducto.getDialogPane().getButtonTypes().addAll(button , ButtonType.CANCEL);	
+		cantidadProducto.setTitle("Ingrese la cantidad a vender");	
+		cantidadProducto.setHeaderText("Ingrese la cantidad a vender");
+		cantidadProducto.initStyle(StageStyle.UTILITY);
 		
-
+		GridPane grid2 = new GridPane();
+		grid2.setHgap(10);
+		grid2.setVgap(10);	
+		
+		//Se llena el grid2 de los productos y la cantidad a ingresar
+		for(int i = 0; i < codigosDeBarras.size() ; i++)
+		{	
+			//Nombre del producto
+			grid2.add(new Label(nombreProd.get(i)), 0 , i);
+			
+			//Cantidad que se vendera
+			TextField cantidad = new TextField();	
+			grid2.add(cantidad, 1, i);
+		}	
+		
+		cantidadProducto.getDialogPane().setContent(grid2);
+		cantidadProducto.showAndWait();
+		/*for(String a : listaCodigos)
+			System.out.println(a);*/
+		
     }
     
     @FXML

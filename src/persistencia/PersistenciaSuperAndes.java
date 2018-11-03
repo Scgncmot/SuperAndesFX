@@ -1070,7 +1070,7 @@ public class PersistenciaSuperAndes {
 
 	}
 
-	public void eliminarSucursalPorNombre(String nombre) 
+	public void eliminarSucursal(long id ,String nombre) 
 	{
 
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1079,7 +1079,7 @@ public class PersistenciaSuperAndes {
 		try 
 		{
 			tx.begin();
-			sqlSucursal.eliminarSucursalPorNombre(pm, nombre);
+			sqlSucursal.eliminarSucursal(pm, id, nombre);
 			tx.commit();
 		}
 		catch(Exception e) 

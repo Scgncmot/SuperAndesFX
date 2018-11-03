@@ -461,9 +461,9 @@ public class SuperAndesAdministrador implements Initializable {
 		cargarSucursales();
 	}	
 
-	public void eliminarSucursal(String nombre) 
+	public void eliminarSucursal(long id, String nombre) 
 	{
-		pp.eliminarSucursalPorNombre(nombre);
+		pp.eliminarSucursal(id, nombre);
 		cargarSucursales();
 	}
 	

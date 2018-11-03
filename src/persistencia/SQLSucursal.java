@@ -45,10 +45,10 @@ public class SQLSucursal
 	     return (long) q.executeUnique();   
 	}
 	
-	public long eliminarSucursalPorNombre (PersistenceManager pm, String nombre)
+	public long eliminarSucursal (PersistenceManager pm, long id, String nombre)
 	{
-		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaSucursal() + " WHERE nombre = ?");
-	    q.setParameters(nombre);
+		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaSucursal() + " WHERE nombre = ? AND idSucursal = ?");
+	    q.setParameters(nombre, id);
 	    return (long) q.executeUnique();
 	}
 	
