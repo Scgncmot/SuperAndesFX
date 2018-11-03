@@ -14,8 +14,12 @@
       <Button fx:id="butCrearEstante" layoutX="519.0" layoutY="79.0" mnemonicParsing="false" onAction="#agregarEstanteSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear estante" />
       <Button fx:id="butDarDinero" layoutX="640.0" layoutY="79.0" mnemonicParsing="false" onAction="#mostrarDineroRecolectado" prefHeight="40.0" prefWidth="117.0" text="Dinero recolectado" />
       <Button fx:id="butEliminarBodegas" layoutX="640.0" layoutY="170.0" mnemonicParsing="false" onAction="#eliminarBodegasSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Bodegas" />
-      <Button fx:id="butAnadirProductos" layoutX="640.0" layoutY="309.0" mnemonicParsing="false" onAction="#anadirProductosSucursal" prefHeight="40.0" prefWidth="117.0" text="Añadir Productos" />
-      <Button fx:id="butEliminarEstantes" layoutX="640.0" layoutY="216.0" mnemonicParsing="false" onAction="#eliminarEstantesSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Estantes" />
-      <Button fx:id="butEliminarProductosSucursal" layoutX="640.0" layoutY="262.0" mnemonicParsing="false" onAction="#eliminarProductosSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Productos" />
+      <Button fx:id="butAnadirProductos" layoutX="640.0" layoutY="407.0" mnemonicParsing="false" onAction="#anadirProductosSucursal" prefHeight="40.0" prefWidth="117.0" text="Añadir Productos" />
+      <Button fx:id="butEliminarEstantes" layoutX="640.0" layoutY="219.0" mnemonicParsing="false" onAction="#eliminarEstantesSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Estantes" />
+      <Button fx:id="butEliminarProductosSucursal" layoutX="640.0" layoutY="266.0" mnemonicParsing="false" onAction="#eliminarProductosSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Productos" />
+      <Button fx:id="butVerPedidosSucursal" layoutX="640.0" layoutY="313.0" mnemonicParsing="false" onAction="#verPedidosSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Pedidos" />
+      <Button fx:id="butCrearPedidoSucursal" layoutX="640.0" layoutY="453.0" mnemonicParsing="false" onAction="#crearPedidoSucursal" prefHeight="40.0" prefWidth="117.0" text="Crear Pedido" />
+      <Button fx:id="butRealizarVentaSucursal" layoutX="640.0" layoutY="500.0" mnemonicParsing="false" onAction="#realizarVentaSucursal" prefHeight="40.0" prefWidth="117.0" text="Realizar Venta" />
+      <Button fx:id="butVerVentasSucursal" layoutX="640.0" layoutY="360.0" mnemonicParsing="false" onAction="#verVentasSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Ventas" />
    </children>
 </Pane>

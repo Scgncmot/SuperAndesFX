@@ -438,6 +438,10 @@ public class SuperAndesAdministrador implements Initializable {
 		return pp.darBodegaSucursalPorId(idSucursal);		
 	}
 	
+	public List<Object[]> darClientes()
+	{
+		return pp.darClientes();		
+	}
 	
 	public List<Object[]> cargarEstantesSucursal(long idSucursal)
 	{

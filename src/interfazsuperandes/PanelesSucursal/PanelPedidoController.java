@@ -18,39 +18,45 @@ import javafx.scene.control.ListView;
  *
  * @author s.carrero
  */
-public class PanelPedidoController implements Initializable {
+public class PanelPedidoController implements Initializable 
+{
 
     @FXML
-    private ListView<String> listViewProveedores;
+    private ListView<?> listViewProveedores;
+
     @FXML
-    private Button butEliminar;
+    private Button butEliminarPedido;
+
     @FXML
-    private Button butCrear;
-    @FXML
-    private Button butModificar;
+    private Button butCrearPedido;
+
     @FXML
     private Button butVerProductos;
-    @FXML
-    private Button butAgregarProductos;
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-    	
-    }    
 
     @FXML
-    private void eliminarProducto(ActionEvent event) {
-    }
-
-    @FXML
-    private void crearProducto(ActionEvent event) {
-    }
-
-    @FXML
-    private void modificarProducto(ActionEvent event) {
-    }
+    private Button butAgregarProductosPedido;
     
+    @Override
+	public void initialize(URL arg0, ResourceBundle arg1) {}
+
+    @FXML
+    void agregarProductoProveedor(ActionEvent event) 
+    {
+
+    }
+
+    @FXML
+    void crearPedido(ActionEvent event) {
+
+    }
+
+    @FXML
+    void eliminarProveedor(ActionEvent event) {
+
+    }
+
+    @FXML
+    void verProductosPedido(ActionEvent event) {
+
+    }    
 }

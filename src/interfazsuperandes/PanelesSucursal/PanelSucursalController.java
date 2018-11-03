@@ -19,6 +19,7 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -30,6 +31,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
@@ -52,37 +54,49 @@ import persistencia.PersistenciaSuperAndes;
 public class PanelSucursalController implements Initializable {
 
 	@FXML
-	private ListView<String> listViewSucursales;	
+    private ListView<String> listViewSucursales;
 
-	@FXML
-	private Button butEliminar;
+    @FXML
+    private Button butEliminar;
 
-	@FXML
-	private Button butCrear;
+    @FXML
+    private Button butCrear;
 
-	@FXML
-	private Button butModificar;
+    @FXML
+    private Button butModificar;
 
-	@FXML
-	private Button butCrearBodega;
+    @FXML
+    private Button butCrearBodega;
 
-	@FXML
-	private Button butCrearEstante;
+    @FXML
+    private Button butCrearEstante;
 
-	@FXML
-	private Button butDarDinero;	
-	
-	@FXML
+    @FXML
+    private Button butDarDinero;
+
+    @FXML
     private Button butEliminarBodegas;
 
-	@FXML
-	private Button butAnadirProductos;
-	
-	@FXML
-	private Button butEliminarEstantes;
-	
-	@FXML
+    @FXML
+    private Button butAnadirProductos;
+
+    @FXML
+    private Button butEliminarEstantes;
+
+    @FXML
     private Button butEliminarProductosSucursal;
+
+    @FXML
+    private Button butVerPedidosSucursal;
+
+    @FXML
+    private Button butCrearPedidoSucursal;
+
+    @FXML
+    private Button butRealizarVentaSucursal;
+
+    @FXML
+    private Button butVerVentasSucursal;
 
 
 	@Override
@@ -647,4 +661,91 @@ public class PanelSucursalController implements Initializable {
 		
 		//SuperAndesLogin.admin.eliminarProductoSucursalPorIds(idSucursal, arreglo2[3]);
 	}	
+    
+    @FXML
+    void realizarVentaSucursal(ActionEvent event) 
+    {
+    	String sucursalActual = listViewSucursales.getSelectionModel().getSelectedItem();	
+		String[] arreglo = sucursalActual.split(": ");
+
+		//[1] = Id , [3] = Nombre
+		long idSucursal = Long.valueOf(arreglo[1].trim());
+		
+		//Solo necesito el TD y el numero documento
+		List<Object[]> clientes = SuperAndesLogin.admin.darClientes();
+		List<String> infoCliente = new ArrayList<String>();		
+		//Hacer lista clientes
+		for(Object[] a : clientes)
+			infoCliente.
+				add("Nombre cliente:   "+ a[2] + "   |   Tipo Documento:   " + a[0]  + "   |   NumeroDocumento:   " + a[1]);
+		
+		ObservableList<String> datosCliente = FXCollections.observableList(infoCliente);	
+		ListView<String> vistaCliente = new ListView<String>();
+		vistaCliente.setItems(datosCliente);
+		
+		//Solo necesito Nombre y Codigo de Barras
+		List<Object[]> productosSucursal = SuperAndesLogin.admin.darProductosSucursal(idSucursal);
+		List<String> infoProductoSucursal = new ArrayList<String>();
+		//Hacer lista de productos
+		for(Object[] a : productosSucursal)
+			infoProductoSucursal.
+				add("Nombre:   " + a[7] + "   |   Codigo de Barras:   " + a[1]);
+		
+		ObservableList<String> datosProducto = FXCollections.observableArrayList(infoProductoSucursal);
+		ListView<String> vistaProducto = new ListView<String>();
+		vistaProducto.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		vistaProducto.setItems(datosProducto);
+		
+		Dialog dialogPane = new Dialog();
+		ButtonType button = new ButtonType("Registrar venta", ButtonData.OK_DONE);
+		dialogPane.getDialogPane().getButtonTypes().addAll(button , ButtonType.CANCEL);		
+		dialogPane.setTitle("Realizar Venta");	
+		dialogPane.initStyle(StageStyle.UTILITY);
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);	
+		
+		grid.add(new Label("Clientes"), 0, 0);
+		grid.add(vistaCliente, 0, 1);	
+		grid.add(new Label("Productos ofrecidos"), 1, 0);
+		grid.add(vistaProducto, 1, 1);	
+
+		dialogPane.getDialogPane().setContent(grid);
+		dialogPane.showAndWait();	
+		
+		String clienteSeleccionado = vistaCliente.getSelectionModel().getSelectedItem();
+		//[1] = Nombre , [4] = Tipo Doc , [7] = Numero Doc
+		String[] infoClienteSeleccionada = clienteSeleccionado.split("   ");		
+		
+		//Se llena la lista con los codigos de barras de los productos comprados.
+		List<String> listaCodigos = new ArrayList<>();
+		for(String a : datosProducto) 		
+			listaCodigos.add(a.split("   ")[4]);
+		
+		for(String a : listaCodigos)
+			System.out.println(a);
+		//TODO Los Codigos estan en el mismo orden que la lista, por lo tanto se puede ingresar un array separado por comas
+		//y quiza funcione.
+		
+
+    }
+    
+    @FXML
+    void verVentasSucursal(ActionEvent event) 
+    {
+
+    }
+    
+    @FXML
+    void crearPedidoSucursal(ActionEvent event) 
+    {
+
+    }
+
+    @FXML
+    void verPedidosSucursal(ActionEvent event) 
+    {
+
+    }
 }

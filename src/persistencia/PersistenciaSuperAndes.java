@@ -1153,6 +1153,26 @@ public class PersistenciaSuperAndes {
 		}		
 	}
 	
+	public List<Object[]> darClientes() 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno =  sqlCliente.darClientes(pm);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
 	public List<Object[]> darProductosSucursal(long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
