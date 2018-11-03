@@ -460,9 +460,9 @@ public class SuperAndesAdministrador implements Initializable {
 		cargarSucursales();
 	}	
 
-	public void eliminarSucursal(String nombre) 
+	public void eliminarSucursal(long id, String nombre) 
 	{
-		pp.eliminarSucursalPorNombre(nombre);
+		pp.eliminarSucursal(id, nombre);
 		cargarSucursales();
 	}
 
@@ -479,6 +479,12 @@ public class SuperAndesAdministrador implements Initializable {
 	public void eliminarProductoSucursalPorIds(long idSucursal, String codigoBarras) 
 	{
 		pp.eliminarProductoSucursalPorIds(idSucursal, codigoBarras);
+	}
+	
+	public void registrarVenta(long sucursal, String tipodocumento, String documento, String[] codigosProductos,
+			String[] cantidad, Double precioTotal, Date fecha)
+	{
+		pp.registrarVenta(sucursal, tipodocumento, documento, codigosProductos, cantidad, precioTotal, fecha);
 	}
 
 	public void modificarSucursal(String sucursal, String nombreActual ) 
