@@ -1,5 +1,7 @@
 package persistencia;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
@@ -40,6 +42,13 @@ public class SQLEstante
 		q.setParameters(id, idSucursal,idCategoria, 0, volumenMaximo, 0,  pesoMaximo, nivelDeAbastecimiento);
 		return (long) q.executeUnique();
 	}
+	
+	public List<Object[]> darEstanteBodegaPorIdSucursal(PersistenceManager pm, long idSucursal) 
+	{		
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaEstante() + " WHERE idSucursal = ?");
+		q.setParameters(idSucursal);
+		return q.executeList();
+	}
 		
 	public long eliminarEstantePorId(PersistenceManager pm, long id)
 	{
@@ -47,4 +56,11 @@ public class SQLEstante
 	    q.setParameters(id);
 	    return (long) q.executeUnique();
 	}	
+	
+	public long eliminarEstantePorIds(PersistenceManager pm, long id, long idSucursal)
+	{
+		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaEstante() + " WHERE idSucursal = ? AND id = ?");
+	    q.setParameters(idSucursal, id);
+	    return (long) q.executeUnique();
+	}
 }

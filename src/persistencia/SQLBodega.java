@@ -1,5 +1,7 @@
 package persistencia;
 
+import java.util.List;
+
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
@@ -39,11 +41,25 @@ public class SQLBodega
 		return (long) q.executeUnique();
 	}
 	
+	public List<Object[]> darBodegaPorIdSucursal(PersistenceManager pm, long idSucursal) 
+	{		
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaBodega() + " WHERE idSucursal = ?");
+		q.setParameters(idSucursal);
+		return q.executeList();
+	}
+	
 	public long eliminarBodegaPorId(PersistenceManager pm, long id)
 	{
 		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBodega() + " WHERE id = ?");
 	    q.setParameters(id);
 	    return (long) q.executeUnique();
 	}	
+	
+	public long eliminarBodegaPorIds(PersistenceManager pm, long id, long idSucursal)
+	{
+		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaBodega() + " WHERE idSucursal = ? AND id = ?");
+	    q.setParameters(idSucursal, id);
+	    return (long) q.executeUnique();
+	}
 }
 

@@ -29,6 +29,7 @@ import negocio.PaqueteDeProductos;
 import negocio.Pedido;
 import negocio.PersonaJuridica;
 import negocio.Producto;
+import negocio.ProductoSucursal;
 import negocio.Promocion;
 import negocio.Proveedor;
 import negocio.Sucursal;
@@ -253,10 +254,6 @@ public class PersistenciaSuperAndes {
 	public static String darTablaPromocion()	{ return "PROMOCION"; }
 
 	public static String darTablaProveedor()	{ return "PROVEEDOR"; }
-
-	public static String darTablaRestriccionBodega()	{ return "RESTRICCIONBODEGA"; }
-
-	public static String darTablaRestriccionEstante()	{ return "RESTRICCIONESTANTE"; }
 
 	public static String darTablaSucursal()	{ return "SUCURSAL"; }
 
@@ -504,10 +501,9 @@ public class PersistenciaSuperAndes {
 		}	
 		finally
 		{
-			if (tx.isActive())
-			{
+			if (tx.isActive())			
 				tx.rollback();
-			}
+			
 			pm.close();
 		}
 
@@ -534,10 +530,9 @@ public class PersistenciaSuperAndes {
 		}
 		finally
 		{
-			if (tx.isActive())
-			{
+			if (tx.isActive())			
 				tx.rollback();
-			}
+			
 			pm.close();
 		}
 	}
@@ -563,16 +558,41 @@ public class PersistenciaSuperAndes {
 		}
 		finally
 		{
-			if (tx.isActive())
-			{
+			if (tx.isActive())			
 				tx.rollback();
-			}
+			
 			pm.close();
 		}
 	}
-
-
-
+	
+	public ProductoSucursal registrarProductoSucursal(long idSucursal, String codigoBarras, Double precioUnitario, Double precioUnidadMedida,
+			Integer nivelDeReorden, Integer cantidadRecompra)
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		try 
+		{
+			//idSucursal, codigoBarras, precioUnitario, precioUnidadMedida, nivelDeReorden, cantidadRecompra
+			tx.begin();
+			long tuplasInsertadas = sqlProductoSucursal.
+					agregarProductosSucursal(pm, idSucursal, codigoBarras, precioUnitario, precioUnidadMedida, nivelDeReorden, cantidadRecompra);
+			tx.commit();
+			log.trace ("Inserción del producto sucursal con codigo de barras: " + codigoBarras + ": " + tuplasInsertadas + " tuplas insertadas");
+			return new ProductoSucursal(idSucursal, codigoBarras, precioUnitario, precioUnidadMedida, nivelDeReorden, cantidadRecompra);
+		} 
+		catch (Exception e) 
+		{
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())			
+				tx.rollback();
+			
+			pm.close();
+		}
+	}
 
 	public PagueNUnidadesLleveMPromo registrarPromocionPagueNLleveM(String codigoProducto, Timestamp fechaVencimientoPromocion, int compraUnidades, int llevaUnidades)
 	{
@@ -941,9 +961,10 @@ public class PersistenciaSuperAndes {
 	 *****************************************************************/
 
 
-	public String[] obtenerPreciosSucursal(String sucursal, String[] productos) {
+	public String[] obtenerPreciosSucursal(String sucursal, String[] productos) 
+	{
 
-		PersistenceManager pm = pmf.getPersistenceManager();
+		/*PersistenceManager pm = pmf.getPersistenceManager();
 
 		Transaction tx = pm.currentTransaction();
 
@@ -963,7 +984,8 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 
 			return null;
-		}	
+		}	*/
+		return null;
 	}
 
 
@@ -1088,6 +1110,8 @@ public class PersistenciaSuperAndes {
 		}
 
 	}	
+	
+	
 
 	public Object[]  darSucursalPorNombre(String nombre) 
 	{
@@ -1108,6 +1132,124 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
+	
+	public List<Object[]> darBodegaSucursalPorId(long idSucursal) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno = sqlBodega.darBodegaPorIdSucursal(pm, idSucursal);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	public List<Object[]> darProductosSucursal(long idSucursal) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno = sqlProductoSucursal.darProductosPorIdSucursal(pm, idSucursal);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	public List<Object[]> darEstanteSucursalPorId(long idSucursal) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno = sqlEstante.darEstanteBodegaPorIdSucursal(pm, idSucursal);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	
+	
+	public void eliminarBodegaPorSucursalId(long idBodega, long idSucursal) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlBodega.eliminarBodegaPorIds(pm, idBodega, idSucursal);
+			tx.commit();
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}
+
+	}
+	
+	public void eliminarEstantePorSucursalId(long idBodega, long idSucursal) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlEstante.eliminarEstantePorIds(pm, idBodega, idSucursal);
+			tx.commit();
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}
+	}
+	
+	public void eliminarProductoSucursalPorIds(long idSucursal, String codigoBarras) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlProductoSucursal.eliminarEstantePorIds(pm, idSucursal, codigoBarras);
+			tx.commit();
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}
+	}
+
 
 	public Object[]  darSucursalPorId(long id) 
 	{
@@ -1184,8 +1326,6 @@ public class PersistenciaSuperAndes {
 			return null;
 
 		}
-
-
 	}
 
 	public String obtenerProductoPorCodigo(String string) {

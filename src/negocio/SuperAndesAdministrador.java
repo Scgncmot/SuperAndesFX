@@ -361,6 +361,16 @@ public class SuperAndesAdministrador implements Initializable {
 		return nomProductos;
 
 	}
+	
+	public List<Object[]> darProductos() 
+	{
+		return pp.darElementos(PersistenciaSuperAndes.darTablaProducto());
+	}
+	
+	public List<Object[]> darProductosSucursal(long idSucursal) 
+	{
+		return pp.darProductosSucursal(idSucursal);
+	}
 
 
 	public void crearProducto(String barcode, String nombre, String presentacion, String marca, String cantidad, String medida,
@@ -421,6 +431,18 @@ public class SuperAndesAdministrador implements Initializable {
 
 		panelSucursal.getListViewSucursales().setItems(lista);
 	}
+	
+	
+	public List<Object[]> cargarBodegasSucursal(long idSucursal)
+	{
+		return pp.darBodegaSucursalPorId(idSucursal);		
+	}
+	
+	
+	public List<Object[]> cargarEstantesSucursal(long idSucursal)
+	{
+		return pp.darEstanteSucursalPorId(idSucursal);
+	}
 
 	public void crearSucursal(String sucursal) 
 	{	
@@ -439,7 +461,21 @@ public class SuperAndesAdministrador implements Initializable {
 	{
 		pp.eliminarSucursalPorNombre(nombre);
 		cargarSucursales();
-
+	}
+	
+	public void eliminarBodegaPorIdSucursal(long idBodega, long idSucursal) 
+	{
+		pp.eliminarBodegaPorSucursalId(idBodega, idSucursal);
+	}
+	
+	public void eliminarEstantePorIdSucursal(long idBodega, long idSucursal) 
+	{
+		pp.eliminarEstantePorSucursalId(idBodega, idSucursal);
+	}
+	
+	public void eliminarProductoSucursalPorIds(long idSucursal, String codigoBarras) 
+	{
+		pp.eliminarProductoSucursalPorIds(idSucursal, codigoBarras);
 	}
 
 	public void modificarSucursal(String sucursal, String nombreActual ) 
@@ -483,21 +519,20 @@ public class SuperAndesAdministrador implements Initializable {
 	}
 
 	public void agregarBodegasSucursal(long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo)
-	{
-		//TODO Corregir lo de la categoria.
-		Object[] codigo = pp.darSucursalPorId(idSucursal);
-		String id = codigo[0].toString();	
-		pp.registrarBodega(Long.parseLong(id), idCategoria, volumenMaximo, pesoMaximo);
+	{	
+		pp.registrarBodega(idSucursal, idCategoria, volumenMaximo, pesoMaximo);
 	}
 	
 	public void agregarEstantesSucursal(long idSucursal, long idCategoria, Double volumenMaximo, Double pesoMaximo,
 			Integer nivelDeAbastecimiento)
-	{
-		//TODO Corregir lo de la categoria.
-		Object[] codigo = pp.darSucursalPorId(idSucursal);
-		String id = codigo[0].toString();	
-		pp.registrarEstante(Long.parseLong(id), idCategoria, volumenMaximo, pesoMaximo, nivelDeAbastecimiento);
-
+	{		
+		pp.registrarEstante(idSucursal, idCategoria, volumenMaximo, pesoMaximo, nivelDeAbastecimiento);
+	}
+	
+	public void agregarProductosSucursal(long idSucursal, String codigoBarras, Double precioUnitario, Double precioUnidadMedida,
+			Integer nivelDeReorden, Integer cantidadRecompra)
+	{		
+		pp.registrarProductoSucursal(idSucursal, codigoBarras, precioUnitario, precioUnidadMedida, nivelDeReorden, cantidadRecompra);
 	}
 
 

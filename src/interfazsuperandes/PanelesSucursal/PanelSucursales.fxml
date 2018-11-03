@@ -6,12 +6,16 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="801.0" style="-fx-background-color: #632921;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfazsuperandes.PanelesSucursal.PanelSucursalController">
    <children>
-      <ListView fx:id="listViewSucursales" layoutX="45.0" layoutY="170.0" prefHeight="380.0" prefWidth="712.0" />
+      <ListView fx:id="listViewSucursales" layoutX="45.0" layoutY="170.0" prefHeight="380.0" prefWidth="574.0" />
       <Button fx:id="butEliminar" layoutX="164.0" layoutY="79.0" mnemonicParsing="false" onAction="#eliminarSucursal" prefHeight="40.0" prefWidth="100.0" text="Eliminar" />
       <Button fx:id="butCrear" layoutX="45.0" layoutY="79.0" mnemonicParsing="false" onAction="#crearSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear" />
       <Button fx:id="butModificar" layoutX="282.0" layoutY="79.0" mnemonicParsing="false" onAction="#modificarSucursal" prefHeight="40.0" prefWidth="100.0" text="Modificar" />
       <Button fx:id="butCrearBodega" layoutX="401.0" layoutY="79.0" mnemonicParsing="false" onAction="#agregarBodegaSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear bodega " />
       <Button fx:id="butCrearEstante" layoutX="519.0" layoutY="79.0" mnemonicParsing="false" onAction="#agregarEstanteSucursal" prefHeight="40.0" prefWidth="100.0" text="Crear estante" />
       <Button fx:id="butDarDinero" layoutX="640.0" layoutY="79.0" mnemonicParsing="false" onAction="#mostrarDineroRecolectado" prefHeight="40.0" prefWidth="117.0" text="Dinero recolectado" />
+      <Button fx:id="butEliminarBodegas" layoutX="640.0" layoutY="170.0" mnemonicParsing="false" onAction="#eliminarBodegasSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Bodegas" />
+      <Button fx:id="butAnadirProductos" layoutX="640.0" layoutY="309.0" mnemonicParsing="false" onAction="#anadirProductosSucursal" prefHeight="40.0" prefWidth="117.0" text="Añadir Productos" />
+      <Button fx:id="butEliminarEstantes" layoutX="640.0" layoutY="216.0" mnemonicParsing="false" onAction="#eliminarEstantesSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Estantes" />
+      <Button fx:id="butEliminarProductosSucursal" layoutX="640.0" layoutY="262.0" mnemonicParsing="false" onAction="#eliminarProductosSucursal" prefHeight="40.0" prefWidth="117.0" text="Ver Productos" />
    </children>
 </Pane>

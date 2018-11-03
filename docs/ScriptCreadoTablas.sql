@@ -25,7 +25,7 @@ CREATE TABLE Sucursal
     CONSTRAINT sucursal_pk PRIMARY KEY(idSucursal)
 );
 
-CREATE TABLE ProductoOfrecidoSucursal
+CREATE TABLE ProductoSucursal
 (
     idSucursal INTEGER NOT NULL, 
     codigoBarras VARCHAR(80) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE ProductoOfrecidoSucursal
     precioUnidadMedida INTEGER CHECK (precioUnidadMedida >= 0),
     nivelDeReorden INTEGER CHECK (nivelDeReorden > 0) ,
     cantidadRecompra INTEGER CHECK (cantidadRecompra > 0),
-    CONSTRAINT productoofrecidosucursal_pk PRIMARY KEY(idSucursal, codigoBarras)
+    CONSTRAINT productosucursal_pk PRIMARY KEY(idSucursal, codigoBarras)
 );
 
 CREATE TABLE Estante
@@ -344,7 +344,7 @@ ALTER TABLE ProductoPromocion
 ;
     
     
-ALTER TABLE ProductoOfrecidoSucursal
+ALTER TABLE ProductoSucursal
     ADD    FOREIGN KEY (codigoBarras)
     REFERENCES Producto(codigoDeBarras)
     ON DELETE CASCADE
@@ -357,7 +357,7 @@ ALTER TABLE ProductoPedido
 ;
     
     
-ALTER TABLE ProductoOfrecidoSucursal
+ALTER TABLE ProductoSucursal
     ADD    FOREIGN KEY (idSucursal)
     REFERENCES Sucursal(idSucursal)
     ON DELETE CASCADE
@@ -423,7 +423,7 @@ ALTER TABLE ProductosBodega
 
 ALTER TABLE ProductosBodega
     ADD FOREIGN KEY (idSucursal , codigoBarras)
-    REFERENCES ProductoOfrecidoSucursal (idSucursal , codigoBarras)
+    REFERENCES ProductoSucursal (idSucursal , codigoBarras)
     ON DELETE CASCADE
 ;
 
@@ -435,7 +435,7 @@ ALTER TABLE ProductosEstante
 
 ALTER TABLE ProductosEstante
  ADD FOREIGN KEY (idSucursal , codigoBarras)
-    REFERENCES ProductoOfrecidoSucursal (idSucursal , codigoBarras)
+    REFERENCES ProductoSucursal (idSucursal , codigoBarras)
     ON DELETE CASCADE
 ;
 
