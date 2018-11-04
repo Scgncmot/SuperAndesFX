@@ -337,12 +337,12 @@ public class PanelPromocionController implements Initializable {
 
 				combo.setItems(listO);
 
-				grid3.add(new Label("Categoria: "), 0, 7);
+				grid3.add(new Label("Categoria: "), 0, 8);
 
-				grid3.add(combo, 1, 7);			
+				grid3.add(combo, 1, 8);			
 
-				grid3.add(labFecha, 0, 8);
-				grid3.add(fechaVencimiento, 1, 8);	
+				grid3.add(labFecha, 0, 9);
+				grid3.add(fechaVencimiento, 1, 9);	
 
 
 				dialog3.getDialogPane().setContent(grid3);
@@ -365,9 +365,9 @@ public class PanelPromocionController implements Initializable {
 
 				datos3[6] = especificacionEmpacadotf.getText();
 				
-				datos3[6] = precioDeVenta.getText();
+				datos3[7] = precioDeVenta.getText();
 
-				datos3[8] = combo.getSelectionModel().getSelectedItem();				
+				datos3[8] = combo.getSelectionModel().getSelectedItem().split("-")[0];			
 				
 				LocalDate fecha3 = fechaVencimiento.getValue();
 				
