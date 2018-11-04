@@ -483,7 +483,7 @@ public class SuperAndesAdministrador implements Initializable {
 	{
 		pp.eliminarProductoSucursalPorIds(idSucursal, codigoBarras);
 	}
-	
+
 	public void registrarVenta(long sucursal, String tipodocumento, String documento, String[] codigosProductos,
 			String[] cantidad, Double precioTotal, Date fecha)
 	{
@@ -605,7 +605,7 @@ public class SuperAndesAdministrador implements Initializable {
 			break;
 
 		case PanelPromocionController.PAQUETEPRODUCTOS:
-
+			
 			pp.registrarPromocionPaqueteProductos(fechaVencimientoPromocion, datos[0], datos[1], datos[2], datos[3], Integer.parseInt(datos[4]), datos[5], datos[6], Integer.parseInt(datos[7]), datos[8]);
 
 			break;
@@ -617,7 +617,7 @@ public class SuperAndesAdministrador implements Initializable {
 			break;
 
 		}
-		
+
 		cargarPromociones();
 
 	}
