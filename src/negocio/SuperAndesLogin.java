@@ -8,6 +8,8 @@ package negocio;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import interfazsuperandes.SuperAndesSucursalInterfaz;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
@@ -32,6 +34,9 @@ import main.main;
 public class SuperAndesLogin implements Initializable {
 
 	public static SuperAndesAdministrador admin;
+	
+	public static SuperAndesSucursalInterfaz sucursalInt;
+
 
 	@FXML
 	private ProgressBar progressBar;
@@ -69,6 +74,20 @@ public class SuperAndesLogin implements Initializable {
 		}
 
 		else if(comboBox.getValue().equals("Sucursal")){
+			
+			FXMLLoader loader = new FXMLLoader();
+
+			loader.setLocation(getClass().getResource("/interfazsuperandes/InterfazSucursal.fxml"));
+
+			Parent window1 = loader.load();
+
+			sucursalInt = loader.getController();
+			
+			sucursalInt.mostrarProductos();
+
+			Stage mainStage = main.parentWindow;			
+
+			mainStage.getScene().setRoot(window1);   
 
 
 		}

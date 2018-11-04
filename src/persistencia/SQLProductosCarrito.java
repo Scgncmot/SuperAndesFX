@@ -28,7 +28,7 @@ public class SQLProductosCarrito
 	{		
 		Query q = pm.newQuery(SQL,
 				"SELECT * FROM " + PersistenciaSuperAndes.darTablaProducto() + " JOIN " + pp.darTablaProductosCarrito() + " ON "
-				+ "PRODUCTOSCARRITO.CODIGOBARRAS = PRODUCTO.CODIGODEBARRAS WHERE productoscarrito.idcarrito = ?");
+				+ "PRODUCTOSCARRITO.CODIGOBARRASPRODUCTO = PRODUCTO.CODIGODEBARRAS WHERE productoscarrito.idcarrito = ?");
 		q.setParameters(idCarrito);
 		return q.executeList();
 	}
