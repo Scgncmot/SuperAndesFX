@@ -767,7 +767,7 @@ public class PersistenciaSuperAndes {
 		}
 	}
 
-	public Pedido registrarPedido(String idSucursal, String[] codigosProductos, String[] cantidad, String[] precios, String nitProveedor, Timestamp fechaPrevista, double precioTotal )
+	public Pedido registrarPedido(long idSucursal, String[] codigosProductos, String[] cantidad, String[] precios, String nitProveedor, Date fechaPrevista, Double precioTotal )
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 
@@ -776,11 +776,8 @@ public class PersistenciaSuperAndes {
 		try {
 
 			tx.begin();
-
 			long codigoPedido = nextval();
-
-			long tuplasInsertadas = sqlPedido.adicionarPedido(pm, idSucursal, codigosProductos, nitProveedor, fechaPrevista, precioTotal);
-
+			long tuplasInsertadas = sqlPedido.adicionarPedido(pm, codigoPedido, fechaPrevista, precioTotal, nitProveedor, idSucursal);
 			long tuplasInsertadas2 = 0;
 
 			for (int i = 0; i < codigosProductos.length; i++) {
@@ -796,10 +793,11 @@ public class PersistenciaSuperAndes {
 			log.trace ("Inserción de productosPedidos: " + codigoPedido + ": " + tuplasInsertadas2 + " tuplas insertadas");
 
 
-			return new Pedido(pm, idSucursal, codigosProductos, nitProveedor, fechaPrevista, precioTotal);
+			return new Pedido(codigoPedido, idSucursal, fechaPrevista, precioTotal, nitProveedor);
 
 		} catch (Exception e) {
 
+			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 
 			return null;
@@ -1215,6 +1213,26 @@ public class PersistenciaSuperAndes {
 		}		
 	}
 	
+	public List<Object[]> darInfoProductosProveedor(String nitProveedor) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno =  sqlProductoProveedor.darInfoProductosProveedor(pm, nitProveedor);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
 	public List<Object[]> darProductosCategoria(long idCategoria) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1377,8 +1395,26 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 
 		}
+	}
+	
+	public List<Object[]> darProveedores() 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
 
-
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno =  sqlProveedor.darProveedores(pm);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
 	}
 
 	public List<String> darProductosProveedor(String nitStr) {

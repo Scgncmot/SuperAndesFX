@@ -1,8 +1,10 @@
 package persistencia;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.jdo.PersistenceManager;
+import javax.jdo.Query;
 
 public class SQLPedido {
 	/* ****************************************************************
@@ -34,8 +36,13 @@ public class SQLPedido {
 		this.pp = pp;
 	}
 
-	public long adicionarPedido(PersistenceManager pm, String idSucursal, String[] codigosProductos,
-			String nitProveedor, Timestamp fechaPrevista, double precioTotal) {
-		return 0;
+	public long adicionarPedido(PersistenceManager pm, long codigoPedido, Date fechaEntrega, Double precioTotal,
+			String nitProveedor, long idSucursal) 
+	{
+		Timestamp fechI = new Timestamp(fechaEntrega.getTime()); 
+		Query q = pm.newQuery(SQL, "INSERT INTO " + pp.darTablaPedido()+
+				" (CODIGOPEDIDO, FECHAENTREGA, PRECIOTOTAL, ESTADOORDEN, NITPROVEEDOR, IDSUCURSAL) values (?, ?, ?, ?, ?, ?)");
+		q.setParameters( codigoPedido, fechI, precioTotal, "En progreso" , nitProveedor, idSucursal);
+		return (long) q.executeUnique();
 	}
 }

@@ -200,6 +200,12 @@ public class SuperAndesAdministrador implements Initializable {
 
 
 	}
+	
+	public List<Object[]> darInfoProductosProveedor(String nitProveedor) 
+	{
+		return pp.darInfoProductosProveedor(nitProveedor);
+
+	}
 
 
 	public void agregarProductoProveedor(String nombreProducto, String nit, String calif, String prec) {
@@ -444,6 +450,12 @@ public class SuperAndesAdministrador implements Initializable {
 	{
 		return pp.darClientes();		
 	}
+	
+	public List<Object[]> darProveedores()
+	{
+		return pp.darProveedores();		
+	}
+
 
 	public List<Object[]> cargarEstantesSucursal(long idSucursal)
 	{
@@ -627,7 +639,10 @@ public class SuperAndesAdministrador implements Initializable {
 	//....................................
 	//.............. PEDIDOS .............
 	//....................................
-
+	public void registrarPedido(long idSucursal, String[] codigosProductos, String[] cantidad, String[] precios, String nitProveedor, Date fechaPrevista, Double precioTotal )
+	{
+		pp.registrarPedido(idSucursal, codigosProductos, cantidad, precios, nitProveedor, fechaPrevista, precioTotal);
+	}
 
 
 

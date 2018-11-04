@@ -760,8 +760,124 @@ public class PanelSucursalController implements Initializable {
     
     @FXML
     void crearPedidoSucursal(ActionEvent event) 
-    {
+    {    	
+    	String sucursalActual = listViewSucursales.getSelectionModel().getSelectedItem();	
+		//[1] = Id , [3] = Nombre
+		String[] arreglo = sucursalActual.split(": ");
+		
+		long idSucursal = Long.valueOf(arreglo[1].trim());
+		
+		List<Object[]> proveedores = SuperAndesLogin.admin.darProveedores();
+		List<String> infoProveedor = new ArrayList<String>();		
+		//Hacer lista clientes
+		for(Object[] a : proveedores) 		
+			infoProveedor.
+				add("NIT:   "+ a[0] + "   |   Nombre:   " + a[1]);
+		
+		
+		ObservableList<String> datosProveedor = FXCollections.observableList(infoProveedor);	
+		ListView<String> vistaProveedor = new ListView<String>();
+		vistaProveedor.setItems(datosProveedor);		
+		vistaProveedor.setMinWidth(330);		
+		
+		Dialog<?> dialogPane = new Dialog();
+		ButtonType button = new ButtonType("Aceptar", ButtonData.OK_DONE);
+		dialogPane.getDialogPane().getButtonTypes().addAll(button , ButtonType.CANCEL);		
+		dialogPane.setTitle("Seleccionar cliente y productos a vender");	
+		dialogPane.initStyle(StageStyle.UTILITY);
+		dialogPane.setWidth(Region.USE_PREF_SIZE);;
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);	
+		
+		grid.add(new Label("Proveedores"), 0, 0);
+		grid.add(vistaProveedor, 0, 1);	
 
+		dialogPane.getDialogPane().setContent(grid);				
+		dialogPane.showAndWait().ifPresent(response -> 
+		{
+			if(response == button)
+			{
+				String[] nit = vistaProveedor.getSelectionModel().getSelectedItem().split("   ");
+				
+				//Datos del producto proveedor
+				List<Object[]> productosProveedor = SuperAndesLogin.admin.darInfoProductosProveedor(nit[1]);
+				List<String> infoProductosProveedor = new ArrayList<String>();
+				//Hacer lista de productos
+				for(Object[] a : productosProveedor)
+					infoProductosProveedor.
+						add("Nombre:   " + a[1] + "   |   Codigo de Barras:   " + a[0] + "   |   Precio:   " + a[10] + "   |   Calidad:   " + a[11]);
+				
+				ObservableList<String> datosProducto = FXCollections.observableArrayList(infoProductosProveedor);
+				ListView<String> vistaProducto = new ListView<String>();
+				vistaProducto.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+				vistaProducto.setItems(datosProducto);
+				vistaProducto.setMinWidth(600);
+				
+				Dialog<?> dialogPane2 = new Dialog();
+				ButtonType button2 = new ButtonType("Aceptar", ButtonData.OK_DONE);
+				dialogPane2.getDialogPane().getButtonTypes().addAll(button2 , ButtonType.CANCEL);		
+				dialogPane2.setTitle("Seleccionar cliente y productos a vender");	
+				dialogPane2.initStyle(StageStyle.UTILITY);
+				dialogPane2.setWidth(Region.USE_PREF_SIZE);;
+				
+				GridPane grid2 = new GridPane();
+				grid2.setHgap(10);
+				grid2.setVgap(10);	
+				
+				grid2.add(new Label("Productos ofrecidos"), 0, 0);
+				grid2.add(vistaProducto, 0, 1);		
+				grid2.add(new Label("Ingrese la cantidad de los productos, separados por comas"), 0, 2);
+				TextField cantidades = new TextField();
+				grid2.add(cantidades, 1, 2);	
+				DatePicker fecha = new DatePicker();	
+				grid2.add(new Label("Ingrese la fecha esperada"), 0, 3);
+				grid2.add(fecha, 1, 3);
+			
+				//Informacion productos
+				List<String> codigosDeBarrasList = new ArrayList<>();;
+				List<String> nombreProd = new ArrayList<>();
+				List<String> preciosUni = new ArrayList<>();	
+				
+				dialogPane2.getDialogPane().setContent(grid2);				
+				dialogPane2.showAndWait().ifPresent(response2 -> 
+				{
+					if (response2 == button2) 
+					{
+						// [1] = Nombre, [4] = Codigo de Barras , [7] = Precio Unitario
+						ObservableList<String> productos = vistaProducto.getSelectionModel().getSelectedItems();
+						for (int i = 0; i < productos.size() ; i++) 
+						{
+							codigosDeBarrasList.add(productos.get(i).split("   ")[4]);
+							nombreProd.add(productos.get(i).split("   ")[1]);
+							preciosUni.add(productos.get(i).split("   ")[7]);						
+						}			
+						
+						String[] cantidadProductoSelec = cantidades.getText().split(",") ;
+						/*for(String a : cantidadProductoSelec)
+							System.out.println(a);*/
+						
+						String[] codigosDeBarras = codigosDeBarrasList.toArray(new String [0]);
+						
+						Double precioTotal = 0.0;					
+						//Los precios y la cantidad deben tener el mismo tamaño de array, asi que no hay problema.
+						for (int i = 0; i < preciosUni.size(); i++) 				
+							precioTotal += Double.valueOf(preciosUni.get(i)) * Double.valueOf(cantidadProductoSelec[i]);
+						
+						String[] precios = preciosUni.toArray(new String [0]);
+						
+						LocalDate fechaPrevista = fecha.getValue();			
+						Date fechaEsperada = Date.from(fechaPrevista.atStartOfDay(ZoneId.systemDefault()).toInstant());
+									
+						SuperAndesLogin.admin.
+							registrarPedido(idSucursal, codigosDeBarras, cantidadProductoSelec, precios, nit[1], fechaEsperada, precioTotal);
+							
+					}
+				});
+			}
+		});		
+		
     }
 
     @FXML

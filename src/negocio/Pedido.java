@@ -1,6 +1,7 @@
 package negocio;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.jdo.PersistenceManager;
 
@@ -9,95 +10,68 @@ public class Pedido implements VOPedido{
 	/* ****************************************************************
 	 * 			Atributos
 	 *****************************************************************/
-	private long id;
+	private long id, idSucursal;
 	
-	private Timestamp fechaEntrega;
+	
+	private Date fechaEntrega;
 	
 	private double precioTotal;
 	
 	private String estadoOrden;
 	
-	private String nitProveedor;
-
-	//TODO ¿Este constructor que?
-	public Pedido(PersistenceManager pm, String idSucursal, String[] codigosProductos, String nitProveedor2,
-			Timestamp fechaPrevista, double precioTotal2) 
-	{
-		// TODO Hacer este constructor
-	}
+	private String nitProveedor;	
 	
-	public Pedido() 
-	{
-		this.id = 0;
-		this.fechaEntrega = Timestamp.valueOf("0001-01-01 00:00:00.0");
-		this.precioTotal = 0.0;
-		this.estadoOrden = "";
-		this.nitProveedor = "";
+	
+
+	public Pedido(long id, long idSucursal, Date fechaEntrega, double precioTotal, String nitProveedor) {
+		super();
+		this.id = id;
+		this.idSucursal = idSucursal;
+		this.fechaEntrega = fechaEntrega;
+		this.precioTotal = precioTotal;
+		this.nitProveedor = nitProveedor;
 	}
 
-	public Pedido(long id, Timestamp fechaEntrega, double precioTotal, String estadoOrden, String nitProveedor) 
+	public Pedido(long id, long idSucursal, Date fechaEntrega, double precioTotal, String estadoOrden,
+			String nitProveedor) 
 	{
 		this.id = id;
+		this.idSucursal = idSucursal;
 		this.fechaEntrega = fechaEntrega;
 		this.precioTotal = precioTotal;
 		this.estadoOrden = estadoOrden;
 		this.nitProveedor = nitProveedor;
 	}
 
-	/**
-	 * @return the id
-	 */
-	public long getId() { return id; }
+	public long getId() {return id;}	
+	
+	public void setId(long id) {this.id = id;}
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(long id) { this.id = id; }
+	public long getIdSucursal() {return idSucursal;}
 
-	/**
-	 * @return the fechaEntrega
-	 */
-	public Timestamp getFechaEntrega() { return fechaEntrega; }
+	public void setIdSucursal(long idSucursal) {this.idSucursal = idSucursal;}
 
-	/**
-	 * @param fechaEntrega the fechaEntrega to set
-	 */
-	public void setFechaEntrega(Timestamp fechaEntrega) { this.fechaEntrega = fechaEntrega; }
+	public Date getFechaEntrega() {return fechaEntrega;}
 
-	/**
-	 * @return the precioTotal
-	 */
-	public double getPrecioTotal() { return precioTotal; }
+	public void setFechaEntrega(Date fechaEntrega) {this.fechaEntrega = fechaEntrega;}
 
-	/**
-	 * @param precioTotal the precioTotal to set
-	 */
-	public void setPrecioTotal(double precioTotal) { this.precioTotal = precioTotal; }
+	public double getPrecioTotal() {return precioTotal;}
 
-	/**
-	 * @return the estadoOrden
-	 */
-	public String getEstadoOrden() { return estadoOrden; }
+	public void setPrecioTotal(double precioTotal) {this.precioTotal = precioTotal;}
 
-	/**
-	 * @param estadoOrden the estadoOrden to set
-	 */
-	public void setEstadoOrden(String estadoOrden) { this.estadoOrden = estadoOrden; }
+	public String getEstadoOrden() {return estadoOrden;}
 
-	/**
-	 * @return the nitProveedor
-	 */
-	public String getNitProveedor() { return nitProveedor; }
+	public void setEstadoOrden(String estadoOrden) {this.estadoOrden = estadoOrden;}
 
-	/**
-	 * @param nitProveedor the nitProveedor to set
-	 */
-	public void setNitProveedor(String nitProveedor) { this.nitProveedor = nitProveedor; }
+	public String getNitProveedor() {return nitProveedor;}
+
+	public void setNitProveedor(String nitProveedor) {this.nitProveedor = nitProveedor;}
 
 	@Override
-	public String toString() 
-	{
-		return "Pedido [id=" + id + ", fechaEntrega=" + fechaEntrega + ", precioTotal=" + precioTotal + ", estadoOrden="
-				+ estadoOrden + ", nitProveedor=" + nitProveedor + "]";
+	public String toString() {
+		return "Pedido [id=" + id + ", idSucursal=" + idSucursal + ", fechaEntrega=" + fechaEntrega + ", precioTotal="
+				+ precioTotal + ", estadoOrden=" + estadoOrden + ", nitProveedor=" + nitProveedor + "]";
 	}
+
+	
 }

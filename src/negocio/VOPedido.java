@@ -1,6 +1,7 @@
 package negocio;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 public interface VOPedido {
 	
@@ -16,7 +17,7 @@ public interface VOPedido {
 	/**
 	 * @return fecha de entrega del pedido
 	 */
-	public Timestamp getFechaEntrega();
+	public Date getFechaEntrega();
 	
 	/**
 	 * @return precio total del pedido

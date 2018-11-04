@@ -42,6 +42,12 @@ public class SQLProveedor {
 		return (long) q.executeUnique();
 
 	}
+	
+	public List<Object[]> darProveedores(PersistenceManager pm)
+	{
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + pp.darTablaProveedor());
+		return (List<Object[]>) q.executeList();
+	}
 
 	public void eliminarPorNombre(PersistenceManager pm, String proveedor) {
 

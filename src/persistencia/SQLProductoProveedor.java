@@ -47,8 +47,13 @@ public class SQLProductoProveedor
 		q.setParameters(nitStr);
 		return q.executeList();				
 	}
-
-
 	
+	public List<Object[]> darInfoProductosProveedor(PersistenceManager pm, String nitProveedor) {
 
+		Query q = pm.newQuery(SQL, "SELECT * FROM " + PersistenciaSuperAndes.darTablaProducto()+" JOIN " +
+				PersistenciaSuperAndes.darTablaProductoProveedor() + " ON producto.codigodebarras = proveedorproducto.codigoproducto "
+						+ "WHERE proveedorproducto.nitproveedor = ?");
+		q.setParameters(nitProveedor);
+		return q.executeList();				
+	}
 }
