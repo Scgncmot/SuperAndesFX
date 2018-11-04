@@ -1,5 +1,6 @@
 package persistencia;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedList;
@@ -18,6 +19,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import interfazsuperandes.PanelesSucursal.PanelPromocionController;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import negocio.Bodega;
 import negocio.Cliente;
 import negocio.DescPorcentajePromo;
@@ -194,12 +197,12 @@ public class PersistenciaSuperAndes {
 	 * Atributo para el acceso a la tabla VENTAPRODUCTO de la BD.
 	 */
 	private SQLVentaProducto sqlVentaProducto;
-	
+
 	/**
 	 * Atributo para el acceso a la tabla CARRITO de la BD.
 	 */
 	private SQLCarrito sqlCarrito;
-	
+
 	/**
 	 * Atributo para el acceso a la tabla PRODUCTOSCARRITO de la BD.
 	 */
@@ -208,6 +211,10 @@ public class PersistenciaSuperAndes {
 	private SQLPaqueteDeProductosPromo sqlPaqueteDeProductosPromo;
 
 	private SQLElementos sqlElementos;
+
+	private SQLAdministrador sqlAdministrador;
+
+	private SQLUsuarioSucursal sqlUsuarioSucursal;
 
 	//------------------------------------------------------------------
 	//--------------Métodos del MANEJADOR DE PERSISTENCIA---------------
@@ -272,10 +279,14 @@ public class PersistenciaSuperAndes {
 	public static String darTablaVenta()	{ return "VENTA"; }
 
 	public static String darTablaVentaProducto()	{ return "VENTAPRODUCTO"; }
-	
+
 	public static String darTablaCarrito() {return "CARRITO";}
-	
+
 	public static String darTablaProductosCarrito() {return "PRODUCTOSCARRITO";}
+
+	public static String darTablaAdministrador() {return "ADMINISTRADORES";}
+
+	public static String darTablaUsuarioSucursal() {return "USUARIOSSUCURSAL";}
 
 	/**
 	 * Constructor privado, que recibe los nombres de las tablas en un objeto Json - Patrón SINGLETON
@@ -355,7 +366,8 @@ public class PersistenciaSuperAndes {
 		sqlPromocion = new SQLPromocion(this);	sqlProveedor = new SQLProveedor(this);	sqlSucursal = new SQLSucursal(this);	
 		sqlVenta = new SQLVenta(this);	sqlVentaProducto = new SQLVentaProducto(this); 
 		sqlPaqueteDeProductosPromo = new SQLPaqueteDeProductosPromo(this); sqlUtil = new SQLUtil(this);	sqlElementos = new SQLElementos(this);
-		sqlCarrito = new SQLCarrito(this);  sqlProductosCarrito = new SQLProductosCarrito(this);
+		sqlCarrito = new SQLCarrito(this);  sqlProductosCarrito = new SQLProductosCarrito(this) ; sqlAdministrador = new SQLAdministrador(this); 
+		sqlUsuarioSucursal =  new SQLUsuarioSucursal(this);
 
 	}	
 
@@ -520,7 +532,7 @@ public class PersistenciaSuperAndes {
 		{
 			if (tx.isActive())			
 				tx.rollback();
-			
+
 			pm.close();
 		}
 
@@ -549,7 +561,7 @@ public class PersistenciaSuperAndes {
 		{
 			if (tx.isActive())			
 				tx.rollback();
-			
+
 			pm.close();
 		}
 	}
@@ -577,11 +589,11 @@ public class PersistenciaSuperAndes {
 		{
 			if (tx.isActive())			
 				tx.rollback();
-			
+
 			pm.close();
 		}
 	}
-	
+
 	public ProductoSucursal registrarProductoSucursal(long idSucursal, String codigoBarras, Double precioUnitario, Double precioUnidadMedida,
 			Integer nivelDeReorden, Integer cantidadRecompra)
 	{
@@ -606,11 +618,11 @@ public class PersistenciaSuperAndes {
 		{
 			if (tx.isActive())			
 				tx.rollback();
-			
+
 			pm.close();
 		}
 	}
-	
+
 	public ProductosCarrito registrarProductoCarrito(long idCarrito, String codigoBarras)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -632,7 +644,7 @@ public class PersistenciaSuperAndes {
 		{
 			if (tx.isActive())			
 				tx.rollback();
-			
+
 			pm.close();
 		}
 	}
@@ -875,7 +887,7 @@ public class PersistenciaSuperAndes {
 			}
 		}
 	}
-	
+
 
 	public void modificarCategoria(long idCategoria , String nuevoNombre, String nombreViejo) {
 
@@ -897,8 +909,8 @@ public class PersistenciaSuperAndes {
 
 		}		
 	}
-	
-	
+
+
 
 	public Venta registrarVenta(long sucursal, String tipodocumento, String documento, String[] codigosProductos,
 			String[] cantidad, Double precioTotal, Date fecha) {
@@ -919,7 +931,7 @@ public class PersistenciaSuperAndes {
 
 			for (int i = 0; i < codigosProductos.length; i++)
 				tuplasInsertadas2 += sqlVentaProducto.adicionarVentaProducto(pm, numeroVenta, codigosProductos[i],cantidad[i]);		
-		
+
 			tx.commit();
 
 			log.trace ("Inserción de venta: " + numeroVenta + ": " + tuplasInsertadas + " tuplas insertadas");
@@ -1105,7 +1117,7 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 		}
 	}
-	
+
 	public void eliminarCategoria(String tipoCategoria) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1125,7 +1137,7 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 		}
 	}
-	
+
 	public long registrarCarrito(String tipoDocumentoCliente, String numDocumentoCliente) {
 
 
@@ -1139,18 +1151,18 @@ public class PersistenciaSuperAndes {
 			long id = nextval();
 			sqlCarrito.crearCarrito(pm, id, tipoDocumentoCliente, numDocumentoCliente);
 			tx.commit();
-			
+
 			return id;
 		}
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-		
+
 			return 0;
 		}
 	}
-	
+
 	public void eliminarCarrito(long idCarrito, String tipoDocumentoCliente, String numDocumentoCliente) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1164,13 +1176,13 @@ public class PersistenciaSuperAndes {
 		}
 		catch(Exception e) 
 		{
-			
+
 			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 			throw e;
 		}
 	}
-	
+
 	public void modificarCarrito(long idCarrito, String tipoDocumentoClienteNuevo,
 			String numDocumentoClienteNuevo) {
 
@@ -1255,8 +1267,8 @@ public class PersistenciaSuperAndes {
 		}
 
 	}	
-	
-	
+
+
 
 	public Object[]  darSucursalPorNombre(String nombre) 
 	{
@@ -1277,7 +1289,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darBodegaSucursalPorId(long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1297,7 +1309,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darClientes() 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1317,7 +1329,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darInfoProductosProveedor(String nitProveedor) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1337,7 +1349,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darProductosCategoria(long idCategoria) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1357,7 +1369,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}	
-	
+
 	public List<Object[]> darProductosCarrito(long idCarrito) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1377,9 +1389,9 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
-	
-	
+
+
+
 	public List<Object[]> darProductosSucursal(long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1399,7 +1411,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darVentasSucursal(long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1419,7 +1431,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darProductosVendidosSucursal(long idVenta) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1439,7 +1451,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darPedidosSucursal(long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1459,7 +1471,7 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
+
 	public List<Object[]> darProductosPedidosSucursal(long idPedido) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1479,8 +1491,8 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
-	
+
+
 	public List<Object[]> darEstanteSucursalPorId(long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1500,9 +1512,9 @@ public class PersistenciaSuperAndes {
 			return null;
 		}		
 	}
-	
-	
-	
+
+
+
 	public void eliminarBodegaPorSucursalId(long idBodega, long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1521,7 +1533,7 @@ public class PersistenciaSuperAndes {
 		}
 
 	}
-	
+
 	public void eliminarEstantePorSucursalId(long idBodega, long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1539,7 +1551,7 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 		}
 	}
-	
+
 	public void eliminarProductoSucursalPorIds(long idSucursal, String codigoBarras) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1557,7 +1569,7 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 		}
 	}
-	
+
 	public void eliminarProductoCarrito(long idCarrito, String codigoBarras)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1623,7 +1635,7 @@ public class PersistenciaSuperAndes {
 
 		}
 	}
-	
+
 	public List<Object[]> darProveedores() 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1756,8 +1768,6 @@ public class PersistenciaSuperAndes {
 
 		}
 
-
-
 	}
 
 	public String buscarDireccionPersonaJuridica(String numDoc) {
@@ -1818,11 +1828,11 @@ public class PersistenciaSuperAndes {
 
 		}
 
-		
+
 	}
 
 	public void eliminarProducto(String barcode) {
-		
+
 		PersistenceManager pm = pmf.getPersistenceManager();
 
 		Transaction tx = pm.currentTransaction();
@@ -1843,7 +1853,38 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 
 		}		
+
+	}
+
+	public void verificarDatosAdmin(String usuario, String contrasena) throws Exception {	
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		List<Object[]> admin = sqlAdministrador.verificarDatos(pm, usuario, contrasena);	
+
+		if(admin.isEmpty()) {
+
+			throw new Exception();
+		}
+
+	}
+
+	public long verificarDatosSucursal(String user, String pass) throws Exception {
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		List<Object[]> admin = sqlUsuarioSucursal.verificarDatos(pm, user, pass);	
+
+		if(admin.isEmpty()) {
+
+			throw new Exception();
+		}
 		
+		System.out.println(admin.get(0)[2]);
+
+		return ((BigDecimal) admin.get(0)[2]).longValue();
+
+
 	}
 
 }

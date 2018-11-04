@@ -1,0 +1,35 @@
+{
+	"title": "Nombres de las tablas de SuperAndes para la aplicacion B",
+	"unidadPersistencia": "SuperAndes",
+	"tablas":
+	[
+		"SuperAndes_sequence",
+		"A_Producto",
+		"A_Sucursal",
+		"A_ProductoSucursal",
+		"A_Estante",
+		"A_ProductosEstante",
+		"A_Bodega",
+		"A_ProductosBodega",
+		"A_Categoria",
+		"A_Pedido",
+		"A_ProductoPedido",
+		"A_Proveedor",
+		"A_ProveedorProducto",
+		"A_LlegadaPedido",
+		"A_Cliente",
+		"A_PersonaJuridica",		
+		"A_Venta",		
+		"A_VentaProducto",		
+		"A_Carrito",		
+		"A_ProductosCarrito",		
+		"A_Promocion",		
+		"A_VentaPromocion",		
+		"A_ProductoPromocion",		
+		"A_PagueNUnidadesLleveMPromo",		
+		"A_PaqueteDeProductosPromo",	
+		"A_PagueXCantidadLleveYPromo",
+		"A_DescPorcentajePromo",
+		"A_Pague1Lleve2ConDescPromo"		
+	]
+}

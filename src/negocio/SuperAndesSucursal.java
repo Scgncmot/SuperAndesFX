@@ -30,6 +30,9 @@ public class SuperAndesSucursal {
 
 	private String documentoCliente;
 
+	private long sucursalId;
+
+
 
 	public SuperAndesSucursal(SuperAndesSucursalInterfaz superAndesSucursalInterfaz) {
 
@@ -90,6 +93,12 @@ public class SuperAndesSucursal {
 
 
 
+	public void setSucursal(long sucursal2) {
+
+		sucursalId = sucursal2;		
+	}
+
+
 
 	public void mostrarProductos() {
 
@@ -100,14 +109,13 @@ public class SuperAndesSucursal {
 
 	public List<String> darListaProductos() {
 
-		List<Object[]> lista = pp.darElementos(PersistenciaSuperAndes.darTablaProducto());
+		List<Object[]> lista = pp.darProductosSucursal(sucursalId);
 
 		List<String> nomProductos = new ArrayList<>();
 
 		for (Object[] objects : lista) {
 
-			nomProductos.add((String) objects[1]);
-
+			nomProductos.add((String) objects[7]);
 		}
 
 		return nomProductos;

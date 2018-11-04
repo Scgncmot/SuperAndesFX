@@ -14,6 +14,21 @@ CREATE TABLE Producto
     CONSTRAINT producto_pk PRIMARY KEY(codigoDeBarras)
 );
 
+CREATE TABLE Administradores
+(
+	usuario VARCHAR(80) NOT NULL,
+	contrasena VARCHAR(80) NOT NULL,
+	CONSTRAINT administradores_pk PRIMARY KEY (usuario)
+);
+
+CREATE TABLE UsuariosSucursal
+(
+	usuario VARCHAR(80) NOT NULL,
+	contrasena VARCHAR(80) NOT NULL,
+	idSucursal INTEGER NOT NULL,
+	CONSTRAINT usuariossucursal_pk PRIMARY KEY (usuario)
+);
+
 CREATE TABLE Sucursal
 (
     idSucursal INTEGER NOT NULL,
@@ -249,6 +264,12 @@ CREATE TABLE Pague1Lleve2ConDescPromo
 );
 
 -- Crear llaves foraneas
+ALTER TABLE UsuariosSucursal
+	ADD FOREIGN KEY (idSucursal)
+	REFERENCES Sucursal(idSucursal)
+	ON DELETE CASCADE
+;
+
 ALTER TABLE Carrito
     ADD FOREIGN KEY (tipoDocumentoCliente, numDocumentoCliente)
     REFERENCES Cliente(tipoDocumento, numDocumento)
