@@ -62,6 +62,9 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 
 	@FXML
 	private Button butRegistrese;
+	
+
+
 
 
 	//....................................
@@ -460,5 +463,12 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 			sucursal.crearClienteNatural(comboDocumento.getValue(),numDocumento.getText(),nombre.getText(),correo.getText());
 
 		}
+	}
+
+
+	public void setSucursal(long sucursal2) {
+		
+		sucursal.setSucursal(sucursal2);
+
 	}
 }
