@@ -835,6 +835,30 @@ public class PersistenciaSuperAndes {
 			}
 		}
 	}
+	
+
+	public void modificarCategoria(long idCategoria , String nuevoNombre, String nombreViejo) {
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlCategoria.modificarCategora(pm, idCategoria, nuevoNombre, nombreViejo);
+			tx.commit();
+
+		}
+		catch(Exception e) {
+
+			e.printStackTrace();
+
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+
+		}		
+	}
+	
+	
 
 	public Venta registrarVenta(long sucursal, String tipodocumento, String documento, String[] codigosProductos,
 			String[] cantidad, Double precioTotal, Date fecha) {
@@ -1031,17 +1055,34 @@ public class PersistenciaSuperAndes {
 
 		try {
 			tx.begin();
-
 			long id = nextval();
-
 			sqlCategoria.adicionarCategoria(pm, id, nombreCategoria);
-
 			tx.commit();
 		}
-		catch (Exception e) {
-
+		catch (Exception e) 
+		{
+			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}
+	}
+	
+	public void eliminarCategoria(String tipoCategoria) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
 
+		try 
+		{
+			tx.begin();
+			sqlCategoria.eliminarCategoriaPorNombre(pm, tipoCategoria);
+			tx.commit();
+
+		}
+		catch(Exception e) 
+		{
+
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 		}
 
 	}
@@ -1163,6 +1204,26 @@ public class PersistenciaSuperAndes {
 		{
 			tx.begin();
 			List<Object[]> retorno =  sqlCliente.darClientes(pm);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	public List<Object[]> darProductosCategoria(long idCategoria) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno =  sqlCategoria.darProductosCategoria(pm, idCategoria);;
 			tx.commit();			
 			return retorno;
 		}

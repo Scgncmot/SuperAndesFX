@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 
+import interfazsuperandes.PanelesSucursal.PanelCategoriaController;
 import interfazsuperandes.PanelesSucursal.PanelClienteController;
 import interfazsuperandes.PanelesSucursal.PanelProductoController;
 import interfazsuperandes.PanelesSucursal.PanelPromocionController;
@@ -32,6 +33,7 @@ import interfazsuperandes.PanelesSucursal.PanelProveedorController;
 import interfazsuperandes.PanelesSucursal.PanelSucursalController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -66,6 +68,8 @@ public class SuperAndesAdministrador implements Initializable {
 	private PanelSucursalController panelSucursal;
 
 	private PanelPromocionController panelPromocion;
+	
+	private PanelCategoriaController panelCategoria;
 
 
 	//Panel principal
@@ -138,8 +142,7 @@ public class SuperAndesAdministrador implements Initializable {
 
 		panelProveedor.getListViewProveedores().setItems(lista);
 	}	
-
-
+	
 	public void crearProveedor(String proveedor) {
 
 		String nit = proveedor.split("/")[0];
@@ -638,7 +641,39 @@ public class SuperAndesAdministrador implements Initializable {
 	//....................................
 	//........... CATEGORIAS .............
 	//....................................
+	@FXML
+	public void cargarCategorias(){
 
+		lista.clear();    	
+
+		List<Object[]> categoria = pp.darElementos(PersistenciaSuperAndes.darTablaCategoria());
+
+		for (Object[] objects : categoria) {    		
+
+			lista.add("Id: "+objects[0]+"      :      Tipo Categoria: "+objects[1]);
+		}    			
+
+		panelCategoria.getListViewCategoria().setItems(lista);
+	}	
+	
+	@FXML
+	public void actualizarPanelCategoria(Event event) throws IOException{
+
+		FXMLLoader loader = new FXMLLoader();
+
+		loader.setLocation(getClass().getResource("/interfazsuperandes/PanelesSucursal/PanelCategorias.fxml"));
+
+		Parent rightSide = loader.load();	
+
+		panelCategoria = loader.getController();
+
+		BorderPane.setAlignment(rightSide, Pos.CENTER);		
+
+		cargarCategorias();
+
+		borderPanelPrincipal.setRight( rightSide );
+
+	}
 
 	public List<String> darListaCategorias() {
 
@@ -646,16 +681,34 @@ public class SuperAndesAdministrador implements Initializable {
 
 		List<String> retorno = new ArrayList<>();
 
-		for (Object[] objects : lista) {
-
+		for (Object[] objects : lista) 
 			retorno.add(objects[0]+"-"+objects[1]);
 
-		}
-
 		return retorno;
-
 	}
-
+	
+	public void crearCategoria(String tipoCategoria)
+	{
+		pp.registrarCategoria(tipoCategoria);
+		cargarCategorias();
+	}
+	
+	public void modificarCategoria(long id, String nombreNuevo, String nombreViejo)
+	{
+		pp.modificarCategoria(id, nombreNuevo, nombreViejo);
+		cargarCategorias();
+	}
+	
+	public List<Object[]> darProductosCategoria(long idCategoria)
+	{
+		return pp.darProductosCategoria(idCategoria);
+	}
+	
+	public void eliminarCategoria(String tipoCategoria)
+	{
+		pp.eliminarCategoria(tipoCategoria);
+		cargarCategorias();
+	}		
 
 	private JsonObject openConfig (String tipo, String archConfig)
 	{
@@ -676,35 +729,4 @@ public class SuperAndesAdministrador implements Initializable {
 		}	
 		return config;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

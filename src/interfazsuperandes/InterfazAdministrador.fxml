@@ -55,7 +55,7 @@
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butCategorias" layoutX="36.0" layoutY="379.0" mnemonicParsing="false" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CATEGORIAS">
+                        <Button fx:id="butCategorias" layoutX="36.0" layoutY="379.0" mnemonicParsing="false" onAction="#actualizarPanelCategoria" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CATEGORIAS">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
