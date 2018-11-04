@@ -180,7 +180,8 @@ CREATE TABLE Carrito
 CREATE TABLE ProductosCarrito
 (
     idCarrito INTEGER NOT NULL,
-    codigoBarrasProducto VARCHAR(80) NOT NULL,    
+    codigoBarrasProducto VARCHAR(80) NOT NULL, 
+    cantidadProducto INTEGER NOT NULL CHECK (cantidadProducto > 0), 
     CONSTRAINT productos_carrito_pk PRIMARY KEY(idCarrito, codigoBarrasProducto)
 );
 
