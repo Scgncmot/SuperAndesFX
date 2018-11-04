@@ -320,7 +320,7 @@ public class PersistenciaSuperAndes {
 	 */
 	public void cerrarUnidadPersistencia ()
 	{
-		pmf.close ();
+		pmf.close();
 		instance = null;
 	}
 

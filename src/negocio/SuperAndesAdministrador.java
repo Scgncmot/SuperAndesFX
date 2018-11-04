@@ -88,21 +88,33 @@ public class SuperAndesAdministrador implements Initializable {
 	@FXML
 	private Button butCategorias;
 
-
-
-
 	/**
 	 * Initializes the controller class.
 	 */
-
 	@Override
-	public void initialize(URL url, ResourceBundle rb) {
-
-		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/TablasBD_A.json");
-
+	public void initialize(URL url, ResourceBundle rb) 
+	{
+		
+	}	
+	
+	public SuperAndesAdministrador()
+	{
+		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
 		pp =  PersistenciaSuperAndes.getInstance (tableConfig);
-
-	}    	
+	}
+	
+	public SuperAndesAdministrador(JsonObject json)
+	{
+		pp =  PersistenciaSuperAndes.getInstance (json);
+	}
+	
+	/**
+	 * Cierra la conexión con la base de datos (Unidad de persistencia)
+	 */
+	public void cerrarUnidadPersistencia ()
+	{
+		pp.cerrarUnidadPersistencia ();
+	}
 
 
 	//....................................
