@@ -755,7 +755,77 @@ public class PanelSucursalController implements Initializable {
     @FXML
     void verVentasSucursal(ActionEvent event) 
     {
+    	//Se obtiene la informacion de la sucursal
+		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		//[1] = Id , [3] = Nombre
+		String[] arreglo = sucursal.split(": ");
 
+		long idSucursal = Long.valueOf(arreglo[1].trim());
+		String nombreSucursal = arreglo[3].trim();
+		
+		Dialog<?> dialogPane = new Dialog();
+		ButtonType button = new ButtonType("Ver productos vendidos", ButtonData.OK_DONE);
+		dialogPane.setTitle("Ventas que ha realizado la sucursal");
+		dialogPane.getDialogPane().getButtonTypes().addAll(button, ButtonType.CANCEL);	
+		dialogPane.initStyle(StageStyle.UTILITY);
+		GridPane grid = new GridPane();
+
+		grid.setHgap(10);
+		grid.setVgap(10);		
+		
+		List<Object[]> valor = SuperAndesLogin.admin.darVentasSucursal(idSucursal);
+		List<String> mostrarDatos = new ArrayList<String>(); /*Informacion que se muestra*/
+			
+		/*Agrega a la lista los datos de la venta*/
+		for (Object[] objects : valor)	
+		{
+			mostrarDatos.add("Numero de venta:   "+ objects[0] + "   |   Documento del cliente:   " + objects[2] +
+					"   |   Fecha de la venta:   " + objects[4] + "   |   Total de la venta:   " + objects[5]);	
+		}
+		
+		ObservableList<String> datos = FXCollections.observableList(mostrarDatos);		
+		ListView<String> vista = new ListView<String>();		
+		vista.setItems(datos);/*Lista de ventas*/	
+		vista.setMinWidth(500);
+		grid.add(vista, 0, 0);
+		
+		dialogPane.getDialogPane().setContent(grid);	
+		dialogPane.showAndWait().ifPresent(response -> 
+		{
+		     if (response == button) {
+		    	String venta = vista.getSelectionModel().getSelectedItem();
+		    	//[1] = Id venta
+		 		String[] arreglo2 = venta.split("   ");
+		 		
+		 		Dialog<?> dialogPane2 = new Dialog();
+				ButtonType button2 = new ButtonType("OK", ButtonData.OK_DONE);
+				dialogPane2.setTitle("Productos vendidos");
+				dialogPane2.getDialogPane().getButtonTypes().addAll(button2);	
+				dialogPane2.initStyle(StageStyle.UTILITY);
+				GridPane grid2 = new GridPane();
+
+				grid2.setHgap(10);
+				grid2.setVgap(10);		
+				
+				List<Object[]> productos = SuperAndesLogin.admin.darProductosVendidosSucursal(Long.valueOf(arreglo2[1].trim()));
+				List<String> datosProductos = new ArrayList<String>(); /*Informacion que se muestra*/
+					
+				/*Agrega a la lista los datos de la venta*/
+				for (Object[] dato : productos)	
+				{
+					datosProductos.add("Nombre:   " + dato[1] + "   |   Codigo de Barras:   " +  dato[0]);	
+				}
+				
+				ObservableList<String> obsProductos = FXCollections.observableList(datosProductos);		
+				ListView<String> vista1 = new ListView<String>();		
+				vista1.setItems(obsProductos);/*Lista de ventas*/	
+				vista1.setMinWidth(500);
+				grid2.add(vista1, 0, 0);
+				
+				dialogPane2.getDialogPane().setContent(grid2);					
+				dialogPane2.showAndWait();
+		     }
+		 });
     }
     
     @FXML
@@ -871,8 +941,7 @@ public class PanelSucursalController implements Initializable {
 						Date fechaEsperada = Date.from(fechaPrevista.atStartOfDay(ZoneId.systemDefault()).toInstant());
 									
 						SuperAndesLogin.admin.
-							registrarPedido(idSucursal, codigosDeBarras, cantidadProductoSelec, precios, nit[1], fechaEsperada, precioTotal);
-							
+							registrarPedido(idSucursal, codigosDeBarras, cantidadProductoSelec, precios, nit[1], fechaEsperada, precioTotal);							
 					}
 				});
 			}
@@ -883,6 +952,74 @@ public class PanelSucursalController implements Initializable {
     @FXML
     void verPedidosSucursal(ActionEvent event) 
     {
+    	//Se obtiene la informacion de la sucursal
+		String sucursal = listViewSucursales.getSelectionModel().getSelectedItem();	
+		//[1] = Id , [3] = Nombre
+		String[] arreglo = sucursal.split(": ");
 
+		long idSucursal = Long.valueOf(arreglo[1].trim());
+		String nombreSucursal = arreglo[3].trim();
+		
+		Dialog<?> dialogPane = new Dialog();
+		ButtonType button = new ButtonType("Ver productos ordenados", ButtonData.OK_DONE);
+		dialogPane.setTitle("Pedidos realizados por la sucursal");
+		dialogPane.getDialogPane().getButtonTypes().addAll(button, ButtonType.CANCEL);	
+		dialogPane.initStyle(StageStyle.UTILITY);
+		GridPane grid = new GridPane();
+
+		grid.setHgap(10);
+		grid.setVgap(10);		
+		
+		List<Object[]> valor = SuperAndesLogin.admin.darPedidosSucursal(idSucursal);
+		List<String> mostrarDatos = new ArrayList<String>(); /*Informacion que se muestra*/
+			
+		/*Agrega a la lista los datos del pedido*/
+		for (Object[] objects : valor)		
+			mostrarDatos.add("Id Pedido:   "+ objects[0] + "   |   NIT Proveedor:   " + objects[4] +
+					"   |   Fecha de entrega:   " + objects[1] + "   |   Estado:   " + objects[3]);		
+		
+		ObservableList<String> datos = FXCollections.observableList(mostrarDatos);		
+		ListView<String> vista = new ListView<String>();		
+		vista.setItems(datos);/*Lista de pedidos*/	
+		vista.setMinWidth(500);
+		grid.add(vista, 0, 0);
+		
+		dialogPane.getDialogPane().setContent(grid);	
+		dialogPane.showAndWait().ifPresent(response -> 
+		{
+		     if (response == button) {
+		    	String venta = vista.getSelectionModel().getSelectedItem();
+		    	//[1] = Id pedido
+		 		String[] arreglo2 = venta.split("   ");
+		 		/*for(String a : arreglo2)
+		 			System.out.println(a);*/
+		 		
+		 		Dialog<?> dialogPane2 = new Dialog();
+				ButtonType button2 = new ButtonType("OK", ButtonData.OK_DONE);
+				dialogPane2.setTitle("Productos ordenados");
+				dialogPane2.getDialogPane().getButtonTypes().addAll(button2);	
+				dialogPane2.initStyle(StageStyle.UTILITY);
+				GridPane grid2 = new GridPane();
+
+				grid2.setHgap(10);
+				grid2.setVgap(10);		
+				
+				List<Object[]> productos = SuperAndesLogin.admin.darProductosPedidosSucursal(Long.valueOf(arreglo2[1].trim()));
+				List<String> datosProductos = new ArrayList<String>(); /*Informacion que se muestra*/
+					
+				/*Agrega a la lista los datos de la venta*/
+				for (Object[] dato : productos)					
+					datosProductos.add("Nombre:   " + dato[1] + "   |   Codigo de Barras:   " +  dato[0]);					
+				
+				ObservableList<String> obsProductos = FXCollections.observableList(datosProductos);		
+				ListView<String> vista1 = new ListView<String>();		
+				vista1.setItems(obsProductos);/*Lista de ventas*/	
+				vista1.setMinWidth(500);
+				grid2.add(vista1, 0, 0);
+				
+				dialogPane2.getDialogPane().setContent(grid2);					
+				dialogPane2.showAndWait();
+		     }
+		 });
     }
 }

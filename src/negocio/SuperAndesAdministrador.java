@@ -643,15 +643,31 @@ public class SuperAndesAdministrador implements Initializable {
 	{
 		pp.registrarPedido(idSucursal, codigosProductos, cantidad, precios, nitProveedor, fechaPrevista, precioTotal);
 	}
+	
+	public List<Object[]> darPedidosSucursal(long idSucursal) 
+	{
+		return pp.darPedidosSucursal(idSucursal);
+	}
+	
+	public List<Object[]> darProductosPedidosSucursal(long idPedido) 
+	{
+		return pp.darProductosPedidosSucursal(idPedido);
+	}
 
 
 
 	//....................................
 	//........... VENTAS .................
 	//....................................
-
-
-
+	public List<Object[]> darVentasSucursal(long idSucursal) 
+	{
+		return pp.darVentasSucursal(idSucursal);
+	}
+	
+	public List<Object[]> darProductosVendidosSucursal(long idVenta) 
+	{
+		return pp.darProductosVendidosSucursal(idVenta);
+	}
 
 	//....................................
 	//........... CATEGORIAS .............

@@ -1273,6 +1273,87 @@ public class PersistenciaSuperAndes {
 		}		
 	}
 	
+	public List<Object[]> darVentasSucursal(long idSucursal) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno = sqlSucursal.darVentasSucursal(pm, idSucursal);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	public List<Object[]> darProductosVendidosSucursal(long idVenta) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno = sqlVenta.darProductosVendidos(pm, idVenta);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	public List<Object[]> darPedidosSucursal(long idSucursal) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno = sqlSucursal.darPedidosSucursal(pm, idSucursal);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	public List<Object[]> darProductosPedidosSucursal(long idPedido) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno = sqlPedido.darProductosPedidosSucursal(pm, idPedido);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
+	}
+	
+	
 	public List<Object[]> darEstanteSucursalPorId(long idSucursal) 
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();

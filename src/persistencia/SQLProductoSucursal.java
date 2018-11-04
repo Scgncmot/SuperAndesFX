@@ -58,6 +58,7 @@ public class SQLProductoSucursal
 		return q.executeList();
 	}
 	
+	
 	public long eliminarEstantePorIds(PersistenceManager pm, long idSucursal, String codigoBarras)
 	{
 		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaProductoSucursal() + " WHERE idSucursal = ? AND codigoBarras = ?");

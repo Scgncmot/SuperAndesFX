@@ -2,6 +2,7 @@ package persistencia;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
@@ -45,4 +46,16 @@ public class SQLPedido {
 		q.setParameters( codigoPedido, fechI, precioTotal, "En progreso" , nitProveedor, idSucursal);
 		return (long) q.executeUnique();
 	}
+	
+	public List<Object[]> darProductosPedidosSucursal(PersistenceManager pm, long idPedido) 
+	{
+		//SELECT * FROM producto JOIN ventaproducto ON producto.codigodebarras = ventaproducto.codigoproducto WHERE ventaproducto.numeroventa = ?
+		Query q = pm.newQuery(SQL,
+				"SELECT * FROM " + pp.darTablaProducto() + " JOIN " + pp.darTablaProductoPedido() + 
+				" ON producto.codigodebarras = productopedido.codigoproducto WHERE productopedido.codigopedido  = ?");
+		q.setParameters(idPedido);
+		return (List<Object[]>) q.executeList();
+	}
+	
+	
 }
