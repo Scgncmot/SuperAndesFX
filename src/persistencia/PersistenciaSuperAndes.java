@@ -1126,7 +1126,7 @@ public class PersistenciaSuperAndes {
 		}
 	}
 	
-	public void registrarCarrito(String tipoDocumentoCliente, String numDocumentoCliente) {
+	public long registrarCarrito(String tipoDocumentoCliente, String numDocumentoCliente) {
 
 
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -1139,11 +1139,15 @@ public class PersistenciaSuperAndes {
 			long id = nextval();
 			sqlCarrito.crearCarrito(pm, id, tipoDocumentoCliente, numDocumentoCliente);
 			tx.commit();
+			
+			return id;
 		}
 		catch (Exception e) 
 		{
 			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		
+			return 0;
 		}
 	}
 	
@@ -1160,9 +1164,10 @@ public class PersistenciaSuperAndes {
 		}
 		catch(Exception e) 
 		{
-
+			
 			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			throw e;
 		}
 	}
 	

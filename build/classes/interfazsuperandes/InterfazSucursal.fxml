@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1110.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1110.0" style="-fx-background-color: #20120F;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfazsuperandes.SuperAndesSucursalInterfaz">
    <left>
-      <Pane prefHeight="629.0" prefWidth="823.0" BorderPane.alignment="CENTER" />
+      <Pane prefHeight="629.0" prefWidth="823.0" BorderPane.alignment="CENTER">
+         <children>
+            <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="598.0" prefWidth="795.0">
+               <content>
+                  <FlowPane fx:id="flowPaneProductos" hgap="33.0" maxHeight="594.0" maxWidth="1.7976931348623157E308" prefHeight="594.0" prefWidth="793.0" vgap="33.0" />
+               </content>
+            </ScrollPane>
+         </children></Pane>
    </left>
+   <right>
+      <BorderPane prefHeight="629.0" prefWidth="318.0" BorderPane.alignment="CENTER">
+         <top>
+            <Pane prefHeight="133.0" prefWidth="287.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane layoutX="6.0" layoutY="12.0" prefHeight="113.0" prefWidth="265.0" style="-fx-background-color: #632921;">
+                     <children>
+                        <ImageView fitHeight="176.0" fitWidth="227.0" layoutX="45.0" layoutY="-27.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@logoSuperAndes.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </top>
+         <center>
+            <Pane prefHeight="450.0" prefWidth="287.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane layoutX="6.0" layoutY="2.0" prefHeight="481.0" prefWidth="265.0" style="-fx-background-color: #632921;">
+                     <children>
+                        <Button fx:id="butCrearCarrito" layoutX="49.0" layoutY="64.0" mnemonicParsing="false" onAction="#crearCarrito" prefHeight="52.0" prefWidth="167.0" text="CREAR CARRITO" />
+                        <Button fx:id="butVerProductosCarrito" layoutX="49.0" layoutY="138.0" mnemonicParsing="false" onAction="#darProductosCarrito" prefHeight="52.0" prefWidth="167.0" text="VER PRODUCTOS CARRITO" />
+                        <Button fx:id="butDescartarCarrito" layoutX="49.0" layoutY="214.0" mnemonicParsing="false" onAction="#descartarCarrito" prefHeight="52.0" prefWidth="167.0" text="DESCARTAR CARRITO" />
+                        <Button fx:id="butPagarCarrito" layoutX="49.0" layoutY="290.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="167.0" text="PAGAR CARRITO" />
+                        <Button fx:id="butRegistrese" layoutX="49.0" layoutY="366.0" mnemonicParsing="false" onAction="#registrese" prefHeight="52.0" prefWidth="167.0" text="¡REGISTRESE! :)" />
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </center>
+      </BorderPane>
+   </right>
 </BorderPane>
