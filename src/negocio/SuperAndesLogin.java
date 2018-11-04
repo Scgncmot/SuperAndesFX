@@ -157,7 +157,7 @@ public class SuperAndesLogin implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 
-		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/TablasBD_A.json");
+		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
 
 		pp =  PersistenciaSuperAndes.getInstance (tableConfig);
 
