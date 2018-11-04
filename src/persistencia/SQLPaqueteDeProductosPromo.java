@@ -14,12 +14,11 @@ public class SQLPaqueteDeProductosPromo {
 		this.pp = persistenciaSuperAndes;
 	}
 
-	public long adicionarPaquete(PersistenceManager pm, String codigoProducto, int precioConjunto) {
-		
+	public long adicionarPaquete(PersistenceManager pm, String codigoProducto, int precioConjunto) 
+	{		
 		Query q = pm.newQuery(SQL,"INSERT INTO "+pp.darTablaPaqueteDeProductosPromo()+" (CODIGOPROMO, PRECIOPROMO) VALUES (?,?)");
 		q.setParameters(codigoProducto, precioConjunto);
-		return (long) q.executeUnique();
-		
+		return (long) q.executeUnique();		
 	}
 	
 	

@@ -31,6 +31,7 @@ import negocio.Pedido;
 import negocio.PersonaJuridica;
 import negocio.Producto;
 import negocio.ProductoSucursal;
+import negocio.ProductosCarrito;
 import negocio.Promocion;
 import negocio.Proveedor;
 import negocio.Sucursal;
@@ -193,6 +194,16 @@ public class PersistenciaSuperAndes {
 	 * Atributo para el acceso a la tabla VENTAPRODUCTO de la BD.
 	 */
 	private SQLVentaProducto sqlVentaProducto;
+	
+	/**
+	 * Atributo para el acceso a la tabla CARRITO de la BD.
+	 */
+	private SQLCarrito sqlCarrito;
+	
+	/**
+	 * Atributo para el acceso a la tabla PRODUCTOSCARRITO de la BD.
+	 */
+	private SQLProductosCarrito sqlProductosCarrito;
 
 	private SQLPaqueteDeProductosPromo sqlPaqueteDeProductosPromo;
 
@@ -261,6 +272,10 @@ public class PersistenciaSuperAndes {
 	public static String darTablaVenta()	{ return "VENTA"; }
 
 	public static String darTablaVentaProducto()	{ return "VENTAPRODUCTO"; }
+	
+	public static String darTablaCarrito() {return "CARRITO";}
+	
+	public static String darTablaProductosCarrito() {return "PRODUCTOSCARRITO";}
 
 	/**
 	 * Constructor privado, que recibe los nombres de las tablas en un objeto Json - Patrón SINGLETON
@@ -340,6 +355,7 @@ public class PersistenciaSuperAndes {
 		sqlPromocion = new SQLPromocion(this);	sqlProveedor = new SQLProveedor(this);	sqlSucursal = new SQLSucursal(this);	
 		sqlVenta = new SQLVenta(this);	sqlVentaProducto = new SQLVentaProducto(this); 
 		sqlPaqueteDeProductosPromo = new SQLPaqueteDeProductosPromo(this); sqlUtil = new SQLUtil(this);	sqlElementos = new SQLElementos(this);
+		sqlCarrito = new SQLCarrito(this);  sqlProductosCarrito = new SQLProductosCarrito(this);
 
 	}	
 
@@ -580,6 +596,32 @@ public class PersistenciaSuperAndes {
 			tx.commit();
 			log.trace ("Inserción del producto sucursal con codigo de barras: " + codigoBarras + ": " + tuplasInsertadas + " tuplas insertadas");
 			return new ProductoSucursal(idSucursal, codigoBarras, precioUnitario, precioUnidadMedida, nivelDeReorden, cantidadRecompra);
+		} 
+		catch (Exception e) 
+		{
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}
+		finally
+		{
+			if (tx.isActive())			
+				tx.rollback();
+			
+			pm.close();
+		}
+	}
+	
+	public ProductosCarrito registrarProductoCarrito(long idCarrito, String codigoBarras)
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		try 
+		{
+			tx.begin();
+			long tuplasInsertadas = sqlProductosCarrito.agregarProductosCarrito(pm, idCarrito, codigoBarras);					
+			tx.commit();
+			log.trace ("Inserción del producto sucursal con codigo de barras: " + codigoBarras + ": " + tuplasInsertadas + " tuplas insertadas");
+			return new ProductosCarrito(idCarrito, codigoBarras);
 		} 
 		catch (Exception e) 
 		{
@@ -1082,7 +1124,65 @@ public class PersistenciaSuperAndes {
 			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 		}
+	}
+	
+	public void registrarCarrito(String tipoDocumentoCliente, String numDocumentoCliente) {
 
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			long id = nextval();
+			sqlCarrito.crearCarrito(pm, id, tipoDocumentoCliente, numDocumentoCliente);
+			tx.commit();
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}
+	}
+	
+	public void eliminarCarrito(long idCarrito, String tipoDocumentoCliente, String numDocumentoCliente) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlCarrito.eliminarCarrito(pm, idCarrito, tipoDocumentoCliente, numDocumentoCliente);
+			tx.commit();
+		}
+		catch(Exception e) 
+		{
+
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}
+	}
+	
+	public void modificarCarrito(long idCarrito, String tipoDocumentoClienteNuevo,
+			String numDocumentoClienteNuevo) {
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		try 
+		{
+			tx.begin();
+			sqlCarrito.modificarCarritoCliente(pm, idCarrito, tipoDocumentoClienteNuevo, numDocumentoClienteNuevo);
+			tx.commit();
+
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}		
 	}
 
 	public void eliminarProveedorPorNombre(String proveedor) {
@@ -1251,7 +1351,29 @@ public class PersistenciaSuperAndes {
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 			return null;
 		}		
+	}	
+	
+	public List<Object[]> darProductosCarrito(long idCarrito) 
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			List<Object[]> retorno =  sqlProductosCarrito.darProductosCarrito(pm, idCarrito);
+			tx.commit();			
+			return retorno;
+		}
+		catch(Exception e) 
+		{		
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return null;
+		}		
 	}
+	
+	
 	
 	public List<Object[]> darProductosSucursal(long idSucursal) 
 	{
@@ -1421,7 +1543,7 @@ public class PersistenciaSuperAndes {
 		try 
 		{
 			tx.begin();
-			sqlProductoSucursal.eliminarEstantePorIds(pm, idSucursal, codigoBarras);
+			sqlProductoSucursal.eliminarProductoSucursalPorIds(pm, idSucursal, codigoBarras);
 			tx.commit();
 		}
 		catch(Exception e) 
@@ -1429,6 +1551,25 @@ public class PersistenciaSuperAndes {
 			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 		}
+	}
+	
+	public void eliminarProductoCarrito(long idCarrito, String codigoBarras)
+	{
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+
+		try 
+		{
+			tx.begin();
+			sqlProductosCarrito.eliminarProductoCarrito(pm, idCarrito, codigoBarras);
+			tx.commit();
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+		}
+
 	}
 
 

@@ -169,6 +169,21 @@ CREATE TABLE VentaProducto
     CONSTRAINT ventaproducto_pk PRIMARY KEY(numeroVenta, codigoProducto)
 );
 
+CREATE TABLE Carrito
+(
+    id INTEGER NOT NULL,
+    tipoDocumentoCliente VARCHAR(80) NOT NULL,
+    numDocumentoCliente VARCHAR(80) NOT NULL,
+    CONSTRAINT carrito_pk PRIMARY KEY(id)
+);
+
+CREATE TABLE ProductosCarrito
+(
+    idCarrito INTEGER NOT NULL,
+    codigoBarrasProducto VARCHAR(80) NOT NULL,    
+    CONSTRAINT productos_carrito_pk PRIMARY KEY(idCarrito, codigoBarrasProducto)
+);
+
 CREATE TABLE Promocion
 (
     codigoPromocion VARCHAR(80) NOT NULL,
@@ -232,8 +247,24 @@ CREATE TABLE Pague1Lleve2ConDescPromo
     CONSTRAINT pague1lleve2condescpromo_pk PRIMARY KEY(codigoPromo)
 );
 
-
 -- Crear llaves foraneas
+ALTER TABLE Carrito
+    ADD FOREIGN KEY (tipoDocumentoCliente, numDocumentoCliente)
+    REFERENCES Cliente(tipoDocumento, numDocumento)
+    ON DELETE CASCADE
+;
+
+ALTER TABLE ProductosCarrito
+ 	ADD FOREIGN KEY (idCarrito)
+    REFERENCES Carrito(id)
+    ON DELETE CASCADE
+;
+
+ALTER TABLE ProductosCarrito
+ 	ADD FOREIGN KEY (codigoBarrasProducto)
+    REFERENCES Producto(codigoDeBarras)
+    ON DELETE CASCADE
+;
 
 ALTER TABLE PaqueteDeProductosPromo
     ADD FOREIGN KEY (codigoPromo)

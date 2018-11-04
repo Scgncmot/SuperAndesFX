@@ -56,14 +56,12 @@ public class SQLProductoSucursal
 				+ pp.darTablaProductoSucursal() + ".idSucursal = ?");
 		q.setParameters(idSucursal);
 		return q.executeList();
-	}
+	}	
 	
-	
-	public long eliminarEstantePorIds(PersistenceManager pm, long idSucursal, String codigoBarras)
+	public long eliminarProductoSucursalPorIds(PersistenceManager pm, long idSucursal, String codigoBarras)
 	{
 		Query q = pm.newQuery(SQL, "DELETE FROM " + pp.darTablaProductoSucursal() + " WHERE idSucursal = ? AND codigoBarras = ?");
 	    q.setParameters(idSucursal, codigoBarras);
 	    return (long) q.executeUnique();
 	}
-
 }

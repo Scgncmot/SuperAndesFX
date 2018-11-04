@@ -1007,13 +1007,13 @@ public class PanelSucursalController implements Initializable {
 				List<Object[]> productos = SuperAndesLogin.admin.darProductosPedidosSucursal(Long.valueOf(arreglo2[1].trim()));
 				List<String> datosProductos = new ArrayList<String>(); /*Informacion que se muestra*/
 					
-				/*Agrega a la lista los datos de la venta*/
+				/*Agrega a la lista los datos de los productos*/
 				for (Object[] dato : productos)					
 					datosProductos.add("Nombre:   " + dato[1] + "   |   Codigo de Barras:   " +  dato[0]);					
 				
 				ObservableList<String> obsProductos = FXCollections.observableList(datosProductos);		
 				ListView<String> vista1 = new ListView<String>();		
-				vista1.setItems(obsProductos);/*Lista de ventas*/	
+				vista1.setItems(obsProductos);/*Lista de productos*/	
 				vista1.setMinWidth(500);
 				grid2.add(vista1, 0, 0);
 				

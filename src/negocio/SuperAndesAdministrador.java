@@ -739,7 +739,33 @@ public class SuperAndesAdministrador implements Initializable {
 	{
 		pp.eliminarCategoria(tipoCategoria);
 		cargarCategorias();
-	}		
+	}	
+	
+	//....................................
+	//.............. CARRITO .............
+	//....................................
+	public void crearCarrito(String tipoDocumentoCliente, String numDocumentoCliente)
+	{
+		pp.registrarCarrito(tipoDocumentoCliente, numDocumentoCliente);
+	} 
+	
+	public void eliminarCarrito(long idCarrito, String tipoDocumentoCliente, String numDocumentoCliente)
+	{
+		pp.eliminarCarrito(idCarrito, tipoDocumentoCliente, numDocumentoCliente);
+	}	
+	
+	//Es un join
+	public List<Object[]> darProductosCarrito(long idCarrito)
+	{
+		return pp.darProductosCarrito(idCarrito);
+	}
+	
+	public void registrarProductoCarrito(long idCarrito, String codigoBarras)
+	{
+		pp.registrarProductoCarrito(idCarrito, codigoBarras);
+	}
+	
+	//TODO Falta el de Eliminar producto carrito de compras.
 
 	private JsonObject openConfig (String tipo, String archConfig)
 	{
