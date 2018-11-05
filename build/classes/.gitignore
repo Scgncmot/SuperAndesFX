@@ -1,10 +1,19 @@
-<<<<<<< HEAD
+/META-INF/
 /config/
-/test/
+/hbase-site.xml
 /interfazsuperandes/
+/log4j.properties
 /main/
-=======
-/test/
->>>>>>> 9fcb7fa773a62f17358291758a349ac944c47963
+/manifest.mf
 /negocio/
+/package-cassandra.orm
+/package-excel.orm
+/package-h2.orm
+/package-hbase.orm
+/package-hsql.orm
+/package-mongodb.orm
+/package-mysql.orm
+/package-neo4j.orm
+/package-odf.orm
 /persistencia/
+/test/
