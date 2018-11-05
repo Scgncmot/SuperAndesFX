@@ -32,15 +32,14 @@ public class SuperAndesSucursal {
 
 	private long sucursalId;
 
+	public SuperAndesSucursal(SuperAndesSucursalInterfaz superAndesSucursalInterfaz) {
 
+		interfaz = superAndesSucursalInterfaz;
 
-	public SuperAndesSucursal(SuperAndesSucursalInterfaz superAndesSucursalInterfaz) 
-	{
-		/*interfaz = superAndesSucursalInterfaz;
 		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
-		pp =  PersistenciaSuperAndes.getInstance (tableConfig);	*/
 
-	}	
+		pp =  PersistenciaSuperAndes.getInstance (tableConfig);	
+}	
 	
 	public SuperAndesSucursal()
 	{
@@ -65,6 +64,22 @@ public class SuperAndesSucursal {
 
 	public void eliminarCarrito()
 	{
+		List<Object[]> prodOb = darProductosCarrito(); 
+		
+		List<String> productosId = new ArrayList<>();
+		
+		for (Object[] objects : prodOb) {
+			
+			productosId.add((String) objects[0]);
+			
+		}
+		
+		for (String idproducto : productosId) {
+			
+			pp.devolverProducto(idcarro, idproducto, sucursalId);					
+		}	
+		
+		
 		pp.eliminarCarrito(idcarro, tipodocumentoCliente, documentoCliente);
 	}	
 
@@ -74,9 +89,12 @@ public class SuperAndesSucursal {
 		return pp.darProductosCarrito(idcarro);
 	}
 
-	public void registrarProductoCarrito(String codigoBarras)
+	public void registrarProductoCarrito(String producto, String cantidad)
 	{
-		pp.registrarProductoCarrito(idcarro, codigoBarras);
+		String codigoBarras = (String) pp.obtenerCodigoDeBarrasPorProducto(producto)[0];
+		
+		pp.registrarProductoCarrito(idcarro, codigoBarras, cantidad, sucursalId);		
+		
 	}
 
 	//TODO Falta el de Eliminar producto carrito de compras.	
@@ -151,7 +169,9 @@ public class SuperAndesSucursal {
 		return config;
 	}
 
-
-
+	public void pagarCarrito() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -216,6 +216,8 @@ public class PersistenciaSuperAndes {
 
 	private SQLUsuarioSucursal sqlUsuarioSucursal;
 
+	private SQLProductosEstante sqlProductoEstante;
+
 	//------------------------------------------------------------------
 	//--------------Métodos del MANEJADOR DE PERSISTENCIA---------------
 	//------------------------------------------------------------------
@@ -287,6 +289,8 @@ public class PersistenciaSuperAndes {
 	public static String darTablaAdministrador() {return "ADMINISTRADORES";}
 
 	public static String darTablaUsuarioSucursal() {return "USUARIOSSUCURSAL";}
+	
+	public static String darTablaProductosEstante() {return "PRODUCTOSESTANTE";}
 
 	/**
 	 * Constructor privado, que recibe los nombres de las tablas en un objeto Json - Patrón SINGLETON
@@ -367,7 +371,7 @@ public class PersistenciaSuperAndes {
 		sqlVenta = new SQLVenta(this);	sqlVentaProducto = new SQLVentaProducto(this); 
 		sqlPaqueteDeProductosPromo = new SQLPaqueteDeProductosPromo(this); sqlUtil = new SQLUtil(this);	sqlElementos = new SQLElementos(this);
 		sqlCarrito = new SQLCarrito(this);  sqlProductosCarrito = new SQLProductosCarrito(this) ; sqlAdministrador = new SQLAdministrador(this); 
-		sqlUsuarioSucursal =  new SQLUsuarioSucursal(this);
+		sqlUsuarioSucursal =  new SQLUsuarioSucursal(this); sqlProductoEstante = new SQLProductosEstante(this);
 
 	}	
 
@@ -623,20 +627,22 @@ public class PersistenciaSuperAndes {
 		}
 	}
 
-	public ProductosCarrito registrarProductoCarrito(long idCarrito, String codigoBarras)
+	public ProductosCarrito registrarProductoCarrito(long idCarrito, String codigoBarras, String cantidad, long sucursalId)
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
 		try 
 		{
 			tx.begin();
-			long tuplasInsertadas = sqlProductosCarrito.agregarProductosCarrito(pm, idCarrito, codigoBarras);					
+			long tuplasInsertadas = sqlProductosCarrito.agregarProductosCarrito(pm, idCarrito, codigoBarras, cantidad);					
+			sqlProductoEstante.quitarNCantidadDeProductos(pm, codigoBarras, cantidad, sucursalId);
 			tx.commit();
 			log.trace ("Inserción del producto sucursal con codigo de barras: " + codigoBarras + ": " + tuplasInsertadas + " tuplas insertadas");
 			return new ProductosCarrito(idCarrito, codigoBarras);
 		} 
 		catch (Exception e) 
 		{
+			e.printStackTrace();
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 			return null;
 		}
@@ -1880,8 +1886,6 @@ public class PersistenciaSuperAndes {
 			throw new Exception();
 		}
 		
-		System.out.println(admin.get(0)[2]);
-
 		return ((BigDecimal) admin.get(0)[2]).longValue();
 
 
@@ -1913,6 +1917,36 @@ public class PersistenciaSuperAndes {
             }
             pm.close();
         }
+		
+	}
+
+	public void devolverProducto(long idcarro, String idproducto, long sucursalId) {
+		
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Transaction tx = pm.currentTransaction();
+
+		try {
+
+			tx.begin();
+
+			int cantidad = sqlProductosCarrito.darCantidad(pm,idcarro,idproducto);
+			
+			sqlProductoEstante.ponerNCantidadDeProductos(pm, idproducto, cantidad, sucursalId);
+
+			tx.commit();
+
+		}
+		catch(Exception e) {
+
+			e.printStackTrace();
+
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+
+		}		
+
+
+		
 		
 	}
 

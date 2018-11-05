@@ -37,14 +37,13 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 
 	private static Logger log = Logger.getLogger(SuperAndesSucursalInterfaz.class.getName());
 
-
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {	
 
 		sucursal = new SuperAndesSucursal(this);
 
 	}    		
-
+	
 	@FXML
 	private FlowPane flowPaneProductos;
 
@@ -284,7 +283,7 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 
 		boolean encontrado = false;
 
-		int cantidad = -1;
+		String cantidad = "";
 
 		for (Iterator iterator = olist.iterator(); !encontrado && iterator.hasNext();) {
 
@@ -292,7 +291,7 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 
 			if(node.getId() != null && node.getId().equals("cantidad"+i)) {
 
-				cantidad = Integer.parseInt(((Label) node).getText());
+				cantidad = ((Label) node).getText();
 
 				((Label) node).setText("0");
 
@@ -301,8 +300,9 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 		}
 
 		String producto = principal.getText();
+		
+		sucursal.registrarProductoCarrito(producto, cantidad);
 
-		System.out.println(producto+"-"+cantidad);
 
 		//TODO: 
 
@@ -463,6 +463,12 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 			sucursal.crearClienteNatural(comboDocumento.getValue(),numDocumento.getText(),nombre.getText(),correo.getText());
 
 		}
+	}
+	
+	public void pagarCarrito() {
+		
+		sucursal.pagarCarrito();
+		
 	}
 
 
