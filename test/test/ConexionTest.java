@@ -86,6 +86,110 @@ public class ConexionTest
 			fail (msg);
 		}
   	}
+    
+    /**
+     * Método que prueba el intento de acceso a una base de datos inaccesible, por alguna de las siguientes causas:
+     * 1. No existe la unidad de persistencia
+     * 2. La unidad de persistencia está caida
+     */
+    @Test
+    public void baseDatosInaccesible ()
+    {
+		try
+		{
+	    	log.info ("Probando el acceso a la base de datos con una base de datos que no existe");
+	    	superAndes = new SuperAndesAdministrador(openConfig (CONFIG_TABLAS_ERR_DS));
+			fail ("Debería fallar. La base de datos no existe !!");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			log.info ("Prueba realizada exitosamente. La excepcion generada es: " + e.getClass ().getName ());
+			log.info ("La causa es: " + e.getCause ().toString ());
+
+			String msg = "Prueba de base de datos inaccesible correcta.\n";
+			msg += "Revise el log de superandes y el de datanucleus para conocer el detalle de la excepción";
+			System.out.println (msg);
+		}
+    }
+    
+    /**
+     * Método que prueba el intento de acceso a una base de datos inaccesible, por causa:
+     * 1. Credenciales de usuario inválidas (nombre de usuario / contraseña)
+     */
+    @Test
+    public void usuarioInvalidoTest ()
+    {
+		try
+		{
+	    	log.info ("Probando el acceso a la base de datos con datos de usuario incorrectos");
+	    	superAndes = new SuperAndesAdministrador (openConfig (CONFIG_TABLAS_ERR_USER));
+			fail ("Debería fallar. Las credenciales del usuario no son validas");
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			log.info ("Prueba realizada exitosamente. La excepción generada es: " + e.getClass ().getName ());
+			log.info ("La causa es: " + e.getCause ().toString ());
+
+			String msg = "Prueba de credenciales incorrectas correcta.\n";
+			msg += "Revise el log de parranderos y el de datanucleus para conocer el detalle de la excepción";
+			System.out.println (msg);
+		}
+    }
+    
+    /**
+     * Método que prueba el intento de acceso a una base de datos inaccesible, por causa:
+     * 1. El esquema no ha sido creado o es erróneo - Intentar acceder a una tabla inexistente
+     */
+    @Test
+    public void tablaInexistenteTest ()
+    {
+    	// Probar primero la conexión a la base de datos
+		try
+		{
+	    	log.info ("Probando el acceso a la base de datos con datos de usuario correctos, pero sin crear el esquema");
+	    	superAndes = new SuperAndesAdministrador (openConfig (CONFIG_TABLAS_B));
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			log.info ("Prueba de tabla inexistente incompleta. No se pudo conectar a la base de datos !!. La excepción generada es: " + e.getClass ().getName ());
+			log.info ("La causa es: " + e.getCause ().toString ());
+
+			String msg = "Prueba de tabla inexistente incompleta. No se pudo conectar a la base de datos !!.\n";
+			msg += "Revise el log de superandes y el de datanucleus para conocer el detalle de la excepción";
+			System.out.println (msg);
+			fail (msg);
+		}		
+		// Ahora si se puede probar si la tabla existe o no...
+		try
+		{
+			String [] array = {"Producto", "Sucursal", "ProductoSucursal", "Estante", "ProductosEstante", "Bodega", "ProductosBodega", "Categoria", 
+					"Pedido", "ProductoPedido", "Proveedor", "ProveedorProducto", "LlegadaPedido", "Cliente", "PersonaJuridica", "Venta", "VentaProducto",		
+					"Carrito", "ProductosCarrito", "Promocion", "VentaPromocion", "ProductoPromocion",	"PagueNUnidadesLleveMPromo", "PaqueteDeProductosPromo",	
+					"PagueXCantidadLleveYPromo", "DescPorcentajePromo",	"Pague1Lleve2ConDescPromo"};	
+			for(String a : array)			
+				superAndes.darTabla(a);
+			
+			fail ("Debería fallar. La tabla consultada no existe en la BD");
+		}
+		catch (Exception e)
+		{
+//			e.printStackTrace();
+			log.info ("Prueba de tabla inexistente correcta. La excepción generada es: " + e.getClass ().getName ());
+			log.info ("La causa es: " + e.getCause ().toString ());
+
+			String msg = "Prueba de tabla inexistente correcta.\n";
+			msg += "Revise el log de parranderos y el de datanucleus para conocer el detalle de la excepción";
+			System.out.println (msg);
+		}
+		finally
+		{
+			superAndes.limpiarSuperAndes();
+			superAndes.cerrarUnidadPersistencia ();    		
+		}
+    }
 	
 	//-----------------------------------------------------------
 	//-----------------Metodos de Configuracion------------------

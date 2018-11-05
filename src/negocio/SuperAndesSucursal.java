@@ -34,15 +34,24 @@ public class SuperAndesSucursal {
 
 
 
-	public SuperAndesSucursal(SuperAndesSucursalInterfaz superAndesSucursalInterfaz) {
-
-		interfaz = superAndesSucursalInterfaz;
-
-		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/TablasBD_A.json");
-
-		pp =  PersistenciaSuperAndes.getInstance (tableConfig);	
+	public SuperAndesSucursal(SuperAndesSucursalInterfaz superAndesSucursalInterfaz) 
+	{
+		/*interfaz = superAndesSucursalInterfaz;
+		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
+		pp =  PersistenciaSuperAndes.getInstance (tableConfig);	*/
 
 	}	
+	
+	public SuperAndesSucursal()
+	{
+		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
+		pp =  PersistenciaSuperAndes.getInstance (tableConfig);
+	}
+	
+	public SuperAndesSucursal(JsonObject json)
+	{
+		pp =  PersistenciaSuperAndes.getInstance (json);
+	}
 
 	public void crearCarrito(String tipoDocumentoCliente, String numDocumentoCliente)
 	{

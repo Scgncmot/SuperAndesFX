@@ -483,8 +483,18 @@ public class SuperAndesAdministrador implements Initializable {
 				direccion = sucursal.split("/")[4];		
 
 		pp.registrarSucursal(nombre, segmentacion, Double.valueOf(tamanio), ciudad, direccion);
-
 		cargarSucursales();
+	}	
+	
+	public void crearSucursal2(String sucursal) 
+	{	
+		String nombre = sucursal.split("/")[0],
+				segmentacion = sucursal.split("/")[1],
+				tamanio = sucursal.split("/")[2],
+				ciudad = sucursal.split("/")[3],
+				direccion = sucursal.split("/")[4];		
+
+		pp.registrarSucursal(nombre, segmentacion, Double.valueOf(tamanio), ciudad, direccion);
 	}	
 
 	public void eliminarSucursal(long id, String nombre) 
@@ -736,6 +746,11 @@ public class SuperAndesAdministrador implements Initializable {
 		cargarCategorias();
 	}
 	
+	public void crearCategoria2(String tipoCategoria)
+	{
+		pp.registrarCategoria(tipoCategoria);
+	}
+	
 	public void modificarCategoria(long id, String nombreNuevo, String nombreViejo)
 	{
 		pp.modificarCategoria(id, nombreNuevo, nombreViejo);
@@ -753,7 +768,21 @@ public class SuperAndesAdministrador implements Initializable {
 		cargarCategorias();
 	}	
 	
-
+	//-------------------------------------------------------------------------------------------------------------------------------------
+	//--------------------------------------------------------Metodos para pruebas---------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------
+	public List<Object[]> darTabla(String tabla)
+	{
+		log.info ("Consultando tabla: " + tabla);
+		List<Object[]> table = pp.darElementos(tabla) ;	
+		log.info ("Consultando tabla " +  tabla +": " + table.size() + " existentes");
+		return table;
+		
+	}
+	
+	//-------------------------------------------------------------------------------------------------------------------------------------
+	//------------------------------------------------------------Configuracion------------------------------------------------------------
+	//-------------------------------------------------------------------------------------------------------------------------------------
 	private JsonObject openConfig (String tipo, String archConfig)
 	{
 		JsonObject config = null;
@@ -772,5 +801,13 @@ public class SuperAndesAdministrador implements Initializable {
 			JOptionPane.showMessageDialog(null, "No se encontro un archivo de configuracion de interfaz valido: " + tipo, "Parranderos App", JOptionPane.ERROR_MESSAGE);
 		}	
 		return config;
+	}
+	
+	public long [] limpiarSuperAndes ()
+	{
+        log.info ("Limpiando la BD de Parranderos");
+        long [] borrrados = pp.limpiarSuperAndes();	
+        log.info ("Limpiando la BD de Parranderos: Listo!");
+        return borrrados;
 	}
 }
