@@ -142,8 +142,6 @@ public class SuperAndesLogin implements Initializable {
 
 		else {
 
-
-
 		}
 
 
@@ -157,17 +155,16 @@ public class SuperAndesLogin implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 
-		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/TablasBD_A.json");
+		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
 
-		pp =  PersistenciaSuperAndes.getInstance (tableConfig);
+		pp =  PersistenciaSuperAndes.getInstance(tableConfig);
+		
+		ObservableList<String> e = FXCollections.observableArrayList("Administrador", "Sucursal");
 
-		ObservableList<String> elements = FXCollections.observableArrayList("Administrador", "Sucursal");
-
-		comboBox.setItems(elements);        
+		comboBox.setItems(e);        
 
 
 	}    
-
 
 
 

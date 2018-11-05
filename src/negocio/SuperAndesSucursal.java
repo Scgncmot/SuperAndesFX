@@ -38,7 +38,7 @@ public class SuperAndesSucursal {
 
 		interfaz = superAndesSucursalInterfaz;
 
-		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/TablasBD_A.json");
+		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
 
 		pp =  PersistenciaSuperAndes.getInstance (tableConfig);	
 
@@ -56,6 +56,22 @@ public class SuperAndesSucursal {
 
 	public void eliminarCarrito()
 	{
+		List<Object[]> prodOb = darProductosCarrito(); 
+		
+		List<String> productosId = new ArrayList<>();
+		
+		for (Object[] objects : prodOb) {
+			
+			productosId.add((String) objects[0]);
+			
+		}
+		
+		for (String idproducto : productosId) {
+			
+			pp.devolverProducto(idcarro, idproducto, sucursalId);					
+		}	
+		
+		
 		pp.eliminarCarrito(idcarro, tipodocumentoCliente, documentoCliente);
 	}	
 
@@ -65,9 +81,12 @@ public class SuperAndesSucursal {
 		return pp.darProductosCarrito(idcarro);
 	}
 
-	public void registrarProductoCarrito(String codigoBarras)
+	public void registrarProductoCarrito(String producto, String cantidad)
 	{
-		pp.registrarProductoCarrito(idcarro, codigoBarras);
+		String codigoBarras = (String) pp.obtenerCodigoDeBarrasPorProducto(producto)[0];
+		
+		pp.registrarProductoCarrito(idcarro, codigoBarras, cantidad, sucursalId);		
+		
 	}
 
 	//TODO Falta el de Eliminar producto carrito de compras.	
@@ -142,7 +161,9 @@ public class SuperAndesSucursal {
 		return config;
 	}
 
-
-
+	public void pagarCarrito() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

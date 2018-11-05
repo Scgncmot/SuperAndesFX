@@ -297,11 +297,13 @@ ALTER TABLE PaqueteDeProductosPromo
 ALTER TABLE Bodega
     ADD FOREIGN KEY (idCategoria)
     REFERENCES Categoria(idCategoria)
+    ON DELETE CASCADE
 ;  
 
 ALTER TABLE Estante
     ADD FOREIGN KEY (idCategoria)
     REFERENCES Categoria(idCategoria)
+    ON DELETE CASCADE
 ;    
 ALTER TABLE Pedido 
     ADD FOREIGN KEY  (idSucursal)

@@ -1,5 +1,7 @@
 package persistencia;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -16,11 +18,12 @@ public class SQLProductosCarrito
 		this.pp = persistenciaSuperAndes;
 	}
 	
-	public long agregarProductosCarrito(PersistenceManager pm, long idCarrito, String codigoBarras) 
+	public long agregarProductosCarrito(PersistenceManager pm, long idCarrito, String codigoBarras, String cantidad) 
 	{
-		Query q = pm.newQuery(SQL, "INSERT INTO " + PersistenciaSuperAndes.darTablaProductosCarrito() + 
-				" (idCarrito, codigoBarras) values (?, ?)"); 
-		q.setParameters(idCarrito, codigoBarras);
+		int canti = Integer.parseInt(cantidad);
+		
+		Query q = pm.newQuery(SQL, "INSERT INTO " + PersistenciaSuperAndes.darTablaProductosCarrito() + " (IDCARRITO, CODIGOBARRASPRODUCTO,CANTIDADPRODUCTO) values (?,?,?)"); 
+		q.setParameters(idCarrito, codigoBarras,canti);
 		return (long) q.executeUnique();
 	}
 	
@@ -38,5 +41,15 @@ public class SQLProductosCarrito
 		Query q = pm.newQuery(SQL, "DELETE FROM " + PersistenciaSuperAndes.darTablaProductosCarrito() + " WHERE idCarrito = ? AND codigoBarras = ?");
 	    q.setParameters(idCarrito, codigoBarras);
 	    return (long) q.executeUnique();
+	}
+
+	public int darCantidad(PersistenceManager pm, long idcarro, String idproducto) {
+		
+		Query q = pm.newQuery(SQL,
+				"SELECT CANTIDADPRODUCTO FROM " +pp.darTablaProductosCarrito() + " WHERE IDCARRITO = ? AND CODIGOBARRASPRODUCTO = ?");
+		q.setParameters(idcarro, idproducto);
+		return  ((BigDecimal) q.executeUnique()).intValue();
+
+
 	}
 }
