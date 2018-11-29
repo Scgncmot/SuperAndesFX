@@ -1,9 +1,12 @@
 package persistencia;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+
+import com.sun.jmx.snmp.Timestamp;
 
 public class SQLCliente 
 {
@@ -69,5 +72,5 @@ public class SQLCliente
 		Query q = pm.newQuery(SQL, "UPDATE " + pp.darTablaCliente()+" SET TIPODOCUMENTO = ? , NUMDOCUMENTO = ?, NOMBRE = ?, CORREO = ?, WHERE TIPODOCUMENTO = ? AND NUMDOCUMENTO = ?");
 		q.setParameters(tipoDoc, numDoc, nombre, correo, tipoDocAntiguo, numDocAntiguo);
 		q.executeUnique();				
-	}
+	}	
 }

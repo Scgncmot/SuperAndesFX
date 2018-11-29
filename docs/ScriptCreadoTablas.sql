@@ -21,6 +21,13 @@ CREATE TABLE Administradores
 	CONSTRAINT administradores_pk PRIMARY KEY (usuario)
 );
 
+CREATE TABLE Gerente
+(
+    usuario VARCHAR(80) NOT NULL,
+    contrasena VARCHAR(80) NOT NULL,
+    CONSTRAINT gerente_pk PRIMARY KEY (usuario)
+);
+
 CREATE TABLE UsuariosSucursal
 (
 	usuario VARCHAR(80) NOT NULL,

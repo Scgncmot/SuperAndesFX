@@ -1920,8 +1920,8 @@ public class PersistenciaSuperAndes {
 		
 	}
 
-	public void devolverProducto(long idcarro, String idproducto, long sucursalId) {
-		
+	public void devolverProducto(long idcarro, String idproducto, long sucursalId) 
+	{		
 		PersistenceManager pm = pmf.getPersistenceManager();
 
 		Transaction tx = pm.currentTransaction();
@@ -1943,11 +1943,22 @@ public class PersistenciaSuperAndes {
 
 			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
 
-		}		
-
-
-		
-		
+		}			
 	}
+	
+	
+	public List<Object[]> darClientesConAlMenosUnaCompra(String codigoBarras, Date fechaInicial, Date fechaFinal, long idSucursal) {
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		List<Object[]> clientes = sqlSucursal.darClientesConAlMenosUnaCompra(pm, codigoBarras, fechaInicial, fechaFinal, idSucursal);
+		
+		return clientes;
+
+	}
+	
+	
+	
+	
 
 }

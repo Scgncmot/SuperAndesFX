@@ -1,9 +1,12 @@
 package persistencia;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+
+import com.sun.jmx.snmp.Timestamp;
 
 
 public class SQLSucursal 
@@ -100,6 +103,36 @@ public class SQLSucursal
 				+")");
 		q.setParameters(idSucursal,idSucursal);
 
+		return q.executeList();
+	}
+	
+	/*RFC10 - CONSULTAR CONSUMO EN SUPERANDES
+	Se quiere conocer la información de los usuarios que realizaron al menos una compra de un determinado
+	producto en un rango de fechas. Los resultados deben ser clasificados según un criterio deseado por quien
+	realiza la consulta. En la clasificación debe ofrecerse la posibilidad de agrupamiento y ordenamiento de las
+	respuestas según los intereses del usuario que consulta como, por ejemplo, por los datos del cliente, por fecha
+	y número de unidades compradas del producto.*/
+	
+	public List<Object[]> darClientesConAlMenosUnaCompra(PersistenceManager pm, String codigoBarras, Date fechaInicial, Date fechaFinal,  long idSucursal)
+	{
+		Timestamp fechaI = new Timestamp(fechaInicial.getTime());
+		Timestamp fechaF = new Timestamp(fechaFinal.getTime());
+		
+		Query q;
+		
+		//Se pasa por parámetro -1 como referencia de que se esta invocando a nivel global
+		if(idSucursal == -1) 
+		{			
+			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ?");
+			q.setParameters(codigoBarras, fechaI, fechaF);			
+		}		
+		else 
+		{			
+			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ? AND ven.IDSUCURSAL = ?");
+			q.setParameters(codigoBarras, fechaI, fechaF, idSucursal);				
+		}		
+	
+		
 		return q.executeList();
 	}
 }
