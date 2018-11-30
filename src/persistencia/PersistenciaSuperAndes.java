@@ -289,7 +289,7 @@ public class PersistenciaSuperAndes {
 	public static String darTablaAdministrador() {return "ADMINISTRADORES";}
 
 	public static String darTablaUsuarioSucursal() {return "USUARIOSSUCURSAL";}
-	
+
 	public static String darTablaProductosEstante() {return "PRODUCTOSESTANTE";}
 
 	/**
@@ -1885,39 +1885,39 @@ public class PersistenciaSuperAndes {
 
 			throw new Exception();
 		}
-		
+
 		return ((BigDecimal) admin.get(0)[2]).longValue();
 
 
 	}
-	
+
 	public long [] limpiarSuperAndes ()
 	{
 		PersistenceManager pm = pmf.getPersistenceManager();
-        Transaction tx=pm.currentTransaction();
-        try
-        {
-            tx.begin();
-            long [] resp = sqlUtil.limpiarSuperAndes(pm);
-            tx.commit ();
-            log.info ("Borrada la base de datos");
-            return resp;
-        }
-        catch (Exception e)
-        {
-        	e.printStackTrace();
-        	log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
-        	return new long[] {-1, -1, -1, -1, -1, -1, -1};
-        }
-        finally
-        {
-            if (tx.isActive())
-            {
-                tx.rollback();
-            }
-            pm.close();
-        }
-		
+		Transaction tx=pm.currentTransaction();
+		try
+		{
+			tx.begin();
+			long [] resp = sqlUtil.limpiarSuperAndes(pm);
+			tx.commit ();
+			log.info ("Borrada la base de datos");
+			return resp;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			log.error ("Exception : " + e.getMessage() + "\n" + darDetalleException(e));
+			return new long[] {-1, -1, -1, -1, -1, -1, -1};
+		}
+		finally
+		{
+			if (tx.isActive())
+			{
+				tx.rollback();
+			}
+			pm.close();
+		}
+
 	}
 
 	public void devolverProducto(long idcarro, String idproducto, long sucursalId) 
@@ -1931,7 +1931,7 @@ public class PersistenciaSuperAndes {
 			tx.begin();
 
 			int cantidad = sqlProductosCarrito.darCantidad(pm,idcarro,idproducto);
-			
+
 			sqlProductoEstante.ponerNCantidadDeProductos(pm, idproducto, cantidad, sucursalId);
 
 			tx.commit();
@@ -1945,20 +1945,106 @@ public class PersistenciaSuperAndes {
 
 		}			
 	}
-	
-	
-	public List<Object[]> darClientesConAlMenosUnaCompra(String codigoBarras, Date fechaInicial, Date fechaFinal, long idSucursal) {
+
+
+	public List<Object[]> darClientesConAlMenosUnaCompra(String codigoBarras, Date fechaInicial, Date fechaFinal, long idSucursal, String ordenamiento) {
+
+		switch (ordenamiento) {
+
+		case "NOMBRE DEL CLIENTE":
+
+			ordenamiento = "cli.NOMBRE";
+
+			break;
+
+		case "FECHA":
+
+			ordenamiento = "ven.FECHAVENTA";
+
+			break;
+
+		case "UNIDADES COMPRADAS":
+
+			ordenamiento = "prod.UNIDADES";
+
+			break;	
+		}
 
 		PersistenceManager pm = pmf.getPersistenceManager();
 
-		List<Object[]> clientes = sqlSucursal.darClientesConAlMenosUnaCompra(pm, codigoBarras, fechaInicial, fechaFinal, idSucursal);
-		
-		return clientes;
+		Transaction tx = pm.currentTransaction();
+
+		try {
+
+			tx.begin();
+
+			List<Object[]> clientes = sqlSucursal.darClientesConAlMenosUnaCompra(pm, codigoBarras, fechaInicial, fechaFinal, idSucursal, ordenamiento);
+
+			tx.commit();
+
+			return clientes;
+
+		}
+		catch(Exception e){
+			
+			e.printStackTrace();
+			
+			return null;
+
+		}
+
 
 	}
-	
-	
-	
-	
+
+	public List<Object[]> darClientesSinCompras(String codigoBarras, Date fechaInicio, Date fechaFinal, long sucursalId, String ordenamiento) {
+		
+		switch (ordenamiento) {
+
+		case "NOMBRE DEL CLIENTE":
+
+			ordenamiento = "cli.NOMBRE";
+
+			break;
+
+		case "FECHA":
+
+			ordenamiento = "ven.FECHAVENTA";
+
+			break;
+
+		case "UNIDADES COMPRADAS":
+
+			ordenamiento = "prod.UNIDADES";
+
+			break;	
+		}
+
+		PersistenceManager pm = pmf.getPersistenceManager();
+
+		Transaction tx = pm.currentTransaction();
+
+		try {
+
+			tx.begin();
+
+			List<Object[]> clientes = sqlSucursal.darClientesSinCompras(pm, codigoBarras, fechaInicio, fechaFinal, sucursalId, ordenamiento);
+
+			tx.commit();
+
+			return clientes;
+
+		}
+		catch(Exception e){
+			
+			e.printStackTrace();
+			
+			return null;
+
+		}
+	}
+
+
+
+
 
 }

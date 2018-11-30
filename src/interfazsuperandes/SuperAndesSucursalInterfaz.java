@@ -2,7 +2,10 @@ package interfazsuperandes;
 
 import java.io.FileReader;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -19,6 +22,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -43,7 +47,7 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 		sucursal = new SuperAndesSucursal(this);
 
 	}    		
-	
+
 	@FXML
 	private FlowPane flowPaneProductos;
 
@@ -60,10 +64,10 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 	private Button butPagarCarrito;
 
 	@FXML
-	private Button butRegistrese;
-	
+	private Button butRegistrese;	
 
-
+	@FXML
+	private Button butEstadisticas;
 
 
 	//....................................
@@ -300,7 +304,7 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 		}
 
 		String producto = principal.getText();
-		
+
 		sucursal.registrarProductoCarrito(producto, cantidad);
 
 
@@ -464,16 +468,168 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 
 		}
 	}
-	
+
+
+	@FXML
+	public void estadisticas(){
+
+		Dialog dialog = new Dialog();
+		dialog.setTitle("Estadisticas");
+		dialog.setHeaderText("Consultar estadisticas");
+
+		ButtonType buttonNext = new ButtonType("Siguiente", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(buttonNext, ButtonType.CANCEL);
+
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+
+		ComboBox<String> combo1 = new ComboBox<>();		
+
+		ObservableList<String> elements = FXCollections.observableArrayList("CONSULTAR CONSUMO","CONSULTAR FALTA DE CONSUMO");
+
+		combo1.setItems(elements);
+
+		ComboBox<String> combo2 = new ComboBox<>();		
+
+		ObservableList<String> filter = FXCollections.observableArrayList("NOMBRE DEL CLIENTE", "FECHA", "UNIDADES COMPRADAS");
+
+		combo2.setItems(filter);
+
+		grid.add(new Label("Estadistica a consultar: "), 0,0);
+
+		grid.add(combo1, 1, 0);
+
+		grid.add(new Label("Ordenar por: "), 0, 1);
+
+		grid.add(combo2, 1, 1);
+
+		dialog.getDialogPane().setContent(grid);
+
+		dialog.showAndWait();
+
+		String requerimiento = combo1.getSelectionModel().getSelectedItem();
+
+		String ordenamiento = combo2.getSelectionModel().getSelectedItem();
+
+		Dialog dialog1 = new Dialog();
+		dialog1.setTitle("Estadisticas");
+		dialog1.setHeaderText("Consultar consumo");
+
+		ButtonType buttonNext1 = new ButtonType("Continuar", ButtonData.OK_DONE);
+		dialog1.getDialogPane().getButtonTypes().addAll(buttonNext1, ButtonType.CANCEL);
+
+		GridPane grid1 = new GridPane();
+		grid1.setHgap(10);
+		grid1.setVgap(10);
+
+		List<String> productos = sucursal.darListaProductos2();
+
+		ObservableList<String> obs = FXCollections.observableList(productos);
+
+		ComboBox<String> cbProductos = new ComboBox<String>();
+
+		cbProductos.setItems(obs);
+
+		grid1.add(new Label("Seleccione el producto: "), 0, 0);
+
+		grid1.add(cbProductos, 1, 0);
+
+		DatePicker dPFechaInicio = new DatePicker();
+
+		DatePicker dpFechaFinal = new DatePicker();			
+
+		grid1.add(new Label("Ingrese la fecha inicial:"), 0, 1);
+		grid1.add(dPFechaInicio, 1, 1);
+
+		grid1.add(new Label("Ingrese la fecha final:"), 0, 2);
+		grid1.add(dpFechaFinal, 1, 2);
+
+		dialog1.getDialogPane().setContent(grid1);
+
+		dialog1.showAndWait();
+
+		String codigoBarras = cbProductos.getSelectionModel().getSelectedItem().split("-")[0];
+
+		LocalDate lDFechaInicio = dPFechaInicio.getValue();
+		LocalDate lDFechaFinal = dpFechaFinal.getValue();
+
+		Date fechaInicio = Date.from(lDFechaInicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date fechaFinal = Date.from(lDFechaFinal.atStartOfDay(ZoneId.systemDefault()).toInstant());		
+
+
+		switch (requerimiento) {
+
+		case "CONSULTAR CONSUMO":
+			
+
+			List<String> listaFinal = sucursal.darClientesConAlMenosUnaCompra(codigoBarras, fechaInicio, fechaFinal, ordenamiento);
+
+			ObservableList<String> obsListaFinal = FXCollections.observableList(listaFinal);
+
+			ListView<String> lvFinal = new ListView<String>();
+
+			lvFinal.setItems(obsListaFinal);
+
+			Dialog dialogF = new Dialog();
+
+			dialogF.setTitle("Estadisticas");
+
+			dialogF.setHeaderText("Resultado consulta");			
+
+			ButtonType buttonNextF = new ButtonType("Finalizar", ButtonData.OK_DONE);
+
+			dialogF.getDialogPane().getButtonTypes().addAll(buttonNextF);
+
+			dialogF.setWidth(lvFinal.getWidth());
+
+			dialogF.getDialogPane().setContent(lvFinal);
+
+			dialogF.showAndWait();				
+
+			break;
+
+
+		case "CONSULTAR FALTA DE CONSUMO":
+			
+			List<String> listaFinal1 = sucursal.darClientesSinCompras(codigoBarras, fechaInicio, fechaFinal, ordenamiento);
+
+			ObservableList<String> obsListaFinal1 = FXCollections.observableList(listaFinal1);
+
+			ListView<String> lvFinal1 = new ListView<String>();
+
+			lvFinal1.setItems(obsListaFinal1);
+
+			Dialog dialogF1 = new Dialog();
+
+			dialogF1.setTitle("Estadisticas");
+
+			dialogF1.setHeaderText("Resultado consulta");			
+
+			ButtonType buttonNextF1 = new ButtonType("Finalizar", ButtonData.OK_DONE);
+
+			dialogF1.getDialogPane().getButtonTypes().addAll(buttonNextF1);
+
+			dialogF1.setWidth(lvFinal1.getWidth());
+
+			dialogF1.getDialogPane().setContent(lvFinal1);
+
+			dialogF1.showAndWait();	
+			
+			break;
+		}
+
+	}
+
 	public void pagarCarrito() {
-		
+
 		sucursal.pagarCarrito();
-		
+
 	}
 
 
 	public void setSucursal(long sucursal2) {
-		
+
 		sucursal.setSucursal(sucursal2);
 
 	}

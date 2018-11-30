@@ -3,6 +3,7 @@ package negocio;
 import java.io.FileReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
@@ -39,14 +40,14 @@ public class SuperAndesSucursal {
 		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
 
 		pp =  PersistenciaSuperAndes.getInstance (tableConfig);	
-}	
-	
+	}	
+
 	public SuperAndesSucursal()
 	{
 		JsonObject tableConfig = openConfig ("Tablas BD", "./resources/config/TablasBD_A.json");
 		pp =  PersistenciaSuperAndes.getInstance (tableConfig);
 	}
-	
+
 	public SuperAndesSucursal(JsonObject json)
 	{
 		pp =  PersistenciaSuperAndes.getInstance (json);
@@ -65,21 +66,21 @@ public class SuperAndesSucursal {
 	public void eliminarCarrito()
 	{
 		List<Object[]> prodOb = darProductosCarrito(); 
-		
+
 		List<String> productosId = new ArrayList<>();
-		
+
 		for (Object[] objects : prodOb) {
-			
+
 			productosId.add((String) objects[0]);
-			
+
 		}
-		
+
 		for (String idproducto : productosId) {
-			
+
 			pp.devolverProducto(idcarro, idproducto, sucursalId);					
 		}	
-		
-		
+
+
 		pp.eliminarCarrito(idcarro, tipodocumentoCliente, documentoCliente);
 	}	
 
@@ -92,9 +93,9 @@ public class SuperAndesSucursal {
 	public void registrarProductoCarrito(String producto, String cantidad)
 	{
 		String codigoBarras = (String) pp.obtenerCodigoDeBarrasPorProducto(producto)[0];
-		
+
 		pp.registrarProductoCarrito(idcarro, codigoBarras, cantidad, sucursalId);		
-		
+
 	}
 
 	//TODO Falta el de Eliminar producto carrito de compras.	
@@ -117,6 +118,24 @@ public class SuperAndesSucursal {
 	//....................................
 	//....... METODOS ADICIONALES ........
 	//....................................
+
+
+	public List<String> darClientesConAlMenosUnaCompra(String codigoBarras, Date fechaInicial, Date fechaFinal, String ordenamiento) {
+
+		List<Object[]> clientes = pp.darClientesConAlMenosUnaCompra(codigoBarras, fechaInicial, fechaFinal, this.sucursalId, ordenamiento);	
+
+		List<String> clientesString = new ArrayList<>();	
+
+		for (Object[] objects : clientes) {
+
+			clientesString.add(objects[0]+"-"+objects[1]+"-"+objects[2]+"-"+objects[3]);
+
+		}
+
+		return clientesString;	
+
+
+	}
 
 
 
@@ -149,6 +168,22 @@ public class SuperAndesSucursal {
 
 	}
 
+
+	public List<String> darListaProductos2() {
+
+		List<Object[]> lista = pp.darProductosSucursal(sucursalId);
+
+		List<String> nomProductos = new ArrayList<>();
+
+		for (Object[] objects : lista) {
+
+			nomProductos.add(objects[1]+"-"+objects[7]);
+		}
+
+		return nomProductos;
+
+	}
+
 	private JsonObject openConfig (String tipo, String archConfig)
 	{
 		JsonObject config = null;
@@ -171,7 +206,22 @@ public class SuperAndesSucursal {
 
 	public void pagarCarrito() {
 		// TODO Auto-generated method stub
+
+	}
+
+	public List<String> darClientesSinCompras(String codigoBarras, Date fechaInicio, Date fechaFinal,String ordenamiento) {
 		
+		List<Object[]> clientes = pp.darClientesSinCompras(codigoBarras, fechaInicio, fechaFinal, this.sucursalId, ordenamiento);	
+
+		List<String> clientesString = new ArrayList<>();	
+
+		for (Object[] objects : clientes) {
+
+			clientesString.add(objects[0]+"-"+objects[1]+"-"+objects[2]+"-"+objects[3]);
+
+		}
+
+		return clientesString;	
 	}
 
 }

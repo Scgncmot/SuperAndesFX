@@ -1,12 +1,11 @@
 package persistencia;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-
-import com.sun.jmx.snmp.Timestamp;
 
 
 public class SQLSucursal 
@@ -113,23 +112,46 @@ public class SQLSucursal
 	respuestas según los intereses del usuario que consulta como, por ejemplo, por los datos del cliente, por fecha
 	y número de unidades compradas del producto.*/
 	
-	public List<Object[]> darClientesConAlMenosUnaCompra(PersistenceManager pm, String codigoBarras, Date fechaInicial, Date fechaFinal,  long idSucursal)
+	public List<Object[]> darClientesConAlMenosUnaCompra(PersistenceManager pm, String codigoBarras, Date fechaInicial, Date fechaFinal,  long idSucursal, String ordenamiento)
 	{
 		Timestamp fechaI = new Timestamp(fechaInicial.getTime());
 		Timestamp fechaF = new Timestamp(fechaFinal.getTime());
-		
+				
 		Query q;
 		
 		//Se pasa por parámetro -1 como referencia de que se esta invocando a nivel global
 		if(idSucursal == -1) 
 		{			
-			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ?");
+			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ? ORDER BY ?");
+			q.setParameters(codigoBarras, fechaI, fechaF, ordenamiento);			
+		}		
+		else 
+		{			
+			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ? AND ven.IDSUCURSAL = ? ORDER BY ?");
+			q.setParameters(codigoBarras, fechaI, fechaF, idSucursal, ordenamiento);				
+		}		
+	
+		
+		return q.executeList();
+	}
+
+	public List<Object[]> darClientesSinCompras(PersistenceManager pm, String codigoBarras, Date fechaInicio, Date fechaFinal, long sucursalId, String ordenamiento) {
+		
+		Timestamp fechaI = new Timestamp(fechaInicio.getTime());
+		Timestamp fechaF = new Timestamp(fechaFinal.getTime());
+				
+		Query q;
+		
+		//Se pasa por parámetro -1 como referencia de que se esta invocando a nivel global
+		if(sucursalId == -1) 
+		{			
+			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM CLIENTE MINUS (SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ?) ORDER BY NOMBRE");
 			q.setParameters(codigoBarras, fechaI, fechaF);			
 		}		
 		else 
 		{			
-			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ? AND ven.IDSUCURSAL = ?");
-			q.setParameters(codigoBarras, fechaI, fechaF, idSucursal);				
+			q = pm.newQuery(SQL, "SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM CLIENTE MINUS (SELECT TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO FROM ((VENTAPRODUCTO prod INNER JOIN VENTA ven ON prod.NUMEROVENTA = ven.NUMEROVENTA) INNER JOIN CLIENTE cli ON ven.NUMDOCCLIENTE = cli.NUMDOCUMENTO) WHERE prod.CODIGOPRODUCTO = ? AND ven.FECHAVENTA BETWEEN ? AND ? AND ven.IDSUCURSAL = ?) ORDER BY NOMBRE");
+			q.setParameters(codigoBarras, fechaI, fechaF, sucursalId);				
 		}		
 	
 		

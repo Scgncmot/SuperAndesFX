@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1110.0" style="-fx-background-color: #20120F;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfazsuperandes.SuperAndesSucursalInterfaz">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="629.0" prefWidth="1110.0" style="-fx-background-color: #20120F;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfazsuperandes.SuperAndesSucursalInterfaz">
    <left>
       <Pane prefHeight="629.0" prefWidth="823.0" BorderPane.alignment="CENTER">
          <children>
@@ -41,11 +41,12 @@
                <children>
                   <Pane layoutX="6.0" layoutY="2.0" prefHeight="481.0" prefWidth="265.0" style="-fx-background-color: #632921;">
                      <children>
-                        <Button fx:id="butCrearCarrito" layoutX="49.0" layoutY="64.0" mnemonicParsing="false" onAction="#crearCarrito" prefHeight="52.0" prefWidth="167.0" text="CREAR CARRITO" />
-                        <Button fx:id="butVerProductosCarrito" layoutX="49.0" layoutY="138.0" mnemonicParsing="false" onAction="#darProductosCarrito" prefHeight="52.0" prefWidth="167.0" text="VER PRODUCTOS CARRITO" />
-                        <Button fx:id="butDescartarCarrito" layoutX="49.0" layoutY="214.0" mnemonicParsing="false" onAction="#descartarCarrito" prefHeight="52.0" prefWidth="167.0" text="DESCARTAR CARRITO" />
-                        <Button fx:id="butPagarCarrito" layoutX="49.0" layoutY="290.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="167.0" text="PAGAR CARRITO" />
-                        <Button fx:id="butRegistrese" layoutX="49.0" layoutY="366.0" mnemonicParsing="false" onAction="#registrese" prefHeight="52.0" prefWidth="167.0" text="¡REGISTRESE! :)" />
+                        <Button fx:id="butCrearCarrito" layoutX="49.0" layoutY="23.0" mnemonicParsing="false" onAction="#crearCarrito" prefHeight="52.0" prefWidth="167.0" text="CREAR CARRITO" />
+                        <Button fx:id="butVerProductosCarrito" layoutX="49.0" layoutY="97.0" mnemonicParsing="false" onAction="#darProductosCarrito" prefHeight="52.0" prefWidth="167.0" text="VER PRODUCTOS CARRITO" />
+                        <Button fx:id="butDescartarCarrito" layoutX="49.0" layoutY="173.0" mnemonicParsing="false" onAction="#descartarCarrito" prefHeight="52.0" prefWidth="167.0" text="DESCARTAR CARRITO" />
+                        <Button fx:id="butPagarCarrito" layoutX="49.0" layoutY="249.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="167.0" text="PAGAR CARRITO" />
+                        <Button fx:id="butRegistrese" layoutX="49.0" layoutY="325.0" mnemonicParsing="false" onAction="#registrese" prefHeight="52.0" prefWidth="167.0" text="¡REGISTRESE! :)" />
+                        <Button fx:id="butEstadisticas" layoutX="49.0" layoutY="399.0" mnemonicParsing="false" onAction="#estadisticas" prefHeight="52.0" prefWidth="167.0" text="ESTADISTICAS" />
                      </children>
                   </Pane>
                </children>
