@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -41,8 +43,15 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import persistencia.PersistenciaSuperAndes;
 
 /**
@@ -86,7 +95,9 @@ public class SuperAndesAdministrador implements Initializable {
 	@FXML
 	private Button butPromociones;
 	@FXML
-	private Button butCategorias;
+	private Button butCategorias;	
+	@FXML
+	private Button butEstadisticas;
 
 	/**
 	 * Initializes the controller class.
@@ -172,6 +183,157 @@ public class SuperAndesAdministrador implements Initializable {
 		pp.eliminarProveedorPorNombre(proveedor);
 
 		cargarProveedores();
+
+	}
+	
+	@FXML
+	public void darEstadisticas(){
+
+		Dialog dialog = new Dialog();
+		dialog.setTitle("Estadisticas");
+		dialog.setHeaderText("Consultar estadisticas");
+
+		ButtonType buttonNext = new ButtonType("Siguiente", ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(buttonNext, ButtonType.CANCEL);
+
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+
+		ComboBox<String> combo1 = new ComboBox<>();		
+
+		ObservableList<String> elements = FXCollections.observableArrayList("CONSULTAR CONSUMO","CONSULTAR FALTA DE CONSUMO");
+
+		combo1.setItems(elements);
+
+		ComboBox<String> combo2 = new ComboBox<>();		
+
+		ObservableList<String> filter = FXCollections.observableArrayList("NOMBRE DEL CLIENTE", "FECHA", "UNIDADES COMPRADAS");
+
+		combo2.setItems(filter);
+
+		grid.add(new Label("Estadistica a consultar: "), 0,0);
+
+		grid.add(combo1, 1, 0);
+
+		grid.add(new Label("Ordenar por: "), 0, 1);
+
+		grid.add(combo2, 1, 1);
+
+		dialog.getDialogPane().setContent(grid);
+
+		dialog.showAndWait();
+
+		String requerimiento = combo1.getSelectionModel().getSelectedItem();
+
+		String ordenamiento = combo2.getSelectionModel().getSelectedItem();
+
+		Dialog dialog1 = new Dialog();
+		dialog1.setTitle("Estadisticas");
+		dialog1.setHeaderText("Consultar consumo");
+
+		ButtonType buttonNext1 = new ButtonType("Continuar", ButtonData.OK_DONE);
+		dialog1.getDialogPane().getButtonTypes().addAll(buttonNext1, ButtonType.CANCEL);
+
+		GridPane grid1 = new GridPane();
+		grid1.setHgap(10);
+		grid1.setVgap(10);
+
+		List<String> productos = darInfoProductos();
+
+		ObservableList<String> obs = FXCollections.observableList(productos);
+
+		ComboBox<String> cbProductos = new ComboBox<String>();
+
+		cbProductos.setItems(obs);
+
+		grid1.add(new Label("Seleccione el producto: "), 0, 0);
+
+		grid1.add(cbProductos, 1, 0);
+
+		DatePicker dPFechaInicio = new DatePicker();
+
+		DatePicker dpFechaFinal = new DatePicker();			
+
+		grid1.add(new Label("Ingrese la fecha inicial:"), 0, 1);
+		grid1.add(dPFechaInicio, 1, 1);
+
+		grid1.add(new Label("Ingrese la fecha final:"), 0, 2);
+		grid1.add(dpFechaFinal, 1, 2);
+
+		dialog1.getDialogPane().setContent(grid1);
+
+		dialog1.showAndWait();
+
+		String codigoBarras = cbProductos.getSelectionModel().getSelectedItem().split("  ")[1];
+
+		LocalDate lDFechaInicio = dPFechaInicio.getValue();
+		LocalDate lDFechaFinal = dpFechaFinal.getValue();
+
+		Date fechaInicio = Date.from(lDFechaInicio.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date fechaFinal = Date.from(lDFechaFinal.atStartOfDay(ZoneId.systemDefault()).toInstant());		
+
+
+		switch (requerimiento) {
+
+		case "CONSULTAR CONSUMO":
+			
+			System.out.println(codigoBarras);
+			List<String> listaFinal = darClientesConAlMenosUnaCompra(codigoBarras, fechaInicio, fechaFinal, ordenamiento);
+
+			ObservableList<String> obsListaFinal = FXCollections.observableList(listaFinal);
+
+			ListView<String> lvFinal = new ListView<String>();
+
+			lvFinal.setItems(obsListaFinal);
+
+			Dialog dialogF = new Dialog();
+
+			dialogF.setTitle("Estadisticas");
+
+			dialogF.setHeaderText("Resultado consulta");			
+
+			ButtonType buttonNextF = new ButtonType("Finalizar", ButtonData.OK_DONE);
+
+			dialogF.getDialogPane().getButtonTypes().addAll(buttonNextF);
+
+			dialogF.setWidth(lvFinal.getWidth());
+
+			dialogF.getDialogPane().setContent(lvFinal);
+
+			dialogF.showAndWait();				
+
+			break;
+
+
+		case "CONSULTAR FALTA DE CONSUMO":
+			
+			List<String> listaFinal1 = darClientesSinCompras(codigoBarras, fechaInicio, fechaFinal, ordenamiento);
+
+			ObservableList<String> obsListaFinal1 = FXCollections.observableList(listaFinal1);
+
+			ListView<String> lvFinal1 = new ListView<String>();
+
+			lvFinal1.setItems(obsListaFinal1);
+
+			Dialog dialogF1 = new Dialog();
+
+			dialogF1.setTitle("Estadisticas");
+
+			dialogF1.setHeaderText("Resultado consulta");			
+
+			ButtonType buttonNextF1 = new ButtonType("Finalizar", ButtonData.OK_DONE);
+
+			dialogF1.getDialogPane().getButtonTypes().addAll(buttonNextF1);
+
+			dialogF1.setWidth(lvFinal1.getWidth());
+
+			dialogF1.getDialogPane().setContent(lvFinal1);
+
+			dialogF1.showAndWait();	
+			
+			break;
+		}
 
 	}
 
@@ -373,7 +535,21 @@ public class SuperAndesAdministrador implements Initializable {
 		}
 
 		return nomProductos;
+	}
+	
+	public List<String> darInfoProductos() {
 
+		List<Object[]> lista = pp.darElementos(PersistenciaSuperAndes.darTablaProducto());
+
+		List<String> nomProductos = new ArrayList<>();
+
+		for (Object[] objects : lista) {
+
+			nomProductos.add((String) "Codigo de Barras:  "+ objects[0] + "  ,Nombre:  "+ objects[1] );
+
+		}
+
+		return nomProductos;
 	}
 
 	public List<Object[]> darProductos() 
@@ -727,6 +903,40 @@ public class SuperAndesAdministrador implements Initializable {
 		borderPanelPrincipal.setRight( rightSide );
 
 	}
+	
+	@FXML
+    void estadisticas(ActionEvent event) 
+	{
+
+    }
+	
+	public List<String> darClientesConAlMenosUnaCompra(String codigoBarras, Date fechaInicial, Date fechaFinal, String ordenamiento) {
+
+		List<Object[]> clientes = pp.darClientesConAlMenosUnaCompra(codigoBarras, fechaInicial, fechaFinal, -1, ordenamiento);	
+
+		List<String> clientesString = new ArrayList<>();	
+
+		//TIPODOCUMENTO, NUMDOCUMENTO, NOMBRE, CORREO
+		for (Object[] objects : clientes) 
+			clientesString.add("Tipo de Documento: " + objects[0]+", Numero de Documento: " + objects[1]+ 
+					", Nombre: " + objects[2]+", Correo: " + objects[3]);		
+
+		return clientesString;	
+		
+	}
+	
+	public List<String> darClientesSinCompras(String codigoBarras, Date fechaInicio, Date fechaFinal,String ordenamiento) {
+		
+		List<Object[]> clientes = pp.darClientesSinCompras(codigoBarras, fechaInicio, fechaFinal, -1, ordenamiento);	
+		List<String> clientesString = new ArrayList<>();	
+
+		for (Object[] objects : clientes) 
+			clientesString.add("Tipo de Documento: " + objects[0]+", Numero de Documento: " + objects[1]+ 
+					", Nombre: " + objects[2]+", Correo: " + objects[3]);		
+
+		
+		return clientesString;	
+	}
 
 	public List<String> darListaCategorias() {
 
@@ -739,6 +949,8 @@ public class SuperAndesAdministrador implements Initializable {
 
 		return retorno;
 	}
+	
+	
 	
 	public void crearCategoria(String tipoCategoria)
 	{
@@ -767,6 +979,8 @@ public class SuperAndesAdministrador implements Initializable {
 		pp.eliminarCategoria(tipoCategoria);
 		cargarCategorias();
 	}	
+	
+	
 	
 	//-------------------------------------------------------------------------------------------------------------------------------------
 	//--------------------------------------------------------Metodos para pruebas---------------------------------------------------------

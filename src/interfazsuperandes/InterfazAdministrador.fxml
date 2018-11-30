@@ -30,32 +30,37 @@
                <children>
                   <Pane layoutX="11.0" layoutY="8.0" prefHeight="493.0" prefWidth="282.0" style="-fx-background-color: #632921;">
                      <children>
-                        <Button fx:id="butProveedores" layoutX="36.0" layoutY="84.0" mnemonicParsing="false" onAction="#actualizarPanelProveedores" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROVEEDORES">
+                        <Button fx:id="butProveedores" layoutX="36.0" layoutY="87.0" mnemonicParsing="false" onAction="#actualizarPanelProveedores" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROVEEDORES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butClientes" layoutX="36.0" layoutY="140.0" mnemonicParsing="false" onAction="#actualizarPanelClientes" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CLIENTES">
+                        <Button fx:id="butClientes" layoutX="36.0" layoutY="130.0" mnemonicParsing="false" onAction="#actualizarPanelClientes" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CLIENTES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butProductos" layoutX="36.0" layoutY="198.0" mnemonicParsing="false" onAction="#actualizarPanelProductos" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PRODUCTOS">
+                        <Button fx:id="butProductos" layoutX="36.0" layoutY="174.0" mnemonicParsing="false" onAction="#actualizarPanelProductos" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PRODUCTOS">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butSucursales" layoutX="36.0" layoutY="259.0" mnemonicParsing="false" onAction="#actualizarPanelSucursales" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="SUCURSALES">
+                        <Button fx:id="butSucursales" layoutX="36.0" layoutY="220.0" mnemonicParsing="false" onAction="#actualizarPanelSucursales" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="SUCURSALES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butPromociones" layoutX="36.0" layoutY="317.0" mnemonicParsing="false" onAction="#actualizarPanelPromociones" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROMOCIONES">
+                        <Button fx:id="butPromociones" layoutX="36.0" layoutY="265.0" mnemonicParsing="false" onAction="#actualizarPanelPromociones" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="PROMOCIONES">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>
                         </Button>
-                        <Button fx:id="butCategorias" layoutX="36.0" layoutY="379.0" mnemonicParsing="false" onAction="#actualizarPanelCategoria" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CATEGORIAS">
+                        <Button fx:id="butCategorias" layoutX="36.0" layoutY="311.0" mnemonicParsing="false" onAction="#actualizarPanelCategoria" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="CATEGORIAS">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="butEstadisticas" layoutX="36.0" layoutY="356.0" mnemonicParsing="false" onAction="#darEstadisticas" opacity="0.8" prefHeight="30.0" prefWidth="211.0" text="ESTADISTICAS">
                            <font>
                               <Font name="System Bold" size="12.0" />
                            </font>

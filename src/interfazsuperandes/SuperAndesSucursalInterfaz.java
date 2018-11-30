@@ -549,7 +549,7 @@ public class SuperAndesSucursalInterfaz implements Initializable {
 
 		dialog1.showAndWait();
 
-		String codigoBarras = cbProductos.getSelectionModel().getSelectedItem().split("-")[0];
+		String codigoBarras = cbProductos.getSelectionModel().getSelectedItem().split("  ")[0];
 
 		LocalDate lDFechaInicio = dPFechaInicio.getValue();
 		LocalDate lDFechaFinal = dpFechaFinal.getValue();

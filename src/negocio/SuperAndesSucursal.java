@@ -123,18 +123,26 @@ public class SuperAndesSucursal {
 	public List<String> darClientesConAlMenosUnaCompra(String codigoBarras, Date fechaInicial, Date fechaFinal, String ordenamiento) {
 
 		List<Object[]> clientes = pp.darClientesConAlMenosUnaCompra(codigoBarras, fechaInicial, fechaFinal, this.sucursalId, ordenamiento);	
-
 		List<String> clientesString = new ArrayList<>();	
 
-		for (Object[] objects : clientes) {
-
-			clientesString.add(objects[0]+"-"+objects[1]+"-"+objects[2]+"-"+objects[3]);
-
-		}
+		for (Object[] objects : clientes)
+			clientesString.add("Tipo de Documento: " + objects[0]+", Numero de Documento: " + objects[1]+ 
+					", Nombre: " + objects[2]+", Correo: " + objects[3]);	
 
 		return clientesString;	
+		
+	}
+	
+	public List<String> darClientesSinCompras(String codigoBarras, Date fechaInicio, Date fechaFinal,String ordenamiento) {
+		
+		List<Object[]> clientes = pp.darClientesSinCompras(codigoBarras, fechaInicio, fechaFinal, this.sucursalId, ordenamiento);	
+		List<String> clientesString = new ArrayList<>();	
 
+		for (Object[] objects : clientes) 
+			clientesString.add("Tipo de Documento: " + objects[0]+", Numero de Documento: " + objects[1]+ 
+					", Nombre: " + objects[2]+", Correo: " + objects[3]);		
 
+		return clientesString;	
 	}
 
 
@@ -209,19 +217,6 @@ public class SuperAndesSucursal {
 
 	}
 
-	public List<String> darClientesSinCompras(String codigoBarras, Date fechaInicio, Date fechaFinal,String ordenamiento) {
-		
-		List<Object[]> clientes = pp.darClientesSinCompras(codigoBarras, fechaInicio, fechaFinal, this.sucursalId, ordenamiento);	
-
-		List<String> clientesString = new ArrayList<>();	
-
-		for (Object[] objects : clientes) {
-
-			clientesString.add(objects[0]+"-"+objects[1]+"-"+objects[2]+"-"+objects[3]);
-
-		}
-
-		return clientesString;	
-	}
+	
 
 }

@@ -1971,7 +1971,6 @@ public class PersistenciaSuperAndes {
 		}
 
 		PersistenceManager pm = pmf.getPersistenceManager();
-
 		Transaction tx = pm.currentTransaction();
 
 		try {
@@ -1985,15 +1984,11 @@ public class PersistenciaSuperAndes {
 			return clientes;
 
 		}
-		catch(Exception e){
-			
-			e.printStackTrace();
-			
+		catch(Exception e)
+		{			
+			e.printStackTrace();			
 			return null;
-
 		}
-
-
 	}
 
 	public List<Object[]> darClientesSinCompras(String codigoBarras, Date fechaInicio, Date fechaFinal, long sucursalId, String ordenamiento) {
@@ -2020,7 +2015,6 @@ public class PersistenciaSuperAndes {
 		}
 
 		PersistenceManager pm = pmf.getPersistenceManager();
-
 		Transaction tx = pm.currentTransaction();
 
 		try {
@@ -2034,12 +2028,10 @@ public class PersistenciaSuperAndes {
 			return clientes;
 
 		}
-		catch(Exception e){
-			
-			e.printStackTrace();
-			
+		catch(Exception e)
+		{			
+			e.printStackTrace();			
 			return null;
-
 		}
 	}
 
